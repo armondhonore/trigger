@@ -1,10 +1,16 @@
 import { conform, useForm } from "@conform-to/react";
 import { parse } from "@conform-to/zod";
 import { CheckCircleIcon, LockClosedIcon, PlusIcon } from "@heroicons/react/20/solid";
-import { Form, useActionData, useNavigation, useNavigate, useSearchParams, useLocation } from "@remix-run/react";
+import {
+  Form,
+  useActionData,
+  useNavigation,
+  useNavigate,
+  useSearchParams,
+  useLocation,
+} from "@remix-run/react";
 import { type ActionFunctionArgs, type LoaderFunctionArgs, json } from "@remix-run/server-runtime";
-import { redirect,
-typedjson, useTypedFetcher } from "remix-typedjson";
+import { redirect, typedjson, useTypedFetcher } from "remix-typedjson";
 import { z } from "zod";
 import { OctoKitty } from "~/components/GitHubLoginButton";
 import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "~/components/primitives/Dialog";
@@ -226,7 +232,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
           await triggerInitialDeployment(projectId, { environment: "prod" });
         }
       } catch (error) {
-        logger.error("Failed to check Vercel integration or trigger initial deployment", { projectId, error });
+        logger.error("Failed to check Vercel integration or trigger initial deployment", {
+          projectId,
+          error,
+        });
       }
 
       return redirectWithMessage(
@@ -587,8 +596,13 @@ export function GitHubConnectionPrompt({
   environmentSlug: string;
   redirectUrl?: string;
 }) {
-
-  const githubInstallationRedirect = redirectUrl || v3ProjectSettingsIntegrationsPath({ slug: organizationSlug }, { slug: projectSlug }, { slug: environmentSlug });
+  const githubInstallationRedirect =
+    redirectUrl ||
+    v3ProjectSettingsIntegrationsPath(
+      { slug: organizationSlug },
+      { slug: projectSlug },
+      { slug: environmentSlug }
+    );
   return (
     <Fieldset>
       <InputGroup fullWidth>
@@ -920,11 +934,8 @@ export function GitHubSettingsPanel({
         redirectUrl={effectiveRedirectUrl}
       />
       {!data.connectedRepository && (
-        <Hint>
-          Connect your GitHub repository to automatically deploy your changes.
-        </Hint>
+        <Hint>Connect your GitHub repository to automatically deploy your changes.</Hint>
       )}
     </div>
-    
   );
 }

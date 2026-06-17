@@ -15,7 +15,7 @@ Pages are MDX files. Frontmatter format:
 ---
 title: "Page Title"
 description: "Brief description for SEO and previews"
-sidebarTitle: "Short Title"  # Optional, shown in sidebar if different from title
+sidebarTitle: "Short Title" # Optional, shown in sidebar if different from title
 ---
 ```
 

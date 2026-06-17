@@ -194,8 +194,8 @@ export function startDevOutput(options: DevOutputOptions) {
       !completion.ok && completion.skippedRetrying
         ? " (retrying skipped)"
         : !completion.ok && completion.retry !== undefined
-        ? ` (retrying in ${completion.retry.delay}ms)`
-        : ""
+          ? ` (retrying in ${completion.retry.delay}ms)`
+          : ""
     );
 
     const resultText = !completion.ok
@@ -209,8 +209,8 @@ export function startDevOutput(options: DevOutputOptions) {
     const errorText = !completion.ok
       ? formatErrorLog(completion.error)
       : "retry" in completion
-      ? `retry in ${completion.retry}ms`
-      : "";
+        ? `retry in ${completion.retry}ms`
+        : "";
 
     const elapsedText = chalkGrey(
       `(${formatDurationMilliseconds(durationMs, { style: "short" })})`

@@ -23,7 +23,6 @@ Our example task uses multiple LLM calls to extract claims from a news article a
 - Evaluates claims against recent sources and analyzes historical context in parallel
 - Combines results into a structured analysis report
 
-
 ```typescript
 import { openai } from "@ai-sdk/openai";
 import { batch, logger, task } from "@trigger.dev/sdk";
@@ -166,9 +165,7 @@ export const newsFactChecker = task({
         error: claimsResult.runs[0].error,
         runId: claimsResult.runs[0].id,
       });
-      throw new Error(
-        `Failed to extract claims: ${claimsResult.runs[0].error}`
-      );
+      throw new Error(`Failed to extract claims: ${claimsResult.runs[0].error}`);
     }
 
     const claims = claimsResult.runs[0].output;
@@ -182,8 +179,7 @@ export const newsFactChecker = task({
     // Split and process results
     const verifications = parallelResults.runs
       .filter(
-        (run): run is typeof run & { ok: true } =>
-          run.ok && run.taskIdentifier === "verify-source"
+        (run): run is typeof run & { ok: true } => run.ok && run.taskIdentifier === "verify-source"
       )
       .map((run) => run.output as SourceVerification);
 
@@ -211,7 +207,7 @@ On the Test page in the dashboard, select the `news-fact-checker` task and inclu
 
 This example payload verifies the claims in the news article and provides a report on the results.
 
-<video 
+<video
   src="https://content.trigger.dev/agent-orchestrator-workers.mp4"
   controls
   muted

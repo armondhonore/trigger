@@ -46,11 +46,11 @@ class Telemetry {
           createdAt: user.createdAt,
           isNewUser,
         };
-        
+
         if (referralSource) {
           properties.referralSource = referralSource;
         }
-        
+
         this.#posthogClient.identify({
           distinctId: user.id,
           properties,

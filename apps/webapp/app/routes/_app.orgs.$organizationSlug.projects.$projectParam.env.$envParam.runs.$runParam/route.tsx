@@ -189,7 +189,10 @@ async function getRunsListFromTableState({
       return null;
     }
 
-    const clickhouse = await clickhouseFactory.getClickhouseForOrganization(project.organizationId, "standard");
+    const clickhouse = await clickhouseFactory.getClickhouseForOrganization(
+      project.organizationId,
+      "standard"
+    );
     const runsListPresenter = new NextRunListPresenter($replica, clickhouse);
     const currentPageResult = await runsListPresenter.call(project.organizationId, environment.id, {
       userId,
@@ -318,11 +321,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
       // Skip on `_data` requests (Remix data fetches): they're
       // client-driven follow-ups and the client URL is what matters,
       // not the loader's view of it.
-      if (
-        !url.searchParams.has("span") &&
-        !url.searchParams.has("_data") &&
-        buffered.run.spanId
-      ) {
+      if (!url.searchParams.has("span") && !url.searchParams.has("_data") && buffered.run.spanId) {
         url.searchParams.set("span", buffered.run.spanId);
         throw redirect(url.pathname + "?" + url.searchParams.toString());
       }
@@ -347,11 +346,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   // block in the buffered fallback above — the sibling redirect routes
   // do this, but direct navigation to the canonical project-scoped URL
   // never hits them, leaving the right detail panel collapsed.
-  if (
-    !url.searchParams.has("span") &&
-    !url.searchParams.has("_data") &&
-    result.run.spanId
-  ) {
+  if (!url.searchParams.has("span") && !url.searchParams.has("_data") && result.run.spanId) {
     url.searchParams.set("span", result.run.spanId);
     throw redirect(url.pathname + "?" + url.searchParams.toString());
   }
@@ -1244,8 +1239,8 @@ function TimelineView({
                             index === 0
                               ? "ml-1"
                               : index === tickCount - 1
-                              ? "-ml-1 -translate-x-full"
-                              : "-translate-x-1/2"
+                                ? "-ml-1 -translate-x-full"
+                                : "-translate-x-1/2"
                           )}
                         >
                           {formatDurationMilliseconds(ms, {

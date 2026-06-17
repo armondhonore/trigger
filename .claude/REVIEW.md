@@ -47,4 +47,4 @@ The `apps/webapp/app/v3/` directory name is misleading — most code there is V2
 
 ## Confidence calibration for this repo
 
-The most common false-positive pattern: speculating about race conditions in code paths the agent doesn't have runtime visibility into. If the only evidence is "this *could* race", drop it. If you can point to a specific interleaving with file:line for each step, surface it.
+The most common false-positive pattern: speculating about race conditions in code paths the agent doesn't have runtime visibility into. If the only evidence is "this _could_ race", drop it. If you can point to a specific interleaving with file:line for each step, surface it.

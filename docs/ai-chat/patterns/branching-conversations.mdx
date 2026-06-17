@@ -192,15 +192,22 @@ function MessageActions({ message, chatId }: { message: UIMessage; chatId: strin
   return (
     <div>
       {editing ? (
-        <form onSubmit={() => {
-          transport.sendAction(chatId, { type: "edit", messageId: message.id, text: editText });
-          setEditing(false);
-        }}>
+        <form
+          onSubmit={() => {
+            transport.sendAction(chatId, { type: "edit", messageId: message.id, text: editText });
+            setEditing(false);
+          }}
+        >
           <input value={editText} onChange={(e) => setEditText(e.target.value)} />
           <button type="submit">Save</button>
         </form>
       ) : (
-        <button onClick={() => { setEditText(getMessageText(message)); setEditing(true); }}>
+        <button
+          onClick={() => {
+            setEditText(getMessageText(message));
+            setEditing(true);
+          }}
+        >
           Edit
         </button>
       )}
@@ -214,7 +221,11 @@ function MessageActions({ message, chatId }: { message: UIMessage; chatId: strin
 To show the `< 2/3 >` sibling switcher, query the tree for siblings at each fork point. This is a frontend concern — the backend exposes the data, the UI navigates it.
 
 ```tsx
-function BranchSwitcher({ message, chatId, siblings }: {
+function BranchSwitcher({
+  message,
+  chatId,
+  siblings,
+}: {
   message: UIMessage;
   chatId: string;
   siblings: { id: string; createdAt: string }[];
@@ -238,7 +249,9 @@ function BranchSwitcher({ message, chatId, siblings }: {
       >
         &lt;
       </button>
-      <span>{currentIndex + 1}/{siblings.length}</span>
+      <span>
+        {currentIndex + 1}/{siblings.length}
+      </span>
       <button
         disabled={currentIndex === siblings.length - 1}
         onClick={() => {
@@ -256,18 +269,20 @@ function BranchSwitcher({ message, chatId, siblings }: {
 ```
 
 <Note>
-  The sibling data (which messages share the same parent) needs to come from your database — query it when loading the chat or include it as client data. The agent only returns the active branch via `hydrateMessages`.
+  The sibling data (which messages share the same parent) needs to come from your database — query
+  it when loading the chat or include it as client data. The agent only returns the active branch
+  via `hydrateMessages`.
 </Note>
 
 ## How it works
 
-| Operation | What happens |
-|-----------|-------------|
-| **Send message** | `hydrateMessages` appends the new message as a child of the current leaf, returns the active path |
-| **Edit message** | `onAction` creates a sibling node with the same parent. The new node becomes the latest leaf, so `hydrateMessages` resolves through it. LLM responds to the edited history |
-| **Regenerate** | Same as edit — create a new assistant sibling. The AI SDK's `regenerate()` handles this via `trigger: "regenerate-message"` |
-| **Undo** | `onAction` removes the last two nodes. `chat.history.set()` updates the accumulator. LLM responds to the earlier state |
-| **Switch branch** | `onAction` updates which leaf is "active". `hydrateMessages` loads the new path. LLM responds to the switched context |
+| Operation         | What happens                                                                                                                                                               |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Send message**  | `hydrateMessages` appends the new message as a child of the current leaf, returns the active path                                                                          |
+| **Edit message**  | `onAction` creates a sibling node with the same parent. The new node becomes the latest leaf, so `hydrateMessages` resolves through it. LLM responds to the edited history |
+| **Regenerate**    | Same as edit — create a new assistant sibling. The AI SDK's `regenerate()` handles this via `trigger: "regenerate-message"`                                                |
+| **Undo**          | `onAction` removes the last two nodes. `chat.history.set()` updates the accumulator. LLM responds to the earlier state                                                     |
+| **Switch branch** | `onAction` updates which leaf is "active". `hydrateMessages` loads the new path. LLM responds to the switched context                                                      |
 
 ## Design notes
 

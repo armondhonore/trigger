@@ -50,14 +50,14 @@ Respond to the customer's issue. Be concise and helpful.`,
 
 ### Options
 
-| Option | Type | Required | Description |
-|--------|------|----------|-------------|
-| `id` | `string` | Yes | Unique identifier (becomes the prompt slug) |
-| `description` | `string` | No | Shown in the dashboard |
-| `model` | `string` | No | Default model (e.g. `"gpt-4o"`, `"claude-sonnet-4-6"`) |
-| `config` | `object` | No | Default config (temperature, maxTokens, etc.) |
-| `variables` | Zod/ArkType schema | No | Schema for template variables (enables validation and dashboard UI) |
-| `content` | `string` | Yes | The prompt template with `{{variable}}` placeholders |
+| Option        | Type               | Required | Description                                                         |
+| ------------- | ------------------ | -------- | ------------------------------------------------------------------- |
+| `id`          | `string`           | Yes      | Unique identifier (becomes the prompt slug)                         |
+| `description` | `string`           | No       | Shown in the dashboard                                              |
+| `model`       | `string`           | No       | Default model (e.g. `"gpt-4o"`, `"claude-sonnet-4-6"`)              |
+| `config`      | `object`           | No       | Default config (temperature, maxTokens, etc.)                       |
+| `variables`   | Zod/ArkType schema | No       | Schema for template variables (enables validation and dashboard UI) |
+| `content`     | `string`           | Yes      | The prompt template with `{{variable}}` placeholders                |
 
 ### Template syntax
 
@@ -93,10 +93,10 @@ const resolved = await supportPrompt.resolve({
   issue: "Cannot access billing dashboard",
 });
 
-console.log(resolved.text);    // The compiled prompt with variables filled in
+console.log(resolved.text); // The compiled prompt with variables filled in
 console.log(resolved.version); // e.g. 3
-console.log(resolved.model);   // "gpt-4o"
-console.log(resolved.labels);  // ["current"] or ["override"]
+console.log(resolved.model); // "gpt-4o"
+console.log(resolved.labels); // ["current"] or ["override"]
 ```
 
 ### Via standalone prompts.resolve()
@@ -132,7 +132,9 @@ const current = await supportPrompt.resolve(variables, { label: "current" });
 By default, `resolve()` returns the **override** version if one is active, otherwise the **current** (latest deployed) version.
 
 <Note>
-  Both `promptHandle.resolve()` and `prompts.resolve()` call the Trigger.dev API when a client is configured. During local dev with `trigger dev`, this means you'll always get the server version (including overrides).
+  Both `promptHandle.resolve()` and `prompts.resolve()` call the Trigger.dev API when a client is
+  configured. During local dev with `trigger dev`, this means you'll always get the server version
+  (including overrides).
 </Note>
 
 ## Using with the AI SDK
@@ -273,7 +275,10 @@ const options = chat.toStreamTextOptions();
 ```
 
 <Tip>
-  When the user provides a `registry` and the prompt has a `model` string (e.g. `"anthropic:claude-sonnet-4-5"`), the model is resolved via `registry.languageModel()` and included in the returned options. This means `streamText` uses the prompt's model by default — no manual model selection needed.
+  When the user provides a `registry` and the prompt has a `model` string (e.g.
+  `"anthropic:claude-sonnet-4-5"`), the model is resolved via `registry.languageModel()` and
+  included in the returned options. This means `streamText` uses the prompt's model by default — no
+  manual model selection needed.
 </Tip>
 
 ### Reading the prompt
@@ -355,16 +360,16 @@ await prompts.promote("customer-support", 2);
 
 ### All management methods
 
-| Method | Description |
-|--------|-------------|
-| `prompts.list()` | List all prompts in the current environment |
-| `prompts.versions(slug)` | List all versions for a prompt |
-| `prompts.resolve(slug, variables?, options?)` | Resolve a prompt by slug |
-| `prompts.promote(slug, version)` | Promote a version to current |
-| `prompts.createOverride(slug, body)` | Create an override |
-| `prompts.updateOverride(slug, body)` | Update the active override |
-| `prompts.removeOverride(slug)` | Remove the active override |
-| `prompts.reactivateOverride(slug, version)` | Reactivate a removed override |
+| Method                                        | Description                                 |
+| --------------------------------------------- | ------------------------------------------- |
+| `prompts.list()`                              | List all prompts in the current environment |
+| `prompts.versions(slug)`                      | List all versions for a prompt              |
+| `prompts.resolve(slug, variables?, options?)` | Resolve a prompt by slug                    |
+| `prompts.promote(slug, version)`              | Promote a version to current                |
+| `prompts.createOverride(slug, body)`          | Create an override                          |
+| `prompts.updateOverride(slug, body)`          | Update the active override                  |
+| `prompts.removeOverride(slug)`                | Remove the active override                  |
+| `prompts.reactivateOverride(slug, version)`   | Reactivate a removed override               |
 
 ## Overrides
 
@@ -425,6 +430,6 @@ When you use `toAISDKTelemetry()`, AI generation spans in the run trace get a cu
 ```ts
 import type { PromptHandle, PromptIdentifier, PromptVariables } from "@trigger.dev/sdk";
 
-type Id = PromptIdentifier<typeof supportPrompt>;   // "customer-support"
-type Vars = PromptVariables<typeof supportPrompt>;   // { customerName: string; plan: string; issue: string }
+type Id = PromptIdentifier<typeof supportPrompt>; // "customer-support"
+type Vars = PromptVariables<typeof supportPrompt>; // { customerName: string; plan: string; issue: string }
 ```

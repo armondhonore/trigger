@@ -48,19 +48,19 @@ Enhanced batch triggering with larger payloads and streaming ingestion.
 
 ### Rate Limiting (per environment)
 
-| Tier | Bucket Size | Refill Rate |
-|------|-------------|-------------|
-| Free | 1,200 runs | 100 runs/10 sec |
-| Hobby | 5,000 runs | 500 runs/5 sec |
-| Pro | 5,000 runs | 500 runs/5 sec |
+| Tier  | Bucket Size | Refill Rate     |
+| ----- | ----------- | --------------- |
+| Free  | 1,200 runs  | 100 runs/10 sec |
+| Hobby | 5,000 runs  | 500 runs/5 sec  |
+| Pro   | 5,000 runs  | 500 runs/5 sec  |
 
 ### Concurrent Batch Processing
 
-| Tier | Concurrent Batches |
-|------|-------------------|
-| Free | 1 |
-| Hobby | 10 |
-| Pro | 10 |
+| Tier  | Concurrent Batches |
+| ----- | ------------------ |
+| Free  | 1                  |
+| Hobby | 10                 |
+| Pro   | 10                 |
 
 ### Usage
 
@@ -122,8 +122,8 @@ await myTask.trigger(
   { userId: "123" },
   {
     debounce: {
-      key: "user-123-update",  // Unique identifier for debounce group
-      delay: "5s",              // Wait duration ("5s", "1m", or milliseconds)
+      key: "user-123-update", // Unique identifier for debounce group
+      delay: "5s", // Wait duration ("5s", "1m", or milliseconds)
     },
   }
 );
@@ -135,14 +135,20 @@ await myTask.trigger(
 
 ```ts
 // First trigger sets the payload
-await myTask.trigger({ action: "first" }, {
-  debounce: { key: "my-key", delay: "10s" }
-});
+await myTask.trigger(
+  { action: "first" },
+  {
+    debounce: { key: "my-key", delay: "10s" },
+  }
+);
 
 // Second trigger only reschedules - payload remains "first"
-await myTask.trigger({ action: "second" }, {
-  debounce: { key: "my-key", delay: "10s" }
-});
+await myTask.trigger(
+  { action: "second" },
+  {
+    debounce: { key: "my-key", delay: "10s" },
+  }
+);
 // Task executes with { action: "first" }
 ```
 
@@ -162,6 +168,7 @@ await myTask.trigger(
 ```
 
 In trailing mode, these options update with each trigger:
+
 - `payload` — task input data
 - `metadata` — run metadata
 - `tags` — run tags (replaces existing)

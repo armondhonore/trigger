@@ -604,7 +604,6 @@
 ### Minor Changes
 
 - Improved Batch Triggering: ([#1502](https://github.com/triggerdotdev/trigger.dev/pull/1502))
-
   - The new Batch Trigger endpoint is now asynchronous and supports up to 500 runs per request.
   - The new endpoint also supports triggering multiple different tasks in a single batch request (support in the SDK coming soon).
   - The existing `batchTrigger` method now supports the new endpoint, and shouldn't require any changes to your code.
@@ -625,7 +624,6 @@
   ```
 
   ### Breaking Changes
-
   - We've removed the `idempotencyKey` option from `triggerAndWait` and `batchTriggerAndWait`, because it can lead to permanently frozen runs in deployed tasks. We're working on upgrading our entire system to support idempotency keys on these methods, and we'll re-add the option once that's complete.
 
 ### Patch Changes

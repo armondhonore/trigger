@@ -3,6 +3,7 @@
 This repository is a pnpm monorepo managed with Turbo. It contains multiple apps and packages that make up the Trigger.dev platform and SDK.
 
 ## Repository layout
+
 - `apps/webapp` – Remix application that serves as the main API and dashboard.
 - `apps/supervisor` – Node application for executing built tasks.
 - `packages/*` – Published packages such as `@trigger.dev/sdk`, the CLI (`trigger.dev`), and shared libraries.
@@ -13,6 +14,7 @@ This repository is a pnpm monorepo managed with Turbo. It contains multiple apps
 See `ai/references/repo.md` for a more complete explanation of the workspaces.
 
 ## Development setup
+
 1. Install dependencies with `pnpm i` (pnpm `10.33.2` and Node.js `20.20.2` are required).
 2. Copy `.env.example` to `.env` and generate a random 16 byte hex string for `ENCRYPTION_KEY` (`openssl rand -hex 16`). Update other secrets if needed.
 3. Start the local services with Docker:
@@ -37,6 +39,7 @@ See `ai/references/repo.md` for a more complete explanation of the workspaces.
 For full setup instructions see `CONTRIBUTING.md`.
 
 ## Running tests
+
 - Unit tests use **vitest**. Run all tests:
   ```bash
   pnpm run test
@@ -55,15 +58,16 @@ For full setup instructions see `CONTRIBUTING.md`.
 Refer to `ai/references/tests.md` for details on writing tests. Tests should avoid mocks or stubs and use the helpers from `@internal/testcontainers` when Redis or Postgres are needed.
 
 ## Coding style
+
 - Formatting is enforced using Prettier. Run `pnpm run format` before committing.
 - Follow the existing project conventions. Test files live beside the files under test and use descriptive `describe` and `it` blocks.
 - Do not commit directly to the `main` branch. All changes should be made in a separate branch and go through a pull request.
 
 ## Additional docs
+
 - The root `README.md` describes Trigger.dev and links to documentation.
 - The `docs` workspace contains our documentation site, which can be run locally with:
   ```bash
   pnpm run dev --filter docs
   ```
 - The [`triggerdotdev/references`](https://github.com/triggerdotdev/references) repo's README explains how to create new reference projects for manual testing.
-

@@ -5,6 +5,7 @@ This benchmark measures the performance impact of error fingerprinting in the Ru
 ## Overview
 
 The benchmark:
+
 1. Creates a realistic dataset of TaskRuns (7% with errors by default)
 2. Runs the producer in a **separate process** to simulate real-world load
 3. Measures replication throughput and Event Loop Utilization (ELU)
@@ -96,17 +97,20 @@ BENCHMARKS_ENABLED=1 pnpm run test ./test/runsReplicationBenchmark.test.ts --run
 ## What Gets Measured
 
 ### 1. Producer Metrics
+
 - Total runs created
 - Runs with errors (should be ~7%)
 - Duration
 - Throughput (runs/sec)
 
 ### 2. Replication Metrics
+
 - Total runs replicated to ClickHouse
 - Replication duration
 - Replication throughput (runs/sec)
 
 ### 3. Event Loop Utilization (ELU)
+
 - Mean utilization (%)
 - P50 (median) utilization (%)
 - P95 utilization (%)
@@ -114,6 +118,7 @@ BENCHMARKS_ENABLED=1 pnpm run test ./test/runsReplicationBenchmark.test.ts --run
 - All samples for detailed analysis
 
 ### 4. OpenTelemetry Metrics
+
 - Batches flushed
 - Task runs inserted
 - Payloads inserted
@@ -210,6 +215,7 @@ Fingerprinting impact on ELU (P99): +4.60%
 ### Expected Results
 
 With a 7% error rate and SHA-256 hashing:
+
 - **Small impact** (<5% overhead): Fingerprinting is well optimized
 - **Moderate impact** (5-15% overhead): May want to consider optimizations
 - **Large impact** (>15% overhead): Fingerprinting needs optimization
@@ -236,6 +242,7 @@ The producer generates realistic error variety:
 - ReferenceError (undefined variables)
 
 Each error template includes:
+
 - Realistic stack traces
 - Variable IDs and timestamps
 - Line/column numbers
@@ -248,6 +255,7 @@ This ensures the fingerprinting algorithm is tested with realistic data.
 ### Benchmark Times Out
 
 Increase the timeout:
+
 ```typescript
 REPLICATION_TIMEOUT_MS: 300_000, // 5 minutes
 ```
@@ -255,6 +263,7 @@ REPLICATION_TIMEOUT_MS: 300_000, // 5 minutes
 ### Producer Fails
 
 Check Postgres connection and ensure:
+
 - Docker services are running (`pnpm run docker`)
 - Database is accessible
 - Sufficient disk space
@@ -262,6 +271,7 @@ Check Postgres connection and ensure:
 ### Different Results Each Run
 
 This is normal! Factors affecting variance:
+
 - System load
 - Docker container overhead
 - Database I/O

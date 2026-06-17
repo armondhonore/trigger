@@ -81,19 +81,21 @@ export const myChat = chat.customAgent({
 ```
 
 <Warning>
-  If you pass `compaction` or `pendingMessages` to `chat.createSession()`, you must also pass `prepareStep: turn.prepareStep()` to `streamText` (or spread `chat.toStreamTextOptions()`, which wires it automatically). Without it, both features silently no-op.
+  If you pass `compaction` or `pendingMessages` to `chat.createSession()`, you must also pass
+  `prepareStep: turn.prepareStep()` to `streamText` (or spread `chat.toStreamTextOptions()`, which
+  wires it automatically). Without it, both features silently no-op.
 </Warning>
 
 ### ChatSessionOptions
 
-| Option                 | Type                         | Default     | Description                                                                                       |
-| ---------------------- | ---------------------------- | ----------- | -------------------------------------------------------------------------------------------------- |
-| `signal`               | `AbortSignal`                | required    | Run-level cancel signal (from task context)                                                       |
-| `idleTimeoutInSeconds` | `number`                     | `30`        | Seconds to stay idle between turns before suspending                                              |
-| `timeout`              | `string`                     | `"1h"`      | Duration string for suspend timeout                                                               |
-| `maxTurns`             | `number`                     | `100`       | Max turns before ending                                                                           |
-| `compaction`           | `ChatAgentCompactionOptions` | `undefined` | Automatic context [compaction](/ai-chat/compaction) — same options as on `chat.agent()`           |
-| `pendingMessages`      | `PendingMessagesOptions`     | `undefined` | Mid-execution [message injection](/ai-chat/pending-messages) — same options as on `chat.agent()`  |
+| Option                 | Type                         | Default     | Description                                                                                      |
+| ---------------------- | ---------------------------- | ----------- | ------------------------------------------------------------------------------------------------ |
+| `signal`               | `AbortSignal`                | required    | Run-level cancel signal (from task context)                                                      |
+| `idleTimeoutInSeconds` | `number`                     | `30`        | Seconds to stay idle between turns before suspending                                             |
+| `timeout`              | `string`                     | `"1h"`      | Duration string for suspend timeout                                                              |
+| `maxTurns`             | `number`                     | `100`       | Max turns before ending                                                                          |
+| `compaction`           | `ChatAgentCompactionOptions` | `undefined` | Automatic context [compaction](/ai-chat/compaction) — same options as on `chat.agent()`          |
+| `pendingMessages`      | `PendingMessagesOptions`     | `undefined` | Mid-execution [message injection](/ai-chat/pending-messages) — same options as on `chat.agent()` |
 
 Between turns the run idles on `waitWithIdleTimeout`: after `idleTimeoutInSeconds` with no message it suspends (compute is freed), and the next message restores it on the same run — the same warm/suspended pipeline `chat.agent()` uses.
 
@@ -101,28 +103,28 @@ Between turns the run idles on `waitWithIdleTimeout`: after `idleTimeoutInSecond
 
 Each turn yielded by the iterator provides:
 
-| Field               | Type                              | Description                                              |
-| ------------------- | --------------------------------- | -------------------------------------------------------- |
-| `number`            | `number`                          | Turn number (0-indexed)                                  |
-| `chatId`            | `string`                          | Chat session ID                                          |
-| `trigger`           | `string`                          | What triggered this turn                                 |
-| `clientData`        | `unknown`                         | Client data from the transport                           |
-| `messages`          | `ModelMessage[]`                  | Full accumulated model messages — pass to `streamText`   |
-| `uiMessages`        | `UIMessage[]`                     | Full accumulated UI messages — use for persistence       |
-| `signal`            | `AbortSignal`                     | Combined stop+cancel signal (fresh each turn)            |
-| `stopped`           | `boolean`                         | Whether the user stopped generation this turn            |
-| `continuation`      | `boolean`                         | Whether this is a continuation run                       |
-| `previousTurnUsage` | `LanguageModelUsage \| undefined` | Token usage from the previous turn (undefined on turn 0) |
-| `totalUsage`        | `LanguageModelUsage`              | Cumulative token usage across all completed turns        |
+| Field               | Type                              | Description                                                                                                                     |
+| ------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `number`            | `number`                          | Turn number (0-indexed)                                                                                                         |
+| `chatId`            | `string`                          | Chat session ID                                                                                                                 |
+| `trigger`           | `string`                          | What triggered this turn                                                                                                        |
+| `clientData`        | `unknown`                         | Client data from the transport                                                                                                  |
+| `messages`          | `ModelMessage[]`                  | Full accumulated model messages — pass to `streamText`                                                                          |
+| `uiMessages`        | `UIMessage[]`                     | Full accumulated UI messages — use for persistence                                                                              |
+| `signal`            | `AbortSignal`                     | Combined stop+cancel signal (fresh each turn)                                                                                   |
+| `stopped`           | `boolean`                         | Whether the user stopped generation this turn                                                                                   |
+| `continuation`      | `boolean`                         | Whether this is a continuation run                                                                                              |
+| `previousTurnUsage` | `LanguageModelUsage \| undefined` | Token usage from the previous turn (undefined on turn 0)                                                                        |
+| `totalUsage`        | `LanguageModelUsage`              | Cumulative token usage across all completed turns                                                                               |
 | `handover`          | `{ isFinal: boolean } \| null`    | The [`chat.headStart`](/ai-chat/fast-starts#handover-with-custom-agents) handover for this turn (turn 0 only); `null` otherwise |
 
-| Method                        | Description                                                                                                |
-| ----------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `turn.complete(source?)`      | Pipe stream, capture response, accumulate, and signal turn-complete. Call with no source on a final head-start handover (`turn.handover.isFinal`), where the warm step-1 partial is already the response |
-| `turn.done()`                 | Signal turn-complete only (when you have piped manually)                                                     |
-| `turn.addResponse(response)`  | Add a response to the accumulator manually                                                                 |
-| `turn.setMessages(uiMessages)`| Replace the accumulated messages — continuation seeding and on-demand compaction                           |
-| `turn.prepareStep()`          | `prepareStep` callback wiring compaction + injection — pass to `streamText` when not spreading `chat.toStreamTextOptions()` |
+| Method                         | Description                                                                                                                                                                                              |
+| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `turn.complete(source?)`       | Pipe stream, capture response, accumulate, and signal turn-complete. Call with no source on a final head-start handover (`turn.handover.isFinal`), where the warm step-1 partial is already the response |
+| `turn.done()`                  | Signal turn-complete only (when you have piped manually)                                                                                                                                                 |
+| `turn.addResponse(response)`   | Add a response to the accumulator manually                                                                                                                                                               |
+| `turn.setMessages(uiMessages)` | Replace the accumulated messages — continuation seeding and on-demand compaction                                                                                                                         |
+| `turn.prepareStep()`           | `prepareStep` callback wiring compaction + injection — pass to `streamText` when not spreading `chat.toStreamTextOptions()`                                                                              |
 
 ### Continuation runs and history seeding
 
@@ -183,15 +185,15 @@ for await (const turn of session) {
 
 For full control, skip `createSession` and compose the primitives directly:
 
-| Primitive                       | Description                                                                                  |
-| ------------------------------- | -------------------------------------------------------------------------------------------- |
-| `chat.messages`                 | Input stream for incoming messages — use `.waitWithIdleTimeout()` to wait for the next turn  |
-| `chat.createStopSignal()`       | Create a managed stop signal wired to the stop input stream                                  |
-| `chat.pipeAndCapture(result)`   | Pipe a `StreamTextResult` to the chat stream and capture the response                        |
-| `chat.writeTurnComplete()`      | Signal the frontend that the current turn is complete                                        |
-| `chat.MessageAccumulator`       | Accumulates conversation messages across turns                                               |
-| `chat.pipe(stream)`             | Pipe a stream to the frontend (no response capture)                                          |
-| `chat.cleanupAbortedParts(msg)` | Clean up incomplete parts from a stopped response                                            |
+| Primitive                       | Description                                                                                 |
+| ------------------------------- | ------------------------------------------------------------------------------------------- |
+| `chat.messages`                 | Input stream for incoming messages — use `.waitWithIdleTimeout()` to wait for the next turn |
+| `chat.createStopSignal()`       | Create a managed stop signal wired to the stop input stream                                 |
+| `chat.pipeAndCapture(result)`   | Pipe a `StreamTextResult` to the chat stream and capture the response                       |
+| `chat.writeTurnComplete()`      | Signal the frontend that the current turn is complete                                       |
+| `chat.MessageAccumulator`       | Accumulates conversation messages across turns                                              |
+| `chat.pipe(stream)`             | Pipe a stream to the frontend (no response capture)                                         |
+| `chat.cleanupAbortedParts(msg)` | Clean up incomplete parts from a stopped response                                           |
 
 A complete loop:
 

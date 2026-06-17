@@ -19,10 +19,9 @@ import { chat } from "@trigger.dev/sdk/ai";
 
 export const myChat = chat.agent({
   id: "my-chat",
-  machine: "small-1x",         // default machine
-  oomMachine: "medium-2x",     // fallback on OOM
-  run: async ({ messages, signal }) =>
-    streamText({ model, messages, abortSignal: signal }),
+  machine: "small-1x", // default machine
+  oomMachine: "medium-2x", // fallback on OOM
+  run: async ({ messages, signal }) => streamText({ model, messages, abortSignal: signal }),
 });
 ```
 

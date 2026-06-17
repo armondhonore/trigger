@@ -120,19 +120,13 @@ export async function action({ request, params }: ActionFunctionArgs) {
         const newTagsCount = existing
           ? nonEmptyTags.filter((t) => !existing.includes(t)).length
           : nonEmptyTags.length;
-        return json(
-          { message: `Successfully set ${newTagsCount} new tags.` },
-          { status: 200 }
-        );
+        return json({ message: `Successfully set ${newTagsCount} new tags.` }, { status: 200 });
       },
       // Buffer rejected the append because it would exceed the cap. We
       // don't know the exact deduped overflow count here (the Lua does),
       // so report the limit rather than a precise "trying to set N".
       rejectedResponse: () =>
-        json(
-          { error: `Runs can only have ${MAX_TAGS_PER_RUN} tags.` },
-          { status: 422 }
-        ),
+        json({ error: `Runs can only have ${MAX_TAGS_PER_RUN} tags.` }, { status: 422 }),
       abortSignal: getRequestAbortSignal(),
     });
 

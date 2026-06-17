@@ -75,8 +75,8 @@ await myTask.trigger(
   { userId: "123" },
   {
     debounce: {
-      key: "user-123-update",  // Unique key for debounce group
-      delay: "5s",              // Wait before executing
+      key: "user-123-update", // Unique key for debounce group
+      delay: "5s", // Wait before executing
     },
   }
 );
@@ -88,13 +88,14 @@ await myTask.trigger(
     debounce: {
       key: "trailing-example",
       delay: "10s",
-      mode: "trailing",  // Default is "leading" (first payload)
+      mode: "trailing", // Default is "leading" (first payload)
     },
   }
 );
 ```
 
 **Debounce modes:**
+
 - `leading` (default): Uses payload from first trigger, subsequent triggers only reschedule
 - `trailing`: Uses payload from most recent trigger
 

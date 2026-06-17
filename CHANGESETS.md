@@ -30,11 +30,11 @@ See `.server-changes/README.md` for full documentation.
 
 ## When to add which
 
-| PR changes | What to add |
-|---|---|
+| PR changes                  | What to add                          |
+| --------------------------- | ------------------------------------ |
 | Only packages (`packages/`) | Changeset (`pnpm run changeset:add`) |
-| Only server (`apps/`) | `.server-changes/` file |
-| Both packages and server | Just the changeset |
+| Only server (`apps/`)       | `.server-changes/` file              |
+| Both packages and server    | Just the changeset                   |
 
 ## Release instructions (CI)
 

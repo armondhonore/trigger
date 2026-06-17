@@ -81,6 +81,7 @@ team settings.
 You can find / generate the `VERCEL_ACCESS_TOKEN` in your Vercel
 [dashboard](https://vercel.com/account/settings/tokens). Make sure the scope of the token covers
 the project with the environment variables you want to sync.
+
 </Accordion>
 
 <Accordion title="Running in Vercel build environment">
@@ -93,6 +94,7 @@ the actual values come from the local environment. Reading values from `process.
 extension to use values that Vercel integrations (such as the Neon integration) set per preview
 deployment in the "Provisioning Integrations" phase that happens just before the Vercel build
 starts.
+
 </Accordion>
 
 <Accordion title="Using with Neon database Vercel integration">
@@ -100,9 +102,10 @@ If you have the Neon database Vercel integration installed and are running build
 Vercel environment, we recommend using `syncNeonEnvVars` in addition to `syncVercelEnvVars` for your
 database environment variables.
 
-This ensures that the correct database connection strings are used for your 
+This ensures that the correct database connection strings are used for your
 selected environment and current branch, as `syncVercelEnvVars` may not accurately reflect
 branch-specific database credentials when run locally.
+
 </Accordion>
 </AccordionGroup>
 
@@ -151,6 +154,7 @@ You need to set the `NEON_ACCESS_TOKEN` and `NEON_PROJECT_ID` environment variab
 as arguments to the `syncNeonEnvVars` build extension.
 
 You can generate a `NEON_ACCESS_TOKEN` in your Neon [dashboard](https://console.neon.tech/app/settings/api-keys).
+
 </Accordion>
 
 <Accordion title="Running in Vercel environment">
@@ -158,6 +162,7 @@ When running the build from a Vercel environment (determined by checking if the 
 environment variable is present), this extension is skipped entirely.
 
 This is because Neon's Vercel integration already handles environment variable synchronization in Vercel environments.
+
 </Accordion>
 
 <Accordion title="Using with Neon database Vercel integration">
@@ -166,12 +171,13 @@ Vercel environment, we recommend using `syncNeonEnvVars` in addition to `syncVer
 database environment variables.
 
 This ensures that the correct database connection strings are used for your selected environment and current branch, as `syncVercelEnvVars` may not accurately reflect branch-specific database credentials when run locally.
+
 </Accordion>
 </AccordionGroup>
 
 <Note>
-  This extension is skipped for `prod` environments. It is designed to sync branch-specific
-  database connections for preview/staging environments.
+  This extension is skipped for `prod` environments. It is designed to sync branch-specific database
+  connections for preview/staging environments.
 </Note>
 
 ```ts
@@ -231,6 +237,7 @@ You need to set the `SUPABASE_ACCESS_TOKEN` and `SUPABASE_PROJECT_ID` environmen
 as arguments to the `syncSupabaseEnvVars` build extension.
 
 You can generate a `SUPABASE_ACCESS_TOKEN` in your Supabase [dashboard](https://supabase.com/dashboard/account/tokens).
+
 </Accordion>
 
 <Accordion title="Running in Vercel environment">
@@ -240,9 +247,9 @@ environment variable is present), this extension is skipped entirely.
 </AccordionGroup>
 
 <Note>
-  For `prod` environments, this extension uses credentials from your default Supabase
-  branch. For `preview` and `staging` environments, it matches the git branch name to a Supabase
-  branch and syncs the corresponding database connection strings and API keys. `dev` environments are skipped.
+  For `prod` environments, this extension uses credentials from your default Supabase branch. For
+  `preview` and `staging` environments, it matches the git branch name to a Supabase branch and
+  syncs the corresponding database connection strings and API keys. `dev` environments are skipped.
 </Note>
 
 ```ts

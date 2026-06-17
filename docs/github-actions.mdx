@@ -6,7 +6,8 @@ description: "You can easily deploy your tasks with GitHub actions and other CI 
 The instructions below are specific to GitHub Actions, but the same concepts can be used with other CI systems.
 
 <Tip>
-  Check out our new [GitHub integration](/github-integration) for automatic deployments, without adding any GitHub Actions workflows.
+  Check out our new [GitHub integration](/github-integration) for automatic deployments, without
+  adding any GitHub Actions workflows.
 </Tip>
 
 ## GitHub Actions example
@@ -115,7 +116,10 @@ jobs:
 ```
 
 <Note>
-  **Include `closed`** in the `pull_request.types` list. Without it, preview branches won't be archived when PRs are merged or closed, and you may hit the limit on active preview branches. See [Preview branches](/deployment/preview-branches#preview-branches-with-github-actions-recommended) for more details.
+  **Include `closed`** in the `pull_request.types` list. Without it, preview branches won't be
+  archived when PRs are merged or closed, and you may hit the limit on active preview branches. See
+  [Preview branches](/deployment/preview-branches#preview-branches-with-github-actions-recommended)
+  for more details.
 </Note>
 
 ## Creating a Personal Access Token

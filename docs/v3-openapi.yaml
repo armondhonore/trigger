@@ -558,7 +558,17 @@ paths:
                           description: The log level of the event.
                         kind:
                           type: string
-                          enum: [UNSPECIFIED, INTERNAL, SERVER, CLIENT, PRODUCER, CONSUMER, UNRECOGNIZED, LOG]
+                          enum:
+                            [
+                              UNSPECIFIED,
+                              INTERNAL,
+                              SERVER,
+                              CLIENT,
+                              PRODUCER,
+                              CONSUMER,
+                              UNRECOGNIZED,
+                              LOG,
+                            ]
                           description: The kind of span event.
                         attemptNumber:
                           type: number
@@ -808,15 +818,7 @@ paths:
           schema:
             type: string
             enum:
-              [
-                "PENDING",
-                "BUILDING",
-                "DEPLOYING",
-                "DEPLOYED",
-                "FAILED",
-                "CANCELED",
-                "TIMED_OUT",
-              ]
+              ["PENDING", "BUILDING", "DEPLOYING", "DEPLOYED", "FAILED", "CANCELED", "TIMED_OUT"]
           description: Filter deployments by status.
         - in: query
           name: period

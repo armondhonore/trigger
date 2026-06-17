@@ -140,7 +140,7 @@ export class SelectBestEnvironmentPresenter {
   }
 
   async selectBestEnvironment<
-    T extends { id: string; type: RuntimeEnvironmentType; orgMember: { userId: string } | null }
+    T extends { id: string; type: RuntimeEnvironmentType; orgMember: { userId: string } | null },
   >(projectId: string, user: UserFromSession, environments: T[]): Promise<T> {
     //try get current environment from prefs
     const currentEnvironmentId: string | undefined =

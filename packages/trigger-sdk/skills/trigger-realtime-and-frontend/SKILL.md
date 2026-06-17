@@ -58,7 +58,13 @@ const publicAccessToken = await auth.createPublicToken({
 "use client";
 import { useRealtimeRun } from "@trigger.dev/react-hooks";
 
-export function RunStatus({ runId, publicAccessToken }: { runId: string; publicAccessToken: string }) {
+export function RunStatus({
+  runId,
+  publicAccessToken,
+}: {
+  runId: string;
+  publicAccessToken: string;
+}) {
   const { run, error } = useRealtimeRun(runId, { accessToken: publicAccessToken });
   if (error) return <div>Error: {error.message}</div>;
   if (!run) return <div>Loading...</div>;
@@ -81,12 +87,22 @@ from `auth.createTriggerPublicToken`). Both default to a 15 minute expiry.
 import { useRealtimeRun } from "@trigger.dev/react-hooks";
 import type { myTask } from "@/trigger/myTask";
 
-export function Progress({ runId, publicAccessToken }: { runId: string; publicAccessToken: string }) {
+export function Progress({
+  runId,
+  publicAccessToken,
+}: {
+  runId: string;
+  publicAccessToken: string;
+}) {
   const { run, error } = useRealtimeRun<typeof myTask>(runId, { accessToken: publicAccessToken });
   if (error) return <div>Error: {error.message}</div>;
   if (!run) return <div>Loading...</div>;
   const progress = run.metadata?.progress as { percentage?: number } | undefined;
-  return <div>{run.status}: {progress?.percentage ?? 0}%</div>;
+  return (
+    <div>
+      {run.status}: {progress?.percentage ?? 0}%
+    </div>
+  );
 }
 ```
 
@@ -146,7 +162,11 @@ export function Runner({ publicAccessToken }: { publicAccessToken: string }) {
     accessToken: publicAccessToken,
   });
   if (run) return <div>{run.status}</div>;
-  return <button onClick={() => submit({ foo: "bar" })} disabled={isLoading}>Run</button>;
+  return (
+    <button onClick={() => submit({ foo: "bar" })} disabled={isLoading}>
+      Run
+    </button>
+  );
 }
 ```
 
@@ -163,7 +183,13 @@ plus optional stream key. Returns `{ parts, error }`.
 import { useRealtimeStream } from "@trigger.dev/react-hooks";
 import { aiStream } from "@/trigger/streams"; // a defined stream -> typed parts
 
-export function StreamView({ runId, publicAccessToken }: { runId: string; publicAccessToken: string }) {
+export function StreamView({
+  runId,
+  publicAccessToken,
+}: {
+  runId: string;
+  publicAccessToken: string;
+}) {
   const { parts, error } = useRealtimeStream(aiStream, runId, {
     accessToken: publicAccessToken,
     timeoutInSeconds: 300, // default 60
@@ -262,10 +288,12 @@ for await (const run of runs.subscribeToRun<typeof myTask>(handle.id)) {
 ## References
 
 Sibling skills:
+
 - `trigger-authoring-tasks` for the task side: `streams.define()`, `metadata.set()`, and `wait.createToken`.
 - `trigger-authoring-chat-agent` and `trigger-chat-agent-advanced` for chat agents, which build on these realtime streams.
 
 Reference docs ship beside this skill in the same package, read them locally (no network), pinned to your installed version. The `sources:` frontmatter above lists every doc this skill draws from, all under `@trigger.dev/sdk/docs/`. Start with:
+
 - `@trigger.dev/sdk/docs/realtime/react-hooks/subscribe.mdx`
 - `@trigger.dev/sdk/docs/realtime/react-hooks/streams.mdx`
 - `@trigger.dev/sdk/docs/realtime/auth.mdx`

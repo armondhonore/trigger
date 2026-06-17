@@ -271,30 +271,28 @@ See the dedicated [Troubleshooting](/private-networking/troubleshooting) page fo
 such as the "Private link not found" wizard error. A few quick checks specific to this setup flow:
 
 <Expandable title="Status stays at Pending or Provisioning for several minutes">
-  - Confirm Trigger.dev's AWS account ID is in your endpoint service's **Allow principals** list.
-  - Confirm the endpoint service is **Available** in the AWS console.
-  - Confirm "Require acceptance" is set to **No** on the endpoint service. If it's set to **Yes**,
-    the request is sitting in your pending queue and you must approve it manually.
+  - Confirm Trigger.dev's AWS account ID is in your endpoint service's **Allow principals** list. -
+  Confirm the endpoint service is **Available** in the AWS console. - Confirm "Require acceptance"
+  is set to **No** on the endpoint service. If it's set to **Yes**, the request is sitting in your
+  pending queue and you must approve it manually.
 </Expandable>
 
 <Expandable title="Status is Active but my task can't connect">
-  - Confirm the NLB has a target registered and the target's health check is passing.
-  - Confirm the listener port matches the port your task code is dialing.
-  - Confirm the security group on your resource allows inbound traffic from the NLB or the VPC's
-    private IP range.
-  - If the NLB itself has a security group attached, turn off **Enforce inbound rules on
-    PrivateLink traffic** on the load balancer. See [the troubleshooting
-    page](/private-networking/troubleshooting#connection-is-active-but-the-assigned-ip-is-not-reachable-from-tasks)
-    for details.
-  - Try connecting from inside the VPC first (e.g., a bastion host) to rule out resource-side
-    issues.
+  - Confirm the NLB has a target registered and the target's health check is passing. - Confirm the
+  listener port matches the port your task code is dialing. - Confirm the security group on your
+  resource allows inbound traffic from the NLB or the VPC's private IP range. - If the NLB itself
+  has a security group attached, turn off **Enforce inbound rules on PrivateLink traffic** on the
+  load balancer. See [the troubleshooting
+  page](/private-networking/troubleshooting#connection-is-active-but-the-assigned-ip-is-not-reachable-from-tasks)
+  for details. - Try connecting from inside the VPC first (e.g., a bastion host) to rule out
+  resource-side issues.
 </Expandable>
 
 <Expandable title="Connection works but is slow">
   - Cross-region connections add ~10–30ms RTT depending on the regions involved. If your tasks run
-    in a different region than your resource, expect higher latency.
-  - The NLB and target group's health checks influence connection setup time. Tighter health check
-    intervals reduce failover time after a backend goes unhealthy.
+  in a different region than your resource, expect higher latency. - The NLB and target group's
+  health checks influence connection setup time. Tighter health check intervals reduce failover time
+  after a backend goes unhealthy.
 </Expandable>
 
 <Expandable title="I want to remove a connection">

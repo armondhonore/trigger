@@ -64,12 +64,15 @@ description: Compute and format dates/times in arbitrary timezones. Use when the
 ## Scripts
 
 ### `scripts/now.sh [TZ]`
+
 Prints the current time in the given IANA timezone (default `UTC`).
 
 ### `scripts/add.sh DAYS [TZ]`
+
 Prints a date `DAYS` days from now.
 
 ## Tips
+
 - IANA timezone names only (`America/New_York`, not `EST`).
 - See `references/timezones.txt` for a cheat-sheet.
 ```
@@ -175,8 +178,8 @@ return streamText({
   abortSignal: signal,
   ...chat.toStreamTextOptions({
     tools: {
-      webFetch,       // your tool
-      deepResearch,   // your tool
+      webFetch, // your tool
+      deepResearch, // your tool
     },
   }),
   stopWhen: stepCountIs(15),

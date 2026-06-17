@@ -117,7 +117,9 @@ function ToolResultCard({ part }: { part: ToolUIPart<"fetchPage"> }) {
   const { docId, url, byteSize, preview } = part.output;
   return (
     <div>
-      <p>{url} — {(byteSize / 1024).toFixed(0)} KB</p>
+      <p>
+        {url} — {(byteSize / 1024).toFixed(0)} KB
+      </p>
       <pre>{preview}…</pre>
       <a href={`/api/document/${docId}`}>Open full HTML</a>
     </div>
@@ -135,7 +137,8 @@ chat.response.write({ type: "data-report", data: { id, summary: shortSummary } }
 ```
 
 <Tip>
-  Persist the large value **before** you emit the id chunk. If the chunk reaches the UI before the row is written, the frontend gets a 404 on the follow-up fetch.
+  Persist the large value **before** you emit the id chunk. If the chunk reaches the UI before the
+  row is written, the frontend gets a 404 on the follow-up fetch.
 </Tip>
 
 ## Transient UI parts

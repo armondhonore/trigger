@@ -242,7 +242,10 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const startTime = fromTime ? new Date(fromTime) : new Date(Date.now() - periodMs);
   const endTime = toTime ? new Date(toTime) : new Date();
 
-  const clickhouse = await clickhouseFactory.getClickhouseForOrganization(project.organizationId, "standard");
+  const clickhouse = await clickhouseFactory.getClickhouseForOrganization(
+    project.organizationId,
+    "standard"
+  );
   const presenter = new PromptPresenter(clickhouse);
   let generations: Awaited<ReturnType<typeof presenter.listGenerations>>["generations"] = [];
   let generationsPagination: { next?: string } = {};
@@ -458,12 +461,12 @@ export default function PromptDetailPage() {
   // Selected version from URL or default to current
   const versionParam = searchValue("version");
   const selectedVersion = versionParam
-    ? versions.find((v) => v.version === Number(versionParam)) ?? versions[0]
+    ? (versions.find((v) => v.version === Number(versionParam)) ?? versions[0])
     : overrideVersion
-    ? versions.find((v) => v.id === overrideVersion.id) ?? versions[0]
-    : currentVersion
-    ? versions.find((v) => v.id === currentVersion.id) ?? versions[0]
-    : versions[0];
+      ? (versions.find((v) => v.id === overrideVersion.id) ?? versions[0])
+      : currentVersion
+        ? (versions.find((v) => v.id === currentVersion.id) ?? versions[0])
+        : versions[0];
 
   const content = selectedVersion ? getVersionContent(selectedVersion) : "";
   const isCurrent = selectedVersion?.labels.includes("current") ?? false;
@@ -504,8 +507,8 @@ export default function PromptDetailPage() {
                     selectedVersion.labels.includes("override")
                       ? "bg-amber-400"
                       : isCurrent
-                      ? "bg-green-500"
-                      : "bg-charcoal-550"
+                        ? "bg-green-500"
+                        : "bg-charcoal-550"
                   )}
                 />
                 <span className="text-xs text-text-dimmed">v{selectedVersion.version}</span>
@@ -793,7 +796,9 @@ export default function PromptDetailPage() {
         }
         isEditingOverride={!!overrideVersion}
         currentOverrideModel={
-          overrideVersion ? versions.find((v) => v.id === overrideVersion.id)?.model ?? null : null
+          overrideVersion
+            ? (versions.find((v) => v.id === overrideVersion.id)?.model ?? null)
+            : null
         }
         onSave={(textContent, commitMessage, model) => {
           const intent = overrideVersion ? "updateOverride" : "saveVersion";
@@ -1502,7 +1507,10 @@ function GenerationsTab({
                       {gen.operation_id || gen.task_identifier}
                     </TableCell>
                     <TableCell
-                      className={cn("tabular-nums", isSelected ? "text-text-bright" : "text-charcoal-400")}
+                      className={cn(
+                        "tabular-nums",
+                        isSelected ? "text-text-bright" : "text-charcoal-400"
+                      )}
                     >
                       v{gen.prompt_version}
                     </TableCell>

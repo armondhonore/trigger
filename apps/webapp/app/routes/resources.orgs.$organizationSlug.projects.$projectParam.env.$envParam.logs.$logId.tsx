@@ -43,7 +43,10 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
   const [traceId, spanId, , startTime] = parts;
 
-  const logsClickhouse = await clickhouseFactory.getClickhouseForOrganization(project.organizationId, "logs");
+  const logsClickhouse = await clickhouseFactory.getClickhouseForOrganization(
+    project.organizationId,
+    "logs"
+  );
   const presenter = new LogDetailPresenter($replica, logsClickhouse);
 
   let result;

@@ -81,9 +81,7 @@ export const translateAndRefine = task({
           role: "system",
           content: `You are an expert literary critic and translator focused on practical, high-quality translations.
                  Your goal is to ensure translations are accurate and natural, but not necessarily perfect.
-                 This is iteration ${
-                   rejectionCount + 1
-                 } of a maximum 5 iterations.
+                 This is iteration ${rejectionCount + 1} of a maximum 5 iterations.
                  
                  RESPONSE FORMAT:
                  - If the translation meets 90%+ quality: Respond with exactly "APPROVED" (nothing else)
@@ -108,9 +106,7 @@ export const translateAndRefine = task({
                  Translation: "${translation.text}"
                  Target Language: ${payload.targetLanguage}
                  Iteration: ${rejectionCount + 1}
-                 Previous Feedback: ${
-                   payload.feedback ? `"${payload.feedback}"` : "None"
-                 }
+                 Previous Feedback: ${payload.feedback ? `"${payload.feedback}"` : "None"}
                  
                  ${
                    rejectionCount === 0
@@ -161,7 +157,7 @@ On the Test page in the dashboard, select the `translate-and-refine` task and in
 
 This example payload translates the text into French and should be suitably difficult to require a few iterations, depending on the model used and the prompt criteria you set.
 
-<video 
+<video
   src="https://content.trigger.dev/agent-evaluator-optimizer.mp4"
   controls
   muted

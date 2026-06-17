@@ -8,9 +8,11 @@ paths:
 When adding a new dependency to any package.json in the monorepo:
 
 1. **Look up the latest version** on npm before adding:
+
    ```bash
    pnpm view <package-name> version
    ```
+
    If unsure which version to use (e.g. major version compatibility), confirm with the user.
 
 2. **Edit the package.json directly** — do NOT use `pnpm add` as it can cause issues in the monorepo. Add the dependency with the correct version range (typically `^x.y.z`).

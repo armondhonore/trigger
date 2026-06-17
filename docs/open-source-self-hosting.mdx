@@ -3,9 +3,15 @@ title: "Docker (legacy)"
 description: "Self-host Trigger.dev on your own infrastructure using Docker."
 ---
 
-<Note>This is a legacy guide for self-hosting v3 using Docker, you can find the v4 guide [here](/self-hosting/docker).</Note>
+<Note>
+  This is a legacy guide for self-hosting v3 using Docker, you can find the v4 guide
+  [here](/self-hosting/docker).
+</Note>
 
-<Warning>Security, scaling, and reliability concerns are not fully addressed here. This guide is meant for evaluation purposes and won't result in a production-ready deployment.</Warning>
+<Warning>
+  Security, scaling, and reliability concerns are not fully addressed here. This guide is meant for
+  evaluation purposes and won't result in a production-ready deployment.
+</Warning>
 
 ## Overview
 
@@ -32,11 +38,18 @@ As self-hosted deployments tend to have unique requirements and configurations, 
 Should the burden ever get too much, we'd be happy to see you on [Trigger.dev cloud](https://trigger.dev/pricing) where we deal with these concerns for you.
 
 <Accordion title="Please consider these additional warnings">
-  - The [docker checkpoint](https://docs.docker.com/reference/cli/docker/checkpoint/) command is an experimental feature which may not work as expected. It won't be enabled by default. Instead, the containers will stay up and their processes frozen. They won't consume CPU but they _will_ consume RAM.
-  - The `docker-provider` does not currently enforce any resource limits. This means your tasks can consume up to the total machine CPU and RAM. Having no limits may be preferable when self-hosting, but can impact the performance of other services.
-  - The worker components (not the tasks!) have direct access to the Docker socket. This means they can run any Docker command. To restrict access, you may want to consider using [Docker Socket Proxy](https://github.com/Tecnativa/docker-socket-proxy).
-  - The task containers are running with host networking. This means there is no network isolation between them and the host machine. They will be able to access any networked service on the host.
-  - There is currently no support for adding multiple worker machines, but we're working on it.
+  - The [docker checkpoint](https://docs.docker.com/reference/cli/docker/checkpoint/) command is an
+  experimental feature which may not work as expected. It won't be enabled by default. Instead, the
+  containers will stay up and their processes frozen. They won't consume CPU but they _will_ consume
+  RAM. - The `docker-provider` does not currently enforce any resource limits. This means your tasks
+  can consume up to the total machine CPU and RAM. Having no limits may be preferable when
+  self-hosting, but can impact the performance of other services. - The worker components (not the
+  tasks!) have direct access to the Docker socket. This means they can run any Docker command. To
+  restrict access, you may want to consider using [Docker Socket
+  Proxy](https://github.com/Tecnativa/docker-socket-proxy). - The task containers are running with
+  host networking. This means there is no network isolation between them and the host machine. They
+  will be able to access any networked service on the host. - There is currently no support for
+  adding multiple worker machines, but we're working on it.
 </Accordion>
 
 ## Requirements
@@ -69,20 +82,23 @@ curl -s https://ngrok-agent.s3.amazonaws.com/ngrok.asc | \
     sudo tee /etc/apt/sources.list.d/ngrok.list
 
 # add docker repo
+
 curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc && \
-    sudo chmod a+r /etc/apt/keyrings/docker.asc && \
-    echo \
-      "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
-      $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-      sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+ sudo chmod a+r /etc/apt/keyrings/docker.asc && \
+ echo \
+ "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
+ $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+ sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
 # update and install
+
 sudo apt-get update
 sudo apt-get install -y \
-    docker.io \
-    docker-compose-plugin \
-    ngrok
-```
+ docker.io \
+ docker-compose-plugin \
+ ngrok
+
+````
 </Accordion>
 
 ### Trigger.dev setup
@@ -92,7 +108,7 @@ sudo apt-get install -y \
 ```bash
 git clone https://github.com/triggerdotdev/docker
 cd docker
-```
+````
 
 2. Run the start script and follow the prompts
 
@@ -226,7 +242,7 @@ scp -3 root@<webapp_machine>:docker/.env root@<worker_machine>:docker/.env
 
 3. **Tunnelling.** This is _not_ required for the worker components.
 
-4. **Registry setup.** Follow the [registry setup](/open-source-self-hosting#registry-setup) section but run the last command on the worker machine - note the container name is different:  
+4. **Registry setup.** Follow the [registry setup](/open-source-self-hosting#registry-setup) section but run the last command on the worker machine - note the container name is different:
 
 ```bash
 docker exec -ti \
@@ -258,6 +274,7 @@ TASK_PAYLOAD_OFFLOAD_THRESHOLD=5242880
 ### Version locking
 
 There are several reasons to lock the version of your Docker images:
+
 - **Backwards compatibility.** We try our best to maintain compatibility with older CLI versions, but it's not always possible. If you don't want to update your CLI, you can lock your Docker images to that specific version.
 - **Ensuring full feature support.** Sometimes, new CLI releases will also require new or updated platform features. Running unlocked images can make any issues difficult to debug. Using a specific tag can help here as well.
 
@@ -274,6 +291,7 @@ By default, magic link auth is the only login option. If the `EMAIL_TRANSPORT` e
 Depending on your choice of mail provider/transport, you will want to configure a set of variables like one of the following:
 
 ##### Resend:
+
 ```bash
 EMAIL_TRANSPORT=resend
 FROM_EMAIL=
@@ -318,7 +336,9 @@ WHITELISTED_EMAILS="^(authorized@yahoo\.com|authorized@gmail\.com)$"
 
 It's currently impossible to restrict GitHub OAuth logins by account name or email like above, so this method is _not recommended_ for self-hosted instances. It's also very easy to lock yourself out of your own instance.
 
-<Warning>Only enable GitHub auth if you understand the risks! We strongly advise you against this.</Warning>
+<Warning>
+  Only enable GitHub auth if you understand the risks! We strongly advise you against this.
+</Warning>
 
 Your GitHub OAuth app needs a callback URL `https://<your_domain>/auth/github/callback` and you will have to set the following env vars:
 
@@ -422,6 +442,7 @@ Occasionally, you may also have to update your `.env` file, but we will try to k
 ### From beta
 
 If you're coming from the beta CLI package images, you will need to:
+
 - **Stash you changes.** If you made any changes, stash them with `git stash`.
 - **Switch branches.** We moved back to main. Run `git checkout main` in your docker repo.
 - **Pull in updates.** We've added a new container for [Electric](https://github.com/electric-sql/electric) and made some other improvements. Run `git pull` to get the latest updates.
@@ -526,11 +547,10 @@ npx trigger.dev@latest deploy --self-hosted --push
 
 ### CI / GitHub Actions
 
-When running the CLI in a CI environment, your login profiles won't be available. Instead, you can use the `TRIGGER_API_URL` and `TRIGGER_ACCESS_TOKEN` environment 
+When running the CLI in a CI environment, your login profiles won't be available. Instead, you can use the `TRIGGER_API_URL` and `TRIGGER_ACCESS_TOKEN` environment
 variables to point at your self-hosted instance and authenticate.
 
 For more detailed instructions, see the [GitHub Actions guide](/github-actions).
-
 
 ## Telemetry
 

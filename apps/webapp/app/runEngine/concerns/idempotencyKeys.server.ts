@@ -65,7 +65,7 @@ export class IdempotencyKeyConcern {
     environmentId: string,
     organizationId: string,
     taskIdentifier: string,
-    idempotencyKey: string,
+    idempotencyKey: string
   ): Promise<TaskRun | null> {
     const buffer = getMollifierBuffer();
     if (!buffer) return null;
@@ -110,10 +110,7 @@ export class IdempotencyKeyConcern {
     // accept goes through as a fresh trigger. Mirrors what
     // `ResetIdempotencyKeyService` does for the explicit
     // reset-via-API path.
-    if (
-      synthetic.idempotencyKeyExpiresAt &&
-      synthetic.idempotencyKeyExpiresAt < new Date()
-    ) {
+    if (synthetic.idempotencyKeyExpiresAt && synthetic.idempotencyKeyExpiresAt < new Date()) {
       const buffer = getMollifierBuffer();
       if (buffer) {
         try {
@@ -174,7 +171,7 @@ export class IdempotencyKeyConcern {
         request.environment.id,
         request.environment.organizationId,
         request.taskId,
-        idempotencyKey,
+        idempotencyKey
       );
       if (buffered) {
         return { isCached: true, run: buffered };
@@ -303,18 +300,18 @@ export class IdempotencyKeyConcern {
         orgId: request.environment.organizationId,
         taskId: request.taskId,
         orgFeatureFlags:
-          ((request.environment.organization?.featureFlags as
+          (request.environment.organization?.featureFlags as
             | Record<string, unknown>
             | null
-            | undefined) ?? null),
+            | undefined) ?? null,
       }));
     if (claimEligible) {
       const ttlSeconds = Math.max(
         1,
         Math.min(
           env.TRIGGER_MOLLIFIER_CLAIM_TTL_SECONDS,
-          Math.ceil((idempotencyKeyExpiresAt.getTime() - Date.now()) / 1000),
-        ),
+          Math.ceil((idempotencyKeyExpiresAt.getTime() - Date.now()) / 1000)
+        )
       );
       const outcome = await claimOrAwait({
         envId: request.environment.id,
@@ -343,7 +340,7 @@ export class IdempotencyKeyConcern {
           request.environment.id,
           request.environment.organizationId,
           request.taskId,
-          idempotencyKey,
+          idempotencyKey
         );
         if (buffered) {
           return { isCached: true, run: buffered };
@@ -376,10 +373,7 @@ export class IdempotencyKeyConcern {
         });
       }
       if (outcome.kind === "timed_out") {
-        throw new ServiceValidationError(
-          "Idempotency claim resolution timed out",
-          503,
-        );
+        throw new ServiceValidationError("Idempotency claim resolution timed out", 503);
       }
       if (outcome.kind === "claimed") {
         // Caller MUST publish/release. Signalled via the result's

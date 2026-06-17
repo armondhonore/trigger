@@ -28,7 +28,6 @@ To install Docker Compose on Linux Ubuntu, you can follow these steps:
    ```
 
    Note:
-
    - To install for all users, replace `$DOCKER_CONFIG/cli-plugins` with `/usr/local/lib/docker/cli-plugins`
 
 3. Set the appropriate permissions to make the Docker Compose plugin executable:

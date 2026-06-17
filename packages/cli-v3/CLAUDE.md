@@ -5,10 +5,13 @@ The `trigger.dev` CLI package, published as `trigger.dev` on npm. Executable: `t
 ## Dev vs Deploy
 
 ### Dev Mode (`src/dev/`)
+
 Runs tasks locally in the user's Node.js process. No containers involved. Uses `src/dev/` for the dev command, connects to the local webapp for coordination.
 
 ### Deploy Mode (`src/deploy/`)
+
 Bundles task code and builds Docker images for production:
+
 1. **Bundle**: `src/build/` bundles worker code using the build system
 2. **Archive**: `src/deploy/archiveContext.ts` packages files for deployment
 3. **Build image**: `src/deploy/buildImage.ts` creates Docker images (local Docker/Depot or remote builds)
@@ -23,6 +26,7 @@ The build system (`src/build/`) uses the config from `trigger.config.ts` in user
 ## Commands
 
 CLI command definitions live in `src/commands/`. Key commands:
+
 - `dev.ts` - Local development mode
 - `deploy.ts` - Production deployment
 - `init.ts` - Project initialization

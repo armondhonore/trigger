@@ -33,7 +33,10 @@ export const myChat = chat.agent({
     summarize: async ({ messages }) => {
       const result = await generateText({
         model: anthropic("claude-haiku-4-5"),
-        messages: [...messages, { role: "user", content: "Summarize this conversation concisely." }],
+        messages: [
+          ...messages,
+          { role: "user", content: "Summarize this conversation concisely." },
+        ],
       });
       return result.text;
     },
@@ -50,7 +53,9 @@ export const myChat = chat.agent({
 ```
 
 <Note>
-  The `prepareStep` for inner-loop compaction is automatically injected when you spread `chat.toStreamTextOptions()` into your `streamText` call. If you provide your own `prepareStep` after the spread, it overrides the auto-injected one.
+  The `prepareStep` for inner-loop compaction is automatically injected when you spread
+  `chat.toStreamTextOptions()` into your `streamText` call. If you provide your own `prepareStep`
+  after the spread, it overrides the auto-injected one.
 </Note>
 
 ## How it works
@@ -145,35 +150,35 @@ compactModelMessages: ({ modelMessages, summary }) => [
 
 The `shouldCompact` callback receives context about the current state:
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `messages` | `ModelMessage[]` | Current model messages |
-| `totalTokens` | `number \| undefined` | Total tokens from the triggering step/turn |
-| `inputTokens` | `number \| undefined` | Input tokens |
-| `outputTokens` | `number \| undefined` | Output tokens |
-| `usage` | `LanguageModelUsage` | Full usage object |
-| `totalUsage` | `LanguageModelUsage` | Cumulative usage across all turns |
-| `chatId` | `string` | Chat session ID |
-| `turn` | `number` | Current turn (0-indexed) |
-| `clientData` | `unknown` | Custom data from the frontend |
-| `source` | `"inner" \| "outer"` | Whether this is between steps or between turns |
-| `steps` | `CompactionStep[]` | Steps array (inner loop only) |
-| `stepNumber` | `number` | Step index (inner loop only) |
+| Field          | Type                  | Description                                    |
+| -------------- | --------------------- | ---------------------------------------------- |
+| `messages`     | `ModelMessage[]`      | Current model messages                         |
+| `totalTokens`  | `number \| undefined` | Total tokens from the triggering step/turn     |
+| `inputTokens`  | `number \| undefined` | Input tokens                                   |
+| `outputTokens` | `number \| undefined` | Output tokens                                  |
+| `usage`        | `LanguageModelUsage`  | Full usage object                              |
+| `totalUsage`   | `LanguageModelUsage`  | Cumulative usage across all turns              |
+| `chatId`       | `string`              | Chat session ID                                |
+| `turn`         | `number`              | Current turn (0-indexed)                       |
+| `clientData`   | `unknown`             | Custom data from the frontend                  |
+| `source`       | `"inner" \| "outer"`  | Whether this is between steps or between turns |
+| `steps`        | `CompactionStep[]`    | Steps array (inner loop only)                  |
+| `stepNumber`   | `number`              | Step index (inner loop only)                   |
 
 ## summarize event
 
 The `summarize` callback receives similar context:
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `messages` | `ModelMessage[]` | Messages to summarize |
-| `usage` | `LanguageModelUsage` | Usage from the triggering step/turn |
-| `totalUsage` | `LanguageModelUsage` | Cumulative usage |
-| `chatId` | `string` | Chat session ID |
-| `turn` | `number` | Current turn |
-| `clientData` | `unknown` | Custom data from the frontend |
-| `source` | `"inner" \| "outer"` | Where compaction is running |
-| `stepNumber` | `number` | Step index (inner loop only) |
+| Field        | Type                 | Description                         |
+| ------------ | -------------------- | ----------------------------------- |
+| `messages`   | `ModelMessage[]`     | Messages to summarize               |
+| `usage`      | `LanguageModelUsage` | Usage from the triggering step/turn |
+| `totalUsage` | `LanguageModelUsage` | Cumulative usage                    |
+| `chatId`     | `string`             | Chat session ID                     |
+| `turn`       | `number`             | Current turn                        |
+| `clientData` | `unknown`            | Custom data from the frontend       |
+| `source`     | `"inner" \| "outer"` | Where compaction is running         |
+| `stepNumber` | `number`             | Step index (inner loop only)        |
 
 ## onCompacted hook
 
@@ -228,9 +233,7 @@ export const myChat = chat.agent({
   },
 
   // User-initiated: the frontend sends { type: "compact" }.
-  actionSchema: z.discriminatedUnion("type", [
-    z.object({ type: z.literal("compact") }),
-  ]),
+  actionSchema: z.discriminatedUnion("type", [z.object({ type: z.literal("compact") })]),
 
   onAction: async ({ action, uiMessages }) => {
     if (action.type !== "compact") return;
@@ -267,8 +270,7 @@ function ChatView({ chatId }: { chatId: string }) {
   const transport = useTriggerChatTransport({
     task: "my-chat",
     accessToken: ({ chatId }) => mintChatAccessToken(chatId),
-    startSession: ({ chatId, clientData }) =>
-      startChatSession({ chatId, clientData }),
+    startSession: ({ chatId, clientData }) => startChatSession({ chatId, clientData }),
   });
   const { messages } = useChat({ id: chatId, transport });
 
@@ -317,8 +319,11 @@ const session = chat.createSession(payload, {
     summarize: async ({ messages }) =>
       generateText({ model: anthropic("claude-haiku-4-5"), messages }).then((r) => r.text),
     compactUIMessages: ({ uiMessages, summary }) => [
-      { id: generateId(), role: "assistant",
-        parts: [{ type: "text", text: `[Summary]\n\n${summary}` }] },
+      {
+        id: generateId(),
+        role: "assistant",
+        parts: [{ type: "text", text: `[Summary]\n\n${summary}` }],
+      },
       ...uiMessages.slice(-4),
     ],
   },
@@ -353,8 +358,11 @@ const conversation = new chat.MessageAccumulator({
     summarize: async ({ messages }) =>
       generateText({ model: anthropic("claude-haiku-4-5"), messages }).then((r) => r.text),
     compactUIMessages: ({ summary }) => [
-      { id: generateId(), role: "assistant",
-        parts: [{ type: "text", text: `[Summary]\n\n${summary}` }] },
+      {
+        id: generateId(),
+        role: "assistant",
+        parts: [{ type: "text", text: `[Summary]\n\n${summary}` }],
+      },
     ],
   },
 });
@@ -407,5 +415,7 @@ prepareStep: chat.compactionStep({
 ```
 
 <Note>
-  The fully manual APIs only handle inner-loop compaction (between tool-call steps). For outer-loop coverage, use the `compaction` option on `chat.agent()`, `chat.createSession()`, or `MessageAccumulator`.
+  The fully manual APIs only handle inner-loop compaction (between tool-call steps). For outer-loop
+  coverage, use the `compaction` option on `chat.agent()`, `chat.createSession()`, or
+  `MessageAccumulator`.
 </Note>

@@ -80,6 +80,7 @@ A new run boots when the user sends `u2`. Run 1 has long since exited. Run 2 has
     - **A partial assistant** — the trailing message if its stream never received a `finish` chunk. The dead run was mid-response when it died. `cleanupAbortedParts` has already stripped streaming-in-progress fragments.
 
     In the steady state this returns empty. In recovery, it returns whatever the dead run was in the middle of.
+
   </Step>
   <Step title="Replay session.in tail">
     GET `session.in` records past the last `turn-complete`'s `session-in-event-id` cursor. Returns the user messages the dead run hadn't acknowledged — typically the message that triggered the cancelled / crashed turn, plus anything the customer typed after.
@@ -92,6 +93,7 @@ A new run boots when the user sends `u2`. Run 1 has long since exited. Run 2 has
     - If there's no partial OR no in-flight users, the chain is just the settled chain and any in-flight users dispatch normally.
 
     Customers can override this entirely via [`onRecoveryBoot`](/ai-chat/patterns/recovery-boot).
+
   </Step>
   <Step title="Append the new wire message">
     Append `u2` from the wire payload, exactly as on turn 1.
@@ -185,14 +187,14 @@ For local development this is sometimes fine — you're not testing continuation
 
 ## Snapshot key & lifecycle
 
-| Field | Value |
-|---|---|
-| Bucket | Whatever `OBJECT_STORE_BASE_URL` points to |
-| Key prefix | `packets/{projectRef}/{envSlug}/` (server-prefixed) |
-| Key suffix | `sessions/{sessionId}/snapshot.json` |
-| Final key | `packets/{projectRef}/{envSlug}/sessions/{sessionId}/snapshot.json` |
-| Size | Tens of KB typical, capped only by object-store limits |
-| Cadence | Overwritten after every successful `onTurnComplete` |
+| Field      | Value                                                               |
+| ---------- | ------------------------------------------------------------------- |
+| Bucket     | Whatever `OBJECT_STORE_BASE_URL` points to                          |
+| Key prefix | `packets/{projectRef}/{envSlug}/` (server-prefixed)                 |
+| Key suffix | `sessions/{sessionId}/snapshot.json`                                |
+| Final key  | `packets/{projectRef}/{envSlug}/sessions/{sessionId}/snapshot.json` |
+| Size       | Tens of KB typical, capped only by object-store limits              |
+| Cadence    | Overwritten after every successful `onTurnComplete`                 |
 
 Snapshots accumulate per-session forever unless you set a lifecycle policy on the bucket. A 90-day expiry on `packets/*/sessions/*/snapshot.json` is a reasonable default if your chats don't typically resume after that window. Closed sessions are not auto-cleaned today.
 

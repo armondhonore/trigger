@@ -22,7 +22,7 @@ In this example, we'll create a workflow that routes a question to a different A
 - Directs simple questions to `gpt-4o` and complex ones to `gpt-o3-mini`
 - Returns both the answer and metadata about the routing decision
 
-```typescript
+````typescript
 import { openai } from "@ai-sdk/openai";
 import { task } from "@trigger.dev/sdk";
 import { generateText } from "ai";
@@ -91,9 +91,7 @@ export const routeAndAnswerQuestion = task({
     };
   },
 });
-```
-
-
+````
 
 ## Run a test
 
@@ -105,10 +103,4 @@ Triggering our task with a simple question shows it routing to the gpt-4o model 
 }
 ```
 
-<video 
-  src="https://content.trigger.dev/agent-routing.mp4"
-  controls
-  muted
-  autoPlay
-  loop
-/>
+<video src="https://content.trigger.dev/agent-routing.mp4" controls muted autoPlay loop />

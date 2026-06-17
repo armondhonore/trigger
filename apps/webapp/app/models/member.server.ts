@@ -119,7 +119,7 @@ export async function inviteMembers({
         inviterId: userId,
         role: "MEMBER",
         rbacRoleId: rbacRoleId ?? null,
-      } satisfies Prisma.OrgMemberInviteCreateManyInput)
+      }) satisfies Prisma.OrgMemberInviteCreateManyInput
   );
 
   await prisma.orgMemberInvite.createMany({

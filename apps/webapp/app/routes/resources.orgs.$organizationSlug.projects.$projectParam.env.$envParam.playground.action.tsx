@@ -116,7 +116,12 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       const tags = [
         `chat:${chatId}`,
         "playground:true",
-        ...(tagsStr ? tagsStr.split(",").map((t) => t.trim()).filter(Boolean) : []),
+        ...(tagsStr
+          ? tagsStr
+              .split(",")
+              .map((t) => t.trim())
+              .filter(Boolean)
+          : []),
       ].slice(0, 5);
 
       const triggerConfig = {
@@ -257,12 +262,11 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         });
 
         if (existing?.title === "New conversation") {
-          const firstUserMsg = messagesData.find(
-            (m: any) => m.role === "user"
-          ) as Record<string, any> | undefined;
+          const firstUserMsg = messagesData.find((m: any) => m.role === "user") as
+            | Record<string, any>
+            | undefined;
           const firstText =
-            firstUserMsg?.parts?.find((p: any) => p.type === "text")?.text ??
-            firstUserMsg?.content;
+            firstUserMsg?.parts?.find((p: any) => p.type === "text")?.text ?? firstUserMsg?.content;
           if (firstText && typeof firstText === "string") {
             titleUpdate = {
               title: firstText.length > 60 ? firstText.slice(0, 60) + "..." : firstText,

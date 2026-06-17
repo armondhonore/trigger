@@ -10,15 +10,15 @@ import RcBanner from "/snippets/ai-chat-rc-banner.mdx";
 
 There are three abstraction levels for a chat backend. All three speak the same wire protocol, so the [frontend transport](/ai-chat/frontend) works unchanged whichever you pick.
 
-| Capability                            | `chat.agent()` | `chat.createSession()`                                        | Raw primitives |
-| ------------------------------------- | -------------- | ------------------------------------------------------------- | -------------- |
-| Turn loop, stop signals, accumulation | Managed        | Managed                                                        | You write it   |
-| Lifecycle hooks                       | Yes            | No — inline code per turn                                      | No             |
-| Continuation recovery on new runs     | Automatic      | [Manual seeding](/ai-chat/custom-agents#continuation-runs-and-history-seeding)       | Manual seeding |
-| Compaction / steering                 | Built-in       | Built-in                                                       | Manual         |
-| Head Start, actions, tool approvals   | Yes            | No                                                             | No             |
-| Custom stream conversion              | No             | Limited                                                        | Full control   |
-| Agent dashboard visibility            | Yes            | Yes (via `customAgent`)                                        | Yes            |
+| Capability                            | `chat.agent()` | `chat.createSession()`                                                         | Raw primitives |
+| ------------------------------------- | -------------- | ------------------------------------------------------------------------------ | -------------- |
+| Turn loop, stop signals, accumulation | Managed        | Managed                                                                        | You write it   |
+| Lifecycle hooks                       | Yes            | No — inline code per turn                                                      | No             |
+| Continuation recovery on new runs     | Automatic      | [Manual seeding](/ai-chat/custom-agents#continuation-runs-and-history-seeding) | Manual seeding |
+| Compaction / steering                 | Built-in       | Built-in                                                                       | Manual         |
+| Head Start, actions, tool approvals   | Yes            | No                                                                             | No             |
+| Custom stream conversion              | No             | Limited                                                                        | Full control   |
+| Agent dashboard visibility            | Yes            | Yes (via `customAgent`)                                                        | Yes            |
 
 The raw-primitives column assumes [`chat.customAgent()`](/ai-chat/custom-agents) as the wrapper, which is what makes the task visible to the agent dashboard.
 
@@ -53,7 +53,12 @@ export const simpleChat = chat.agent({
 ```
 
 <Warning>
-  **Always spread `chat.toStreamTextOptions()` first** (as above) so your explicit overrides win. It wires up the `prepareStep` callback behind [compaction](/ai-chat/compaction), [steering](/ai-chat/pending-messages), and [background injection](/ai-chat/background-injection), all of which silently no-op without it, and injects the system prompt from `chat.prompt()`, the resolved model (when you pass a `registry`), and telemetry metadata. Examples below keep the spread implicit for brevity, so include it in real code.
+  **Always spread `chat.toStreamTextOptions()` first** (as above) so your explicit overrides win. It
+  wires up the `prepareStep` callback behind [compaction](/ai-chat/compaction),
+  [steering](/ai-chat/pending-messages), and [background injection](/ai-chat/background-injection),
+  all of which silently no-op without it, and injects the system prompt from `chat.prompt()`, the
+  resolved model (when you pass a `registry`), and telemetry metadata. Examples below keep the
+  spread implicit for brevity, so include it in real code.
 </Warning>
 
 ### Using chat.pipe() for complex flows
@@ -131,11 +136,15 @@ writer.write({
 ```
 
 <Info>
-  This matches the AI SDK's semantics: `data-*` chunks persist to `message.parts` by default. Only `transient: true` chunks are ephemeral. Non-data chunks (`text-delta`, `tool-*`, etc.) are handled by `streamText` and captured via `onFinish` — they don't need `chat.response`.
+  This matches the AI SDK's semantics: `data-*` chunks persist to `message.parts` by default. Only
+  `transient: true` chunks are ephemeral. Non-data chunks (`text-delta`, `tool-*`, etc.) are handled
+  by `streamText` and captured via `onFinish` — they don't need `chat.response`.
 </Info>
 
 <Note>
-  `chat.response` and the `writer` accumulation behavior work with `chat.agent` and `chat.createSession`. If you're using [`chat.customAgent`](/ai-chat/custom-agents), you own the accumulator — see the raw-task example for the manual pattern.
+  `chat.response` and the `writer` accumulation behavior work with `chat.agent` and
+  `chat.createSession`. If you're using [`chat.customAgent`](/ai-chat/custom-agents), you own the
+  accumulator — see the raw-task example for the manual pattern.
 </Note>
 
 ### Raw streaming with `chat.stream`
@@ -153,17 +162,20 @@ await waitUntilComplete();
 ```
 
 <Tip>
-  Use `data-*` chunk types (e.g. `data-status`, `data-progress`) for custom data. The AI SDK processes these into `DataUIPart` objects in `message.parts` on the frontend. Writing the same `type` + `id` again updates the existing part instead of creating a new one — useful for live progress.
+  Use `data-*` chunk types (e.g. `data-status`, `data-progress`) for custom data. The AI SDK
+  processes these into `DataUIPart` objects in `message.parts` on the frontend. Writing the same
+  `type` + `id` again updates the existing part instead of creating a new one — useful for live
+  progress.
 </Tip>
 
 `chat.stream` exposes the full stream API:
 
-| Method | Description |
-|--------|-------------|
-| `chat.stream.writer(options)` | Write individual chunks via a callback |
-| `chat.stream.pipe(stream, options?)` | Pipe a `ReadableStream` or `AsyncIterable` |
-| `chat.stream.append(value, options?)` | Append raw data |
-| `chat.stream.read(runId, options?)` | Read the stream by run ID |
+| Method                                | Description                                |
+| ------------------------------------- | ------------------------------------------ |
+| `chat.stream.writer(options)`         | Write individual chunks via a callback     |
+| `chat.stream.pipe(stream, options?)`  | Pipe a `ReadableStream` or `AsyncIterable` |
+| `chat.stream.append(value, options?)` | Append raw data                            |
+| `chat.stream.read(runId, options?)`   | Read the stream by run ID                  |
 
 For piping streams from subtasks to the parent chat (via `target: "root"`), see the [Sub-agents pattern](/ai-chat/patterns/sub-agents).
 
@@ -246,12 +258,12 @@ export const myChat = chat.agent({
 
 **Which form to call:**
 
-| Form | Use when |
-|---|---|
-| `chat.toStreamTextOptions()` | Default. Wires up `prepareStep` (compaction, steering, background injection), the stored prompt's `system` / `model` / `config`, and telemetry metadata. |
-| `chat.toStreamTextOptions({ registry })` | You're using [Prompts](/ai/prompts) with a provider-prefixed model string (e.g. `"anthropic:claude-sonnet-4-5"`). The registry resolves the prefix to a real model instance via `createProviderRegistry({ anthropic, openai, ... })`. |
-| `chat.toStreamTextOptions({ tools })` | You want HITL tool approvals — pass the same `tools` object you give to `streamText`. The SDK then knows which tool calls need to pause on `needsApproval: true`. |
-| `chat.toStreamTextOptions({ registry, tools })` | Both of the above. |
+| Form                                            | Use when                                                                                                                                                                                                                              |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `chat.toStreamTextOptions()`                    | Default. Wires up `prepareStep` (compaction, steering, background injection), the stored prompt's `system` / `model` / `config`, and telemetry metadata.                                                                              |
+| `chat.toStreamTextOptions({ registry })`        | You're using [Prompts](/ai/prompts) with a provider-prefixed model string (e.g. `"anthropic:claude-sonnet-4-5"`). The registry resolves the prefix to a real model instance via `createProviderRegistry({ anthropic, openai, ... })`. |
+| `chat.toStreamTextOptions({ tools })`           | You want HITL tool approvals — pass the same `tools` object you give to `streamText`. The SDK then knows which tool calls need to pause on `needsApproval: true`.                                                                     |
+| `chat.toStreamTextOptions({ registry, tools })` | Both of the above.                                                                                                                                                                                                                    |
 
 <Tip>
   See [Prompts](/ai/prompts) for the full guide — defining templates, variable schemas, dashboard
@@ -397,7 +409,9 @@ To build a chat app that survives page refreshes you persist two things, both se
 2. **Session state.** The transport's reconnect metadata: `publicAccessToken` and `lastEventId`. Written alongside the messages from the same hooks.
 
 <Note>
-  Sessions let the transport reconnect to an existing run after a page refresh. Without them, every page load would start a new run, losing the conversation context that was accumulated in the previous run.
+  Sessions let the transport reconnect to an existing run after a page refresh. Without them, every
+  page load would start a new run, losing the conversation context that was accumulated in the
+  previous run.
 </Note>
 
 For the full per-hook breakdown, race-condition warnings (atomic `lastEventId` writes, why not to use `chat.defer` in `onTurnStart`), token renewal via the `accessToken` callback, and an end-to-end three-file example, see [Database persistence](/ai-chat/patterns/database-persistence).
@@ -479,31 +493,35 @@ See [Actions](/ai-chat/actions).
 Imperative API for reading and modifying the accumulated message history. Works from any hook (`onAction`, `onTurnStart`, `onBeforeTurnComplete`, `onTurnComplete`, `hydrateMessages`) or from `run()` and AI SDK tools.
 
 <Note>
-  The agent's accumulator — not `session.out` — is the source of truth for the full conversation. The `.out` stream is a bounded sliding window (roughly one turn at steady state, see [Records on `session.out`](/ai-chat/client-protocol#records-on-session-out)); the durable history lives in the agent's accumulator and is persisted to S3 between turns for fast next-run boots. `chat.history` reads and mutates that accumulator directly.
+  The agent's accumulator — not `session.out` — is the source of truth for the full conversation.
+  The `.out` stream is a bounded sliding window (roughly one turn at steady state, see [Records on
+  `session.out`](/ai-chat/client-protocol#records-on-session-out)); the durable history lives in the
+  agent's accumulator and is persisted to S3 between turns for fast next-run boots. `chat.history`
+  reads and mutates that accumulator directly.
 </Note>
 
 **Reads.** Synchronous against the current accumulator state.
 
-| Method | Description |
-|--------|-------------|
-| `chat.history.all()` | Returns a copy of the current accumulated UI messages. |
-| `chat.history.getChain()` | Same as `all()`. Use whichever name reads better in context. |
-| `chat.history.findMessage(messageId)` | Returns the message with that id, or `undefined`. |
-| `chat.history.getPendingToolCalls()` | Tool calls on the most recent assistant message that are still in `input-available` state (waiting on `addToolOutput`). |
-| `chat.history.getResolvedToolCalls()` | All tool calls in the chain in `output-available` or `output-error` state. |
+| Method                                        | Description                                                                                                                                                                         |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `chat.history.all()`                          | Returns a copy of the current accumulated UI messages.                                                                                                                              |
+| `chat.history.getChain()`                     | Same as `all()`. Use whichever name reads better in context.                                                                                                                        |
+| `chat.history.findMessage(messageId)`         | Returns the message with that id, or `undefined`.                                                                                                                                   |
+| `chat.history.getPendingToolCalls()`          | Tool calls on the most recent assistant message that are still in `input-available` state (waiting on `addToolOutput`).                                                             |
+| `chat.history.getResolvedToolCalls()`         | All tool calls in the chain in `output-available` or `output-error` state.                                                                                                          |
 | `chat.history.extractNewToolResults(message)` | Tool results in `message` whose `toolCallId` is not already resolved in the chain. Most useful in `hydrateMessages` against an incoming wire message, before the runtime merges it. |
 
 Each pending and resolved entry is shaped `{ toolCallId, toolName, messageId }`. Each new-result entry is `{ toolCallId, toolName, output, errorText? }`, where `errorText` is set only for `output-error` parts.
 
 **Mutations.** Applied at lifecycle checkpoints (after hooks return). Multiple mutations in the same hook compose correctly.
 
-| Method | Description |
-|--------|-------------|
-| `chat.history.set(messages)` | Replace all messages. Same as `chat.setMessages()`. |
-| `chat.history.remove(messageId)` | Remove a specific message by ID. |
-| `chat.history.rollbackTo(messageId)` | Keep messages up to and including the given ID (undo). |
-| `chat.history.replace(messageId, message)` | Replace a specific message by ID (edit). |
-| `chat.history.slice(start, end?)` | Keep only messages in the given range. |
+| Method                                     | Description                                            |
+| ------------------------------------------ | ------------------------------------------------------ |
+| `chat.history.set(messages)`               | Replace all messages. Same as `chat.setMessages()`.    |
+| `chat.history.remove(messageId)`           | Remove a specific message by ID.                       |
+| `chat.history.rollbackTo(messageId)`       | Keep messages up to and including the given ID (undo). |
+| `chat.history.replace(messageId, message)` | Replace a specific message by ID (edit).               |
+| `chat.history.slice(start, end?)`          | Keep only messages in the given range.                 |
 
 ```ts
 // Undo the last exchange in onAction
@@ -543,7 +561,7 @@ hydrateMessages: async ({ incomingMessages }) => {
 },
 ```
 
-`extractNewToolResults` compares against the *current* chain. Inside `onTurnComplete`, the chain already contains the just-finished `responseMessage`, so it returns `[]`. Use it where the message is from outside the accumulator: `hydrateMessages` (incoming wire), `onAction` if the action carries a message, or any custom pre-merge code path.
+`extractNewToolResults` compares against the _current_ chain. Inside `onTurnComplete`, the chain already contains the just-finished `responseMessage`, so it returns `[]`. Use it where the message is from outside the accumulator: `hydrateMessages` (incoming wire), `onAction` if the action carries a message, or any custom pre-merge code path.
 
 ### prepareMessages
 
@@ -607,7 +625,10 @@ The current turn streams through normally, `onBeforeTurnComplete` / `onTurnCompl
 Use this when the agent knows its work is done (budget exhausted, goal achieved, one-shot response) rather than relying on the idle timeout. Unlike `chat.requestUpgrade()`, no `upgrade-required` signal is sent to the client, so there's no version-migration semantics.
 
 <Warning>
-  If you persist `lastEventId` to your own storage for cross-page-load resume, **don't clear it on `chat.endRun()`**. The cursor is sessionId-keyed and stays valid across Run boundaries — clearing it forces the next `sendMessages` to subscribe from `seq_num=0`, where it may hit the prior turn's stale `turn-complete` record and close the stream empty before the new Run's chunks arrive.
+  If you persist `lastEventId` to your own storage for cross-page-load resume, **don't clear it on
+  `chat.endRun()`**. The cursor is sessionId-keyed and stays valid across Run boundaries — clearing
+  it forces the next `sendMessages` to subscribe from `seq_num=0`, where it may hit the prior turn's
+  stale `turn-complete` record and close the stream empty before the new Run's chunks arrive.
 </Warning>
 
 ### Runtime configuration
@@ -740,9 +761,9 @@ export const myChat = chat
 
 <Info>
   The generated ID is sent to the frontend in the stream's `start` chunk, so frontend and backend
-  always reference the same ID for each message. This is important for features like tool
-  approvals, where the frontend resends an assistant message and the backend needs to match it
-  by ID in the conversation accumulator.
+  always reference the same ID for each message. This is important for features like tool approvals,
+  where the frontend resends an assistant message and the backend needs to match it by ID in the
+  conversation accumulator.
 </Info>
 
 ##### Per-turn overrides
@@ -804,6 +825,7 @@ export const manualChat = task({
 ---
 
 {/* Anchor stubs for inbound deep links to the sections that moved to /ai-chat/custom-agents. */}
+
 <a id="chat-createsession" />
 <a id="chat-customagent" />
 <a id="raw-task-with-primitives" />

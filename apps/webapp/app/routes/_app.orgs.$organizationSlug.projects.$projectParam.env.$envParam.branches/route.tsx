@@ -167,10 +167,9 @@ export async function action({ request, params }: ActionFunctionArgs) {
       );
     }
     if (purchaseBlockReason === "managed_billing") {
-      return json(
-        { ok: false, error: "Contact us to request more branches." } as const,
-        { status: 403 }
-      );
+      return json({ ok: false, error: "Contact us to request more branches." } as const, {
+        status: 403,
+      });
     }
 
     const submission = parse(formData, { schema: PurchaseSchema });

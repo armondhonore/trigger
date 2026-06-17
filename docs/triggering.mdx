@@ -32,7 +32,10 @@ When you trigger a task from your backend code, you need to set the `TRIGGER_SEC
 If a single process needs to trigger across multiple projects, environments, or preview branches, use [`new TriggerClient({...})`](/management/multiple-clients) for each target instead of relying on the global env vars.
 
 <Note>
-**Which trigger pattern should I use?** If your triggering code can import the task definition (same codebase), use `yourTask.trigger()` for full type safety. Use `tasks.trigger()` with a type-only import when the task runs in a separate service or you need to avoid bundling task code into your app (common in Next.js). Both do the same thing at runtime.
+  **Which trigger pattern should I use?** If your triggering code can import the task definition
+  (same codebase), use `yourTask.trigger()` for full type safety. Use `tasks.trigger()` with a
+  type-only import when the task runs in a separate service or you need to avoid bundling task code
+  into your app (common in Next.js). Both do the same thing at runtime.
 </Note>
 
 <Note>
@@ -472,7 +475,6 @@ Here's how you can manage run failures:
 2. **Access error information**: For failed runs, you can examine the `error` property to get details about the failure.
 
 3. **Choose your failure strategy**: You have two main options:
-
    - **Fail the entire batch**: Throw an error if any run fails, causing the parent task to reattempt.
    - **Continue despite failures**: Process the results without throwing an error, allowing the parent task to continue.
 
@@ -787,7 +789,10 @@ The timeline would look like this:
 For this reason, the `ttl` option only accepts durations and not absolute timestamps.
 
 <Note>
-  On [Trigger.dev Cloud](https://trigger.dev), there is a maximum TTL of 14 days. If you don't specify a TTL in staging or production, runs automatically get a 14-day TTL. If you specify a TTL longer than 14 days, it is clamped to 14 days. See [Limits — Maximum run TTL](/limits#maximum-run-ttl) for details.
+  On [Trigger.dev Cloud](https://trigger.dev), there is a maximum TTL of 14 days. If you don't
+  specify a TTL in staging or production, runs automatically get a 14-day TTL. If you specify a TTL
+  longer than 14 days, it is clamped to 14 days. See [Limits — Maximum run
+  TTL](/limits#maximum-run-ttl) for details.
 </Note>
 
 ### `idempotencyKey`
@@ -892,8 +897,8 @@ await summarizeChat.trigger(
   {
     debounce: {
       key: "conversation-123",
-      delay: "10s",    // Wait 10s after each message
-      maxDelay: "5m",  // But always run within 5 minutes of first trigger
+      delay: "10s", // Wait 10s after each message
+      maxDelay: "5m", // But always run within 5 minutes of first trigger
     },
   }
 );
@@ -909,15 +914,15 @@ This is useful for scenarios like:
 
 Consider `delay: "5s"` and `maxDelay: "30s"` with triggers arriving every 2 seconds:
 
-| Time | Event | Result |
-| :--- | :--- | :--- |
-| 0s | Trigger 1 | Run A created, scheduled for 5s |
-| 2s | Trigger 2 | Run A rescheduled to 7s |
-| 4s | Trigger 3 | Run A rescheduled to 9s |
-| ... | ... | ... |
-| 26s | Trigger 14 | Run A rescheduled to 31s |
-| 28s | Trigger 15 | Would reschedule to 33s, but exceeds maxDelay (30s). Run A executes, Run B created |
-| 30s | Trigger 16 | Run B rescheduled to 35s |
+| Time | Event      | Result                                                                             |
+| :--- | :--------- | :--------------------------------------------------------------------------------- |
+| 0s   | Trigger 1  | Run A created, scheduled for 5s                                                    |
+| 2s   | Trigger 2  | Run A rescheduled to 7s                                                            |
+| 4s   | Trigger 3  | Run A rescheduled to 9s                                                            |
+| ...  | ...        | ...                                                                                |
+| 26s  | Trigger 14 | Run A rescheduled to 31s                                                           |
+| 28s  | Trigger 15 | Would reschedule to 33s, but exceeds maxDelay (30s). Run A executes, Run B created |
+| 30s  | Trigger 16 | Run B rescheduled to 35s                                                           |
 
 Without `maxDelay`, continuous triggers would prevent the run from ever executing. With `maxDelay: "30s"`, execution is guaranteed within 30 seconds of the first trigger.
 
@@ -1162,14 +1167,14 @@ file processing where you don't want to load all items into memory at once.
 
 When batch triggering fails, the SDK throws a `BatchTriggerError` with properties that help you understand what went wrong and how to react:
 
-| Property | Type | Description |
-| :--- | :--- | :--- |
-| `isRateLimited` | `boolean` | `true` if the error was caused by rate limiting |
-| `retryAfterMs` | `number \| undefined` | Milliseconds until the rate limit resets |
-| `phase` | `"create" \| "stream"` | Which phase of batch creation failed |
-| `batchId` | `string \| undefined` | The batch ID if it was created before failure |
-| `itemCount` | `number` | Number of items attempted in the batch |
-| `cause` | `unknown` | The underlying error |
+| Property        | Type                   | Description                                     |
+| :-------------- | :--------------------- | :---------------------------------------------- |
+| `isRateLimited` | `boolean`              | `true` if the error was caused by rate limiting |
+| `retryAfterMs`  | `number \| undefined`  | Milliseconds until the rate limit resets        |
+| `phase`         | `"create" \| "stream"` | Which phase of batch creation failed            |
+| `batchId`       | `string \| undefined`  | The batch ID if it was created before failure   |
+| `itemCount`     | `number`               | Number of items attempted in the batch          |
+| `cause`         | `unknown`              | The underlying error                            |
 
 ### Detecting and handling rate limits
 
@@ -1237,7 +1242,8 @@ export const parentTask = task({
 ```
 
 <Note>
-  For rate limit values and how the token bucket algorithm works, see [Batch trigger rate limits](/limits#batch-trigger-rate-limits).
+  For rate limit values and how the token bucket algorithm works, see [Batch trigger rate
+  limits](/limits#batch-trigger-rate-limits).
 </Note>
 
 ## Large Payloads

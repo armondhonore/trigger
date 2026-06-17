@@ -55,11 +55,10 @@ What changed:
   server-side in `chat.createStartSessionAction(taskId, options)`.
 
 <Note>
-  The architectural shift is that `chat.agent` no longer rolls its own
-  per-run streams. It runs on top of a durable **Session** row that owns
-  its current run, persists across run lifecycles, and orchestrates
-  upgrades server-side. The customer-facing surface is similar; the wire
-  path beneath it changed completely.
+  The architectural shift is that `chat.agent` no longer rolls its own per-run streams. It runs on
+  top of a durable **Session** row that owns its current run, persists across run lifecycles, and
+  orchestrates upgrades server-side. The customer-facing surface is similar; the wire path beneath
+  it changed completely.
 </Note>
 
 ## Step 1: Replace your access-token server action with two server actions
@@ -72,8 +71,7 @@ The old pattern was a single helper that minted a trigger token:
 import { chat } from "@trigger.dev/sdk/ai";
 import type { myChat } from "@/trigger/chat";
 
-export const getChatToken = () =>
-  chat.createAccessToken<typeof myChat>("my-chat");
+export const getChatToken = () => chat.createAccessToken<typeof myChat>("my-chat");
 ```
 
 Replace with two helpers — one for session creation, one for PAT refresh:
@@ -126,8 +124,7 @@ export function Chat() {
   const transport = useTriggerChatTransport<typeof myChat>({
     task: "my-chat",
     accessToken: ({ chatId }) => mintChatAccessToken(chatId),
-    startSession: ({ chatId, clientData }) =>
-      startChatSession({ chatId, clientData }),
+    startSession: ({ chatId, clientData }) => startChatSession({ chatId, clientData }),
   });
 
   const { messages, sendMessage, status } = useChat({ transport });
@@ -137,12 +134,12 @@ export function Chat() {
 
 The transport calls them in two distinct flows:
 
-| Trigger | Callback fired |
-|---|---|
-| `transport.preload(chatId)` | `startSession` |
-| First `sendMessage` for a chatId with no cached PAT | `startSession` (auto) |
-| Any 401/403 from `.in/append`, `.out` SSE, or `end-and-continue` | `accessToken` |
-| Page hydrates with `sessions: { [chatId]: ... }` | Neither (uses hydrated PAT) |
+| Trigger                                                          | Callback fired              |
+| ---------------------------------------------------------------- | --------------------------- |
+| `transport.preload(chatId)`                                      | `startSession`              |
+| First `sendMessage` for a chatId with no cached PAT              | `startSession` (auto)       |
+| Any 401/403 from `.in/append`, `.out` SSE, or `end-and-continue` | `accessToken`               |
+| Page hydrates with `sessions: { [chatId]: ... }`                 | Neither (uses hydrated PAT) |
 
 `startSession` is deduped via an in-flight promise — concurrent
 `preload` + `sendMessage` calls converge to one server action invocation.
@@ -178,11 +175,10 @@ export const startChatSession = chat.createStartSessionAction("my-chat", {
 const transport = useTriggerChatTransport<typeof myChat>({
   task: "my-chat",
   accessToken: ({ chatId }) => mintChatAccessToken(chatId),
-  startSession: ({ chatId, clientData }) =>
-      startChatSession({ chatId, clientData }),
+  startSession: ({ chatId, clientData }) => startChatSession({ chatId, clientData }),
 });
 
-transport.preload(chatId);  // no second arg
+transport.preload(chatId); // no second arg
 ```
 
 For metadata that varies per chat, use `clientData` on the transport (see
@@ -204,8 +200,7 @@ option is now the canonical place to set it. The same value:
 const transport = useTriggerChatTransport<typeof myChat>({
   task: "my-chat",
   accessToken: ({ chatId }) => mintChatAccessToken(chatId),
-  startSession: ({ chatId, clientData }) =>
-      startChatSession({ chatId, clientData }),
+  startSession: ({ chatId, clientData }) => startChatSession({ chatId, clientData }),
   clientData: {
     userId: currentUser.id,
     plan: currentUser.plan,
@@ -218,11 +213,10 @@ calls `setClientData` under the hood), so dynamic values work without
 reconstructing the transport.
 
 <Tip>
-  Server-side authorization can still override or augment the
-  browser-claimed `clientData` inside `startSession` — never trust the
-  browser's identity claim. A typical pattern: the server action looks up
-  the user from the request session, then merges the trusted server fields
-  on top of `params.clientData`.
+  Server-side authorization can still override or augment the browser-claimed `clientData` inside
+  `startSession` — never trust the browser's identity claim. A typical pattern: the server action
+  looks up the user from the request session, then merges the trusted server fields on top of
+  `params.clientData`.
 </Tip>
 
 ## Step 5: Update your `ChatSession` persistence
@@ -253,9 +247,7 @@ Hydration on page reload is unchanged:
 ```tsx
 const transport = useTriggerChatTransport<typeof myChat>({
   // ...
-  sessions: persistedSession
-    ? { [chatId]: persistedSession }
-    : {},
+  sessions: persistedSession ? { [chatId]: persistedSession } : {},
 });
 ```
 
@@ -280,11 +272,11 @@ The new run is recorded in a `SessionRun` audit row with
 If your code talks to the realtime API directly instead of going through
 the SDK, the URL shapes changed:
 
-| Before | After |
-|---|---|
-| `GET /realtime/v1/streams/{runId}/chat` | `GET /realtime/v1/sessions/{chatId}/out` |
+| Before                                                            | After                                                                                |
+| ----------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| `GET /realtime/v1/streams/{runId}/chat`                           | `GET /realtime/v1/sessions/{chatId}/out`                                             |
 | `POST /realtime/v1/streams/{runId}/{target}/chat-messages/append` | `POST /realtime/v1/sessions/{chatId}/in/append` (body: `{kind: "message", payload}`) |
-| `POST /realtime/v1/streams/{runId}/{target}/chat-stop/append` | `POST /realtime/v1/sessions/{chatId}/in/append` (body: `{kind: "stop"}`) |
+| `POST /realtime/v1/streams/{runId}/{target}/chat-stop/append`     | `POST /realtime/v1/sessions/{chatId}/in/append` (body: `{kind: "stop"}`)             |
 
 The session-scoped PAT
 (`read:sessions:{chatId} + write:sessions:{chatId}`) authorizes both the
@@ -367,17 +359,20 @@ The wire is now **delta-only**: each `.in/append` carries at most one new `UIMes
 
 Snapshot read/write uses Trigger.dev's existing object-store infrastructure — the same presigned-URL routes used for large payloads. Set the standard `OBJECT_STORE_*` env vars on your webapp deployment if you haven't already; MinIO and S3-compatible stores work via `OBJECT_STORE_DEFAULT_PROTOCOL`.
 
-| Env var | Purpose |
-|---|---|
-| `OBJECT_STORE_BASE_URL` | Endpoint URL (S3, MinIO, R2, etc.) |
-| `OBJECT_STORE_ACCESS_KEY_ID` | Access key |
-| `OBJECT_STORE_SECRET_ACCESS_KEY` | Secret key |
-| `OBJECT_STORE_DEFAULT_PROTOCOL` | `s3` (default), `minio`, etc. |
+| Env var                          | Purpose                            |
+| -------------------------------- | ---------------------------------- |
+| `OBJECT_STORE_BASE_URL`          | Endpoint URL (S3, MinIO, R2, etc.) |
+| `OBJECT_STORE_ACCESS_KEY_ID`     | Access key                         |
+| `OBJECT_STORE_SECRET_ACCESS_KEY` | Secret key                         |
+| `OBJECT_STORE_DEFAULT_PROTOCOL`  | `s3` (default), `minio`, etc.      |
 
 Snapshots are written under `packets/{projectRef}/{envSlug}/sessions/{sessionId}/snapshot.json`. Each snapshot is small (typically tens of KB) and overwritten every turn — no append-only growth.
 
 <Warning>
-  **No object store + no `hydrateMessages` = conversations don't survive run boundaries.** With neither piece of state, a continuation boots empty and the agent can't reconstruct prior turns. Either configure an object store or register `hydrateMessages`. The runtime logs a warning at agent registration time when both are missing.
+  **No object store + no `hydrateMessages` = conversations don't survive run boundaries.** With
+  neither piece of state, a continuation boots empty and the agent can't reconstruct prior turns.
+  Either configure an object store or register `hydrateMessages`. The runtime logs a warning at
+  agent registration time when both are missing.
 </Warning>
 
 ### Custom transports
@@ -386,7 +381,7 @@ If you've built your own transport (Slack bot, CLI, native app) against the [Cli
 
 ```ts before
 type ChatTaskWirePayload = {
-  messages: UIMessage[];        // full history
+  messages: UIMessage[]; // full history
   chatId: string;
   trigger: "submit-message" | "regenerate-message" | "preload" | "close" | "action";
   // ...
@@ -395,8 +390,8 @@ type ChatTaskWirePayload = {
 
 ```ts after
 type ChatTaskWirePayload = {
-  message?: UIMessage;          // singular, optional
-  headStartMessages?: UIMessage[];  // chat.headStart only, "handover-prepare"
+  message?: UIMessage; // singular, optional
+  headStartMessages?: UIMessage[]; // chat.headStart only, "handover-prepare"
   chatId: string;
   trigger:
     | "submit-message"
@@ -411,12 +406,12 @@ type ChatTaskWirePayload = {
 
 What to send per trigger:
 
-| Trigger | What to put in the payload |
-|---|---|
-| `submit-message` | The new user message (or a tool-approval-responded assistant message) in `message` |
-| `regenerate-message` | No `message` — the agent trims its own tail |
-| `preload` / `close` / `action` | No `message` |
-| `handover-prepare` (head-start only) | Full prior history in `headStartMessages` (route handler — not on `/in/append`) |
+| Trigger                              | What to put in the payload                                                         |
+| ------------------------------------ | ---------------------------------------------------------------------------------- |
+| `submit-message`                     | The new user message (or a tool-approval-responded assistant message) in `message` |
+| `regenerate-message`                 | No `message` — the agent trims its own tail                                        |
+| `preload` / `close` / `action`       | No `message`                                                                       |
+| `handover-prepare` (head-start only) | Full prior history in `headStartMessages` (route handler — not on `/in/append`)    |
 
 The full wire breakdown is in the rewritten [Client Protocol](/ai-chat/client-protocol).
 
@@ -428,13 +423,14 @@ The hook signature is unchanged. Two behavior tightenings worth knowing:
 
 ```ts
 hydrateMessages: async ({ incomingMessages }) => {
-  for (const msg of incomingMessages) {  // 0-or-1 iterations
+  for (const msg of incomingMessages) {
+    // 0-or-1 iterations
     for (const r of chat.history.extractNewToolResults(msg)) {
       await auditLog.record({ id: r.toolCallId, output: r.output });
     }
   }
   return await db.getMessages(chatId);
-}
+};
 ```
 
 2. **Registering `hydrateMessages` short-circuits snapshot+replay.** The runtime trusts your hook to be the source of truth, so it doesn't read or write the JSON snapshot or replay `session.out`. Zero object-store traffic. Trade-off: you own persistence end-to-end.
@@ -447,15 +443,19 @@ This makes once-per-chat setup code (create the Chat DB row, mint chat-scoped re
 
 ```ts before
 onChatStart: async ({ continuation, chatId, clientData }) => {
-  if (continuation) return;           // ❌ no longer needed — fires only on first message ever
-  await db.chat.create({ /* ... */ });
-}
+  if (continuation) return; // ❌ no longer needed — fires only on first message ever
+  await db.chat.create({
+    /* ... */
+  });
+};
 ```
 
 ```ts after
 onChatStart: async ({ chatId, clientData }) => {
-  await db.chat.create({ /* ... */ });  // ✅ guaranteed first-message-of-chat
-}
+  await db.chat.create({
+    /* ... */
+  }); // ✅ guaranteed first-message-of-chat
+};
 ```
 
 If you need per-turn setup that **does** run on continuations, move it to [`onTurnStart`](/ai-chat/lifecycle-hooks#onturnstart) — that hook still fires on every turn, including the first turn of a continuation run.
@@ -470,7 +470,7 @@ const userContext = chat.local<{ name: string; plan: string }>({ id: "userContex
 onChatStart: async ({ clientData }) => {
   const user = await db.user.findUnique({ where: { id: clientData.userId } });
   userContext.init({ name: user.name, plan: user.plan }); // ❌ never runs on continuation
-}
+};
 ```
 
 ```ts after
@@ -479,7 +479,7 @@ const userContext = chat.local<{ name: string; plan: string }>({ id: "userContex
 onBoot: async ({ clientData }) => {
   const user = await db.user.findUnique({ where: { id: clientData.userId } });
   userContext.init({ name: user.name, plan: user.plan }); // ✅ runs on every fresh worker
-}
+};
 ```
 
 Anything else that's per-process (DB connection pools, sandbox handles, in-memory caches) belongs in `onBoot` for the same reason. Branch on `continuation` inside `onBoot` if you need to re-load state from your DB on takeover.

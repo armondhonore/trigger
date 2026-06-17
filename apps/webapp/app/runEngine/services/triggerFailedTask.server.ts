@@ -228,8 +228,7 @@ export class TriggerFailedTaskService {
         logger.warn("TriggerFailedTaskService: alert enqueue failed", {
           taskId: request.taskId,
           friendlyId: failedRun.friendlyId,
-          error:
-            alertsError instanceof Error ? alertsError.message : String(alertsError),
+          error: alertsError instanceof Error ? alertsError.message : String(alertsError),
         });
       }
 
@@ -334,8 +333,7 @@ export class TriggerFailedTaskService {
         logger.warn("TriggerFailedTaskService.callWithoutTraceEvents: alert enqueue failed", {
           taskId: opts.taskId,
           friendlyId: failedRun.friendlyId,
-          error:
-            alertsError instanceof Error ? alertsError.message : String(alertsError),
+          error: alertsError instanceof Error ? alertsError.message : String(alertsError),
         });
       }
 

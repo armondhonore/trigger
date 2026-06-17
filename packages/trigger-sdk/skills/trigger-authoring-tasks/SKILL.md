@@ -74,7 +74,13 @@ import { task, AbortTaskRunError } from "@trigger.dev/sdk";
 
 export const charge = task({
   id: "charge",
-  retry: { maxAttempts: 5, factor: 1.8, minTimeoutInMs: 500, maxTimeoutInMs: 30_000, randomize: true },
+  retry: {
+    maxAttempts: 5,
+    factor: 1.8,
+    minTimeoutInMs: 500,
+    maxTimeoutInMs: 30_000,
+    randomize: true,
+  },
   run: async (payload: { amount: number }) => {
     if (payload.amount <= 0) throw new AbortTaskRunError("Invalid amount"); // no retry
     // work that may throw and retry
@@ -195,7 +201,13 @@ export default defineConfig({
   machine: "small-1x",
   retries: {
     enabledInDev: false,
-    default: { maxAttempts: 3, factor: 2, minTimeoutInMs: 1000, maxTimeoutInMs: 10000, randomize: true },
+    default: {
+      maxAttempts: 3,
+      factor: 2,
+      minTimeoutInMs: 1000,
+      maxTimeoutInMs: 10000,
+      randomize: true,
+    },
   },
 });
 ```

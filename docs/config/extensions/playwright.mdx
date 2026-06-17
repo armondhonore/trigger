@@ -12,9 +12,7 @@ If you are using [Playwright](https://playwright.dev/), you should use the Playw
 - Lets you specify the Playwright version, or auto-detects it
 - Installs only the dependencies needed for the selected browsers to optimize build time and image size
 
-<Note>
-  This extension only affects the build and deploy process, not the `dev` command.
-</Note>
+<Note>This extension only affects the build and deploy process, not the `dev` command.</Note>
 
 You can use it for a simple Playwright setup like this:
 
@@ -26,9 +24,7 @@ export default defineConfig({
   project: "<project ref>",
   // Your other config settings...
   build: {
-    extensions: [
-      playwright(),
-    ],
+    extensions: [playwright()],
   },
 });
 ```
@@ -40,7 +36,8 @@ export default defineConfig({
 - `version`: Playwright version to install. If not provided, the version will be auto-detected from your dependencies (recommended).
 
   <Warning>
-    Using a different version in your app than specified here will break things. We recommend not setting this option to automatically detect the version.
+    Using a different version in your app than specified here will break things. We recommend not
+    setting this option to automatically detect the version.
   </Warning>
 
 ### Custom browsers and version
@@ -55,7 +52,7 @@ export default defineConfig({
     extensions: [
       playwright({
         browsers: ["chromium", "webkit"], // optional, will use ["chromium"] if not provided
-        version: "1.43.1",  // optional, will automatically detect the version if not provided
+        version: "1.43.1", // optional, will automatically detect the version if not provided
       }),
     ],
   },

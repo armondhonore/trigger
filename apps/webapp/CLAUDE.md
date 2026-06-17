@@ -75,6 +75,7 @@ const signal = getRequestAbortSignal();
 Access via `env` export from `app/env.server.ts`. **Never use `process.env` directly.**
 
 For testable code, **never import env.server.ts** in test files. Pass configuration as options instead:
+
 - `realtimeClient.server.ts` (testable service, takes config as constructor arg)
 - `realtimeClientGlobal.server.ts` (creates singleton with env config)
 
@@ -87,6 +88,7 @@ The `engineVersion.server.ts` file determines V1 vs V2 for a given environment. 
 ## Background Workers
 
 Background job workers use `@trigger.dev/redis-worker`:
+
 - `app/v3/commonWorker.server.ts`
 - `app/v3/alertsWorker.server.ts`
 - `app/v3/batchTriggerWorker.server.ts`
@@ -101,6 +103,7 @@ Do NOT add new jobs using zodworker/graphile-worker (legacy).
 ## Legacy V1 Code
 
 The `app/v3/` directory name is misleading - most code is actively used by V2. Only these specific files are V1-only legacy:
+
 - `app/v3/marqs/` (old MarQS queue system)
 - `app/v3/legacyRunEngineWorker.server.ts`
 - `app/v3/services/triggerTaskV1.server.ts`

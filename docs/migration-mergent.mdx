@@ -120,18 +120,22 @@ mergent.tasks.create({
 ```ts
 import { processImageTask } from "@/trigger/processImage";
 
-await processImageTask.trigger({
-  imageUrl: "...",
-  filters: ["blur"],
-}, {
-  delay: "5m",
-});
+await processImageTask.trigger(
+  {
+    imageUrl: "...",
+    filters: ["blur"],
+  },
+  {
+    delay: "5m",
+  }
+);
 ```
 
 - You can trigger tasks immediately, or add logic inside the task to delay execution (using `wait.for` or `wait.until`).
 - No need to expose HTTP endpoints for every task.
 
-**Summary:**  
+**Summary:**
+
 - Mergent tasks are HTTP handlers; Trigger.dev tasks are functions that get deployed on a managed worker for you.
 - Scheduling and retries are built-in and configured in code.
 - Trigger.dev tasks are type-safe, and easy to debug.

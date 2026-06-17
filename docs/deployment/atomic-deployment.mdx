@@ -62,7 +62,6 @@ jobs:
 ```
 
 - Deploy to Trigger.dev
-
   - The `npx trigger.dev deploy` command uses `--skip-promotion` to deploy the tasks without setting the version as the default.
   - The step’s id: `deploy-trigger` allows us to capture the deployment version in the output (deploymentVersion).
 
@@ -167,6 +166,7 @@ Checkout our [example repo](https://github.com/ericallam/vercel-atomic-deploys) 
   We are using the `ludalex/vercel-wait` action above as a fork of the [official
   tj-actions/vercel-wait](https://github.com/tj-actions/vercel-wait) action because there is a bug
   in the official action that exits early if the deployment isn't found in the first check and due
-  to the fact that it supports treating skipped (cancelled) Vercel deployments as valid (on by default). 
-  I've opened a PR for this issue [here](https://github.com/tj-actions/vercel-wait/pull/106).
+  to the fact that it supports treating skipped (cancelled) Vercel deployments as valid (on by
+  default). I've opened a PR for this issue
+  [here](https://github.com/tj-actions/vercel-wait/pull/106).
 </Note>

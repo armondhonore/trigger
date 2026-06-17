@@ -188,9 +188,7 @@ const { action } = createActionApiRoute(
     // owns the full request shape including parent/root operations,
     // metadataVersion CAS, batching, validation — none of which the
     // buffer side needs to reimplement.
-    const [pgError, pgResult] = await tryCatch(
-      updateMetadataService.call(runId, body, env)
-    );
+    const [pgError, pgResult] = await tryCatch(updateMetadataService.call(runId, body, env));
     if (pgError) {
       if (pgError instanceof ServiceValidationError) {
         return json({ error: pgError.message }, { status: pgError.status ?? 422 });
@@ -278,13 +276,9 @@ const { action } = createActionApiRoute(
       routeOperationsToRun(
         bufferOutcome.parentTaskRunFriendlyId ?? runId,
         body.parentOperations,
-        env,
+        env
       ),
-      routeOperationsToRun(
-        bufferOutcome.rootTaskRunFriendlyId ?? runId,
-        body.rootOperations,
-        env,
-      ),
+      routeOperationsToRun(bufferOutcome.rootTaskRunFriendlyId ?? runId, body.rootOperations, env),
     ]);
 
     // Wire-shape parity with the PG branch. `UpdateMetadataService.call`

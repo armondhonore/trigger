@@ -326,7 +326,10 @@ const Env = z
         path: ["TRIGGER_WORKLOAD_API_DOMAIN"],
       });
     }
-    if (data.TRIGGER_DEQUEUE_BACKPRESSURE_ENABLED && !data.TRIGGER_DEQUEUE_BACKPRESSURE_REDIS_HOST) {
+    if (
+      data.TRIGGER_DEQUEUE_BACKPRESSURE_ENABLED &&
+      !data.TRIGGER_DEQUEUE_BACKPRESSURE_REDIS_HOST
+    ) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message:

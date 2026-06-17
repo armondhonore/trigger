@@ -57,15 +57,18 @@ Set `USE_COMPUTE_BETA=1` in the staging environment of the app that calls `trigg
 Open the **Regions** page in the dashboard and set `us-east-1-next` as the project-wide default. This applies to **all environments in the project**, so only do this on a project that is running staging traffic only.
 
 <Note>
-  Switching the default region doesn't move runs that are already in the queue - they stay in the previous region until they execute. To make a switch take effect for in-flight work, [cancel those runs](/bulk-actions) and re-trigger them after changing the default. This applies whenever you change regions, not just when moving on or off `us-east-1-next`.
+  Switching the default region doesn't move runs that are already in the queue - they stay in the
+  previous region until they execute. To make a switch take effect for in-flight work, [cancel those
+  runs](/bulk-actions) and re-trigger them after changing the default. This applies whenever you
+  change regions, not just when moving on or off `us-east-1-next`.
 </Note>
 
 <Warning>
   Setting `us-east-1-next` as your project default makes boot snapshot creation a required step at deploy time. Two things to expect:
 
-  - Deploys take a bit longer (up to ~30 seconds extra) while the snapshot is built.
-  - Deploys can fail if the snapshot step fails. This is by design - boot snapshot creation is what proves your deploy image can actually run on microVM compute. Retrying may succeed, but if it doesn't please switch your default region back for a quick unblock and reach out to us on Slack.
-</Warning>
+- Deploys take a bit longer (up to ~30 seconds extra) while the snapshot is built.
+- Deploys can fail if the snapshot step fails. This is by design - boot snapshot creation is what proves your deploy image can actually run on microVM compute. Retrying may succeed, but if it doesn't please switch your default region back for a quick unblock and reach out to us on Slack.
+  </Warning>
 
 ## Machine sizes
 

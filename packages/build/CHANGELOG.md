@@ -166,7 +166,6 @@
 - The `prismaExtension` has been completely redesigned to support multiple Prisma versions and deployment strategies. This update introduces **three distinct modes** to handle the evolving Prisma ecosystem, from legacy setups to the upcoming Prisma 7. ([#2689](https://github.com/triggerdotdev/trigger.dev/pull/2689))
 
   **Highlights:**
-
   - 🎯 Three modes: Legacy, Engine-Only, and Modern
   - 🎉 **NEW:** Support for `prisma.config.ts` files (Legacy Mode)
   - 🔍 **NEW:** Enhanced version detection with filesystem fallback
@@ -215,7 +214,6 @@
   **Use when:** You're using Prisma 6.x or earlier with the `prisma-client-js` provider.
 
   **Features:**
-
   - Automatic `prisma generate` during deployment
   - Supports single-file schemas (`prisma/schema.prisma`)
   - Supports multi-file schemas (Prisma 6.7+, directory-based schemas)
@@ -264,7 +262,6 @@
   ```
 
   **Tested Versions:**
-
   - Prisma 6.14.0 ✅
   - Prisma 6.7.0+ (multi-file schema support) ✅
   - Prisma 5.x ✅
@@ -276,7 +273,6 @@
   **Use when:** You have a custom Prisma client output path and want to manage `prisma generate` yourself.
 
   **Features:**
-
   - Only installs Prisma engine binaries (no client generation)
   - Automatic version detection from `@prisma/client`
   - Manual override of version and binary target
@@ -316,7 +312,6 @@
   ```
 
   **Important Notes:**
-
   - You **must** run `prisma generate` yourself (typically in a prebuild script)
   - Your schema **must** include the correct `binaryTargets` for deployment to the trigger.dev cloud. The binary target is `debian-openssl-3.0.x`.
   - The extension sets `PRISMA_QUERY_ENGINE_LIBRARY` and `PRISMA_QUERY_ENGINE_SCHEMA_ENGINE` environment variables to the correct paths for the binary targets.
@@ -334,7 +329,6 @@
   ```
 
   **Tested Versions:**
-
   - Prisma 6.19.0 ✅
   - Prisma 6.16.0+ ✅
 
@@ -345,7 +339,6 @@
   **Use when:** You're using Prisma 6.16+ with the new `prisma-client` provider (with `engineType = "client"`) or preparing for Prisma 7.
 
   **Features:**
-
   - Designed for the new Prisma architecture
   - Zero configuration required
   - Automatically marks `@prisma/client` as external
@@ -409,14 +402,12 @@
   ```
 
   **Important Notes:**
-
   - You **must** run `prisma generate` yourself
   - Requires Prisma 6.16.0+ or Prisma 7 beta
   - The new `prisma-client` provider generates plain TypeScript (no Rust binaries)
   - Requires database adapters (e.g., `@prisma/adapter-pg` for PostgreSQL)
 
   **Tested Versions:**
-
   - Prisma 6.16.0 with `engineType = "client"` ✅
   - Prisma 6.20.0-integration-next.8 (Prisma 7 beta) ✅
 
@@ -457,7 +448,6 @@
   ### Preparing for Prisma 7
 
   If you want to adopt the new Prisma architecture, use **Modern Mode**:
-
   1. Update your schema to use `prisma-client` provider
   2. Add database adapters to your dependencies
   3. Configure the extension:
@@ -489,7 +479,6 @@
   **Use when:** You want to use Prisma's new config file format (Prisma 6+) to centralize your Prisma configuration.
 
   **Benefits:**
-
   - Single source of truth for Prisma configuration
   - Automatic extraction of schema location and migrations path
   - Type-safe configuration with TypeScript
@@ -527,7 +516,6 @@
   ```
 
   **What gets extracted:**
-
   - `schema` - The schema file or directory path
   - `migrations.path` - The migrations directory path (if specified)
 

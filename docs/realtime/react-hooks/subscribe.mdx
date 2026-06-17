@@ -466,10 +466,10 @@ export function DeploymentMonitor({ runId, publicAccessToken }: DeploymentMonito
                   isFailed
                     ? "bg-red-500 text-white"
                     : isCompleted
-                    ? "bg-green-500 text-white"
-                    : isActive
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-200 text-gray-600"
+                      ? "bg-green-500 text-white"
+                      : isActive
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-200 text-gray-600"
                 }`}
               >
                 {isCompleted ? "✓" : index + 1}
@@ -479,10 +479,10 @@ export function DeploymentMonitor({ runId, publicAccessToken }: DeploymentMonito
                   isActive
                     ? "font-medium text-blue-600"
                     : isCompleted
-                    ? "text-green-600"
-                    : isFailed
-                    ? "text-red-600"
-                    : "text-gray-500"
+                      ? "text-green-600"
+                      : isFailed
+                        ? "text-red-600"
+                        : "text-gray-500"
                 }`}
               >
                 {stage}

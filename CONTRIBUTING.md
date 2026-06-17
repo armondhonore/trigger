@@ -275,6 +275,7 @@ EOF
 ```
 
 **Fields:**
+
 - `area` (required): `webapp` | `supervisor` | `coordinator` | `kubernetes-provider` | `docker-provider`
 - `type` (required): `feature` | `fix` | `improvement` | `breaking`
 
@@ -282,11 +283,11 @@ The body text (below the frontmatter) is a one-line description of the change. K
 
 **When to add which:**
 
-| PR changes | What to add |
-|---|---|
-| Only packages (`packages/`) | Changeset |
-| Only server (`apps/`) | `.server-changes/` file |
-| Both packages and server | Just the changeset |
+| PR changes                  | What to add             |
+| --------------------------- | ----------------------- |
+| Only packages (`packages/`) | Changeset               |
+| Only server (`apps/`)       | `.server-changes/` file |
+| Both packages and server    | Just the changeset      |
 
 See `.server-changes/README.md` for more details.
 

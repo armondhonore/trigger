@@ -69,6 +69,7 @@ The `publicAccessToken` returned by `wait.createToken()` is scoped to that speci
     const token = await wait.createToken({ timeout: "10m" });
     // Pass token.id and token.publicAccessToken to your frontend
     ```
+
   </Step>
   <Step title="Complete the token from the browser">
     ```typescript
@@ -92,6 +93,7 @@ The `publicAccessToken` returned by `wait.createToken()` is scoped to that speci
       throw new Error(`Failed to complete token: ${response.statusText}`);
     }
     ```
+
   </Step>
 </Steps>
 

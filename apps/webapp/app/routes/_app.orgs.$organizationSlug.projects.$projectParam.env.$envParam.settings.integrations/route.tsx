@@ -122,7 +122,10 @@ export const action: ActionFunction = async ({ request, params }) => {
   const userId = await requireUserId(request);
   const { organizationSlug, projectParam } = params;
   if (!organizationSlug || !projectParam) {
-    return json({ errors: { body: "organizationSlug and projectParam are required" } }, { status: 400 });
+    return json(
+      { errors: { body: "organizationSlug and projectParam are required" } },
+      { status: 400 }
+    );
   }
 
   const formData = await request.formData();
@@ -230,7 +233,17 @@ export default function IntegrationsSettingsPage() {
       // Query param removed but modal is open, close modal
       setIsModalOpen(false);
     }
-  }, [hasQueryParam, vercelIntegrationEnabled, organization.slug, project.slug, environment.slug, vercelFetcher.data, vercelFetcher.state, isModalOpen, openVercelOnboarding]);
+  }, [
+    hasQueryParam,
+    vercelIntegrationEnabled,
+    organization.slug,
+    project.slug,
+    environment.slug,
+    vercelFetcher.data,
+    vercelFetcher.state,
+    isModalOpen,
+    openVercelOnboarding,
+  ]);
 
   // Ensure modal stays open when query param is present (even after data reloads)
   // This is a safeguard to prevent the modal from closing during form submissions
@@ -275,11 +288,23 @@ export default function IntegrationsSettingsPage() {
         `${vercelResourcePath(organization.slug, project.slug, environment.slug)}?vercelOnboarding=true`
       );
     }
-  }, [organization.slug, project.slug, environment.slug, vercelFetcher, setSearchParams, hasQueryParam, openVercelOnboarding]);
+  }, [
+    organization.slug,
+    project.slug,
+    environment.slug,
+    vercelFetcher,
+    setSearchParams,
+    hasQueryParam,
+    openVercelOnboarding,
+  ]);
 
   // When data loads from button click, open modal
   useEffect(() => {
-    if (waitingForButtonClickRef.current && vercelFetcher.data?.onboardingData && vercelFetcher.state === "idle") {
+    if (
+      waitingForButtonClickRef.current &&
+      vercelFetcher.data?.onboardingData &&
+      vercelFetcher.state === "idle"
+    ) {
       // Data loaded from button click, open modal and ensure query param is present
       waitingForButtonClickRef.current = false;
       openVercelOnboarding();
@@ -313,7 +338,9 @@ export default function IntegrationsSettingsPage() {
                       projectSlug={project.slug}
                       environmentSlug={environment.slug}
                       onOpenVercelModal={handleOpenVercelModal}
-                      isLoadingVercelData={vercelFetcher.state === "loading" || vercelFetcher.state === "submitting"}
+                      isLoadingVercelData={
+                        vercelFetcher.state === "loading" || vercelFetcher.state === "submitting"
+                      }
                     />
                   </div>
                 </div>
@@ -347,7 +374,9 @@ export default function IntegrationsSettingsPage() {
           onDataReload={(vercelEnvironmentId) => {
             vercelFetcher.load(
               `${vercelResourcePath(organization.slug, project.slug, environment.slug)}?vercelOnboarding=true${
-                vercelEnvironmentId ? `&vercelEnvironmentId=${encodeURIComponent(vercelEnvironmentId)}` : ""
+                vercelEnvironmentId
+                  ? `&vercelEnvironmentId=${encodeURIComponent(vercelEnvironmentId)}`
+                  : ""
               }`
             );
           }}

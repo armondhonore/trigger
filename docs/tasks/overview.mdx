@@ -84,13 +84,13 @@ export const taskWithRetries = task({
 });
 ```
 
-| Option | What it does |
-|---|---|
-| `maxAttempts` | Total number of attempts (including the first). Default: 3 |
-| `factor` | Exponential backoff multiplier. Each retry delay = previous delay x factor. With `factor: 1.8` and `minTimeoutInMs: 500`, retries wait 500ms, 900ms, 1620ms, etc. |
-| `minTimeoutInMs` | Delay before the first retry |
-| `maxTimeoutInMs` | Cap on the delay between retries |
-| `randomize` | Add jitter to retry delays to prevent multiple failing tasks from retrying in lockstep |
+| Option           | What it does                                                                                                                                                      |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `maxAttempts`    | Total number of attempts (including the first). Default: 3                                                                                                        |
+| `factor`         | Exponential backoff multiplier. Each retry delay = previous delay x factor. With `factor: 1.8` and `minTimeoutInMs: 500`, retries wait 500ms, 900ms, 1620ms, etc. |
+| `minTimeoutInMs` | Delay before the first retry                                                                                                                                      |
+| `maxTimeoutInMs` | Cap on the delay between retries                                                                                                                                  |
+| `randomize`      | Add jitter to retry delays to prevent multiple failing tasks from retrying in lockstep                                                                            |
 
 <Note>Task-level retry settings override the defaults in your `trigger.config` file.</Note>
 

@@ -39,8 +39,7 @@ export function Chat() {
   const transport = useTriggerChatTransport<typeof myChat>({
     task: "my-chat",
     accessToken: ({ chatId }) => mintChatAccessToken(chatId),
-    startSession: ({ chatId, clientData }) =>
-      startChatSession({ chatId, clientData }),
+    startSession: ({ chatId, clientData }) => startChatSession({ chatId, clientData }),
   });
   const { messages, sendMessage } = useChat({ transport });
   // ... render UI
@@ -63,7 +62,7 @@ See [Quick Start](/ai-chat/quick-start) for the matching server actions and a ru
 Three primitives, related but distinct:
 
 - **Chat agents** — the SDK surface you define with [`chat.agent()`](/ai-chat/backend#chat-agent). Owns the turn loop, lifecycle hooks, and the response stream.
-- **Sessions** — the durable, bi-directional channel keyed on `chatId` that holds the conversation across run boundaries. A chat agent runs *on top of* a [Session](/ai-chat/sessions).
+- **Sessions** — the durable, bi-directional channel keyed on `chatId` that holds the conversation across run boundaries. A chat agent runs _on top of_ a [Session](/ai-chat/sessions).
 - **Sub-agents** — Delegate work from one agent to another via [`AgentChat`](/ai-chat/patterns/sub-agents). The sub-agent runs as its own durable agent on its own session; its response streams back through the parent as preliminary tool results, so the frontend sees the sub-agent working inside the parent's tool card.
 
 ## Next steps

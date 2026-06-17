@@ -12,12 +12,12 @@ import RcBanner from "/snippets/ai-chat-rc-banner.mdx";
 
 ## Error layers at a glance
 
-| Layer | Source | Default behavior | Recovery |
-|-------|--------|------------------|----------|
-| **Stream** | `streamText` errors mid-response (rate limits, model API failures) | `onError` callback converts to error chunk | Sanitize message via `uiMessageStreamOptions.onError` |
-| **Hook / turn** | Throws in `onValidateMessages`, `onTurnStart`, `run`, etc. | Error chunk + turn-complete written to stream; conversation continues | Catch in your hook, or rely on default |
-| **Run** | Unhandled exception escapes the run | Run fails. No retry by default. Standard task `onFailure` fires. | `onFailure` task hook |
-| **Frontend** | Stream delivers `{ type: "error", errorText }` | `useChat` exposes via `error` field and `onError` callback | Show toast, retry button, etc. |
+| Layer           | Source                                                             | Default behavior                                                      | Recovery                                              |
+| --------------- | ------------------------------------------------------------------ | --------------------------------------------------------------------- | ----------------------------------------------------- |
+| **Stream**      | `streamText` errors mid-response (rate limits, model API failures) | `onError` callback converts to error chunk                            | Sanitize message via `uiMessageStreamOptions.onError` |
+| **Hook / turn** | Throws in `onValidateMessages`, `onTurnStart`, `run`, etc.         | Error chunk + turn-complete written to stream; conversation continues | Catch in your hook, or rely on default                |
+| **Run**         | Unhandled exception escapes the run                                | Run fails. No retry by default. Standard task `onFailure` fires.      | `onFailure` task hook                                 |
+| **Frontend**    | Stream delivers `{ type: "error", errorText }`                     | `useChat` exposes via `error` field and `onError` callback            | Show toast, retry button, etc.                        |
 
 ## Stream errors mid-turn
 
@@ -47,7 +47,8 @@ export const myChat = chat.agent({
 ```
 
 <Note>
-  Returning a string from `onError` is what gets shown to the user. Do not return raw error messages — they may leak internal details (API keys, stack traces, etc.).
+  Returning a string from `onError` is what gets shown to the user. Do not return raw error messages
+  — they may leak internal details (API keys, stack traces, etc.).
 </Note>
 
 The frontend receives this as an error chunk that `useChat` exposes via its `error` field:
@@ -55,7 +56,9 @@ The frontend receives this as an error chunk that `useChat` exposes via its `err
 ```tsx
 const { messages, error } = useChat({ transport });
 
-{error && <div className="text-red-600">{error.message}</div>}
+{
+  error && <div className="text-red-600">{error.message}</div>;
+}
 ```
 
 ## Hook and turn errors
@@ -100,7 +103,8 @@ onValidateMessages: async ({ messages }) => {
 ```
 
 <Tip>
-  The `Error.message` you throw is sent verbatim to the frontend as the error chunk's `errorText`. Use messages safe for end users.
+  The `Error.message` you throw is sent verbatim to the frontend as the error chunk's `errorText`.
+  Use messages safe for end users.
 </Tip>
 
 ### Catching errors inside `run()`
@@ -204,11 +208,13 @@ chat.agent({
 On the frontend, show an "Undo" button when an error occurs:
 
 ```tsx
-{error && (
-  <button onClick={() => transport.sendAction(chatId, { type: "undo" })}>
-    Undo and try again
-  </button>
-)}
+{
+  error && (
+    <button onClick={() => transport.sendAction(chatId, { type: "undo" })}>
+      Undo and try again
+    </button>
+  );
+}
 ```
 
 ### Pattern 2: Retry the last message
@@ -218,9 +224,9 @@ For transient errors (network blips, rate limits), the simplest recovery is to r
 ```tsx
 const { messages, error, regenerate } = useChat({ transport });
 
-{error && (
-  <button onClick={() => regenerate()}>Retry</button>
-)}
+{
+  error && <button onClick={() => regenerate()}>Retry</button>;
+}
 ```
 
 `regenerate()` removes the last assistant response and re-sends. Combined with `onValidateMessages` or `hydrateMessages`, you can reload the canonical state from your DB before retrying.
@@ -270,7 +276,8 @@ run: async ({ messages, signal }) => {
 ```
 
 <Note>
-  This only catches errors thrown synchronously by `streamText` setup. Errors that happen mid-stream go through `uiMessageStreamOptions.onError`, not your try/catch.
+  This only catches errors thrown synchronously by `streamText` setup. Errors that happen mid-stream
+  go through `uiMessageStreamOptions.onError`, not your try/catch.
 </Note>
 
 ## What gets written to the stream on error
@@ -345,12 +352,18 @@ uiMessageStreamOptions: {
 
 ```tsx
 // Frontend
-{error?.message.startsWith("RATE_LIMIT") && <RateLimitNotice />}
-{error?.message.startsWith("CONTEXT_TOO_LONG") && <NewChatPrompt />}
+{
+  error?.message.startsWith("RATE_LIMIT") && <RateLimitNotice />;
+}
+{
+  error?.message.startsWith("CONTEXT_TOO_LONG") && <NewChatPrompt />;
+}
 ```
 
 <Tip>
-  For richer error structures, use [`chat.response.write()`](/ai-chat/backend#custom-data-parts) with a custom `data-error` part type. This lets you ship structured error metadata (codes, retry hints, etc.) instead of stringly-typed messages.
+  For richer error structures, use [`chat.response.write()`](/ai-chat/backend#custom-data-parts)
+  with a custom `data-error` part type. This lets you ship structured error metadata (codes, retry
+  hints, etc.) instead of stringly-typed messages.
 </Tip>
 
 ### Errors from `accessToken` / `startSession`
@@ -370,8 +383,7 @@ const transport = useTriggerChatTransport({
       throw new Error(`AUTH_REFRESH: ${err.message}`);
     }
   },
-  startSession: ({ chatId, clientData }) =>
-      startChatSession({ chatId, clientData }),
+  startSession: ({ chatId, clientData }) => startChatSession({ chatId, clientData }),
 });
 ```
 

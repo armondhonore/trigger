@@ -54,7 +54,10 @@ Happy path: drive an agent from server-side code (task, webhook, or script) with
 import { AgentChat } from "@trigger.dev/sdk/chat";
 import type { myAgent } from "./trigger/my-agent";
 
-const chat = new AgentChat<typeof myAgent>({ agent: "my-chat", clientData: { userId: "user_123" } });
+const chat = new AgentChat<typeof myAgent>({
+  agent: "my-chat",
+  clientData: { userId: "user_123" },
+});
 const stream = await chat.sendMessage("Review PR #42");
 const text = await stream.text();
 await chat.close();
@@ -155,7 +158,12 @@ export const myChat = chat.agent({
     );
   },
   run: async ({ messages, signal }) =>
-    streamText({ ...chat.toStreamTextOptions({ registry }), messages, abortSignal: signal, stopWhen: stepCountIs(15) }),
+    streamText({
+      ...chat.toStreamTextOptions({ registry }),
+      messages,
+      abortSignal: signal,
+      stopWhen: stepCountIs(15),
+    }),
 });
 ```
 
@@ -195,7 +203,8 @@ export const myChat = chat.agent({
     if (action.type === "undo") chat.history.slice(0, -2);
     if (action.type === "rollback") chat.history.rollbackTo(action.targetMessageId);
   },
-  run: async ({ messages, signal }) => streamText({ model: anthropic("claude-sonnet-4-5"), messages, abortSignal: signal }),
+  run: async ({ messages, signal }) =>
+    streamText({ model: anthropic("claude-sonnet-4-5"), messages, abortSignal: signal }),
 });
 ```
 
@@ -241,7 +250,10 @@ const userContext = chat.local<{ name: string; plan: "free" | "pro" }>({ id: "us
 export const myChat = chat.agent({
   id: "my-chat",
   onBoot: async ({ clientData }) => userContext.init({ name: "Alice", plan: "pro" }),
-  run: async ({ messages, signal }) => streamText({ /* ... */ }),
+  run: async ({ messages, signal }) =>
+    streamText({
+      /* ... */
+    }),
 });
 ```
 
@@ -285,7 +297,11 @@ import { myChatAgent } from "./my-chat.js";
 
 const harness = mockChatAgent(myChatAgent, { chatId: "test-1", clientData: { model } });
 try {
-  const turn = await harness.sendMessage({ id: "u1", role: "user", parts: [{ type: "text", text: "hi" }] });
+  const turn = await harness.sendMessage({
+    id: "u1",
+    role: "user",
+    parts: [{ type: "text", text: "hi" }],
+  });
   // assert against turn.chunks
 } finally {
   await harness.close();
@@ -312,11 +328,15 @@ TS helpers `SSEStreamSubscription` and `controlSubtype(headers)` (documented in
 ## Common mistakes
 
 - **CRITICAL: sending a follow-up by re-POSTing `POST /api/v1/sessions`.**
+
   ```ts
   // Wrong - a cached re-POST silently drops basePayload.message; basePayload is trigger config, not a channel
   await fetch("/api/v1/sessions", { method: "POST", body: JSON.stringify({ ...createBody }) });
   // Correct - append to the session's input channel
-  await fetch(`/realtime/v1/sessions/${id}/in/append`, { method: "POST", body: JSON.stringify({ kind: "message", payload }) });
+  await fetch(`/realtime/v1/sessions/${id}/in/append`, {
+    method: "POST",
+    body: JSON.stringify({ kind: "message", payload }),
+  });
   ```
 
 - **Using the wrong token for `.in` / `.out`.** Use `publicAccessToken` from the create response

@@ -19,17 +19,18 @@ This page describes a **hook mapping** that works with any database. Adapt table
 
 You can use one table or two; the important split is **semantic**:
 
-| Concept | Purpose | Typical fields |
-| ------- | ------- | -------------- |
-| **Conversation** | Durable transcript + display metadata | Stable id (same as **`chatId`**), serialized **`uiMessages`**, title, model choice, owner/user id, timestamps |
-| **Active session** | Hydrate the transport on page reload | Same **`chatId`** as key (or FK), **`publicAccessToken`**, optional **`lastEventId`** |
+| Concept            | Purpose                               | Typical fields                                                                                                |
+| ------------------ | ------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| **Conversation**   | Durable transcript + display metadata | Stable id (same as **`chatId`**), serialized **`uiMessages`**, title, model choice, owner/user id, timestamps |
+| **Active session** | Hydrate the transport on page reload  | Same **`chatId`** as key (or FK), **`publicAccessToken`**, optional **`lastEventId`**                         |
 
 The **conversation** row is what your UI lists as "chats." The **session** row is what the **transport** needs after a refresh: a session-scoped PAT (so the transport doesn't have to re-mint on first paint) and the SSE resume cursor.
 
 Storing the current **`runId`** is optional — useful for telemetry / dashboard linking ("View this run") but not required for resume. The Session row owns its current run server-side; the transport reads from `session.out` keyed on `chatId`, so a run swap (continuation, upgrade) is invisible to your DB schema.
 
 <Note>
-  Store **`UIMessage[]`** in a JSON-compatible column, or normalize to a messages table — the pattern is *when* you read/write, not *how* you encode rows.
+  Store **`UIMessage[]`** in a JSON-compatible column, or normalize to a messages table — the
+  pattern is *when* you read/write, not *how* you encode rows.
 </Note>
 
 ## Where each hook writes
@@ -74,6 +75,7 @@ onTurnStart: async ({ chatId, uiMessages }) => {
 ```
 
 `chat.defer` is for writes whose timing doesn't matter for resume — analytics, audit logs, search-index updates, etc. Anything the next page load reads needs to land before the stream begins.
+
 </Warning>
 
 ### `onTurnComplete`
@@ -101,8 +103,11 @@ await db.$transaction([
 // lastEventId is still pre-write. A page refresh that lands here will
 // duplicate the assistant message on resume.
 await db.chat.update({ where: { id: chatId }, data: { messages: uiMessages } });
-await db.chatSession.upsert({ /* ... */ });
+await db.chatSession.upsert({
+  /* ... */
+});
 ```
+
 </Warning>
 
 ## Token renewal (app server)
@@ -237,7 +242,12 @@ Hydration composes with [Head Start](/ai-chat/fast-starts#with-hydratemessages):
 End-to-end implementation across the three files involved: agent task, server actions, and React component.
 
 <Warning>
-  The example below trusts raw `chatId` and returns rows without filtering by user. In a real multi-user app, **scope every query by the authenticated user** — read the user from your auth/session in each server action and add `where: { userId }` to all `db.chat.*` and `db.chatSession.*` queries. Without that, one client could read or delete another user's chat state, and `getAllSessions()` would leak other users' `publicAccessToken`s. The snippet keeps auth out of the way to focus on the persistence shape.
+  The example below trusts raw `chatId` and returns rows without filtering by user. In a real
+  multi-user app, **scope every query by the authenticated user** — read the user from your
+  auth/session in each server action and add `where: {userId}` to all `db.chat.*` and
+  `db.chatSession.*` queries. Without that, one client could read or delete another user's chat
+  state, and `getAllSessions()` would leak other users' `publicAccessToken`s. The snippet keeps auth
+  out of the way to focus on the persistence shape.
 </Warning>
 
 <CodeGroup>
@@ -352,8 +362,7 @@ export function Chat({ chatId, initialMessages, initialSessions }) {
   const transport = useTriggerChatTransport<typeof myChat>({
     task: "my-chat",
     accessToken: ({ chatId }) => mintChatAccessToken(chatId),
-    startSession: ({ chatId, clientData }) =>
-      startChatSession({ chatId, clientData }),
+    startSession: ({ chatId, clientData }) => startChatSession({ chatId, clientData }),
     clientData: { userId: currentUser.id }, // Type-checked against clientDataSchema
     sessions: initialSessions,
     onSessionChange: (id, session) => {

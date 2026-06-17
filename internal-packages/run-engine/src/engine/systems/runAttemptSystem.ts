@@ -1402,7 +1402,7 @@ export class RunAttemptSystem {
           where: { id: runId },
           data: {
             status: "CANCELED",
-            completedAt: finalizeRun ? completedAt ?? new Date() : completedAt,
+            completedAt: finalizeRun ? (completedAt ?? new Date()) : completedAt,
             error,
             bulkActionGroupIds: bulkActionId
               ? {
@@ -2005,14 +2005,11 @@ export class RunAttemptSystem {
       if (!metadata.success) {
         // Customer's metadata operations don't match the schema (typically
         // non-JSON values in `operations[].value`). System ignores it.
-        this.$.logger.warn(
-          "RunEngine.completeRunAttempt(): failed to validate flushed metadata",
-          {
-            runId,
-            flushedMetadata: completion.flushedMetadata,
-            error: metadata.error,
-          }
-        );
+        this.$.logger.warn("RunEngine.completeRunAttempt(): failed to validate flushed metadata", {
+          runId,
+          flushedMetadata: completion.flushedMetadata,
+          error: metadata.error,
+        });
 
         return;
       }

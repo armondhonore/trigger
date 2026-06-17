@@ -117,7 +117,7 @@ export const handleCustomerQuestion = task({
 
 On the Test page in the dashboard, select the `handle-customer-question` task and include a payload like the following:
 
-``` json
+```json
 {
   "question": "Can you explain 2FA?"
 }
@@ -125,10 +125,4 @@ On the Test page in the dashboard, select the `handle-customer-question` task an
 
 When triggered with a question, the task simultaneously generates a response while checking for inappropriate content using two parallel LLM calls. The main task waits for both operations to complete before delivering the final response.
 
-<video 
-  src="https://content.trigger.dev/agent-parallelization.mp4"
-  controls
-  muted
-  autoPlay
-  loop
-/>
+<video src="https://content.trigger.dev/agent-parallelization.mp4" controls muted autoPlay loop />

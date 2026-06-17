@@ -17,7 +17,7 @@ Three changes to `matchRoutesImpl` / `compilePath`, all pure memoization of work
 depends only on the **static** route manifest:
 
 1. **Cache flattened + ranked branches per route-tree** (`WeakMap` keyed by the `routes`
-   ref). `flattenRoutes()` + `rankRouteBranches()` were recomputed on *every* `matchRoutes`
+   ref). `flattenRoutes()` + `rankRouteBranches()` were recomputed on _every_ `matchRoutes`
    call across all ~436 webapp routes.
 2. **Hoist `decodePath(pathname)` out of the branch-match loop** — it's loop-invariant but
    was recomputed once per branch.
@@ -36,12 +36,12 @@ everywhere.
 
 Measured on a single instance, same load, before vs after this patch:
 
-| | before | after |
-|---|---|---|
-| active CPU (self-time / window) | 28.3s | 18.5s (**−34%**) |
-| route-matching self-time | 19.2s | 7.5s (**−61%**) |
-| event-loop lag p99 | 322ms | 113ms (**−65%**) |
-| idle headroom | 26% | 52% |
+|                                 | before | after            |
+| ------------------------------- | ------ | ---------------- |
+| active CPU (self-time / window) | 28.3s  | 18.5s (**−34%**) |
+| route-matching self-time        | 19.2s  | 7.5s (**−61%**)  |
+| event-loop lag p99              | 322ms  | 113ms (**−65%**) |
+| idle headroom                   | 26%    | 52%              |
 
 The realtime machinery itself (router/hydrate/serialize/diff) was ~0% — the bottleneck was
 entirely generic Remix request overhead.
@@ -55,11 +55,11 @@ Router v7** — which we can't adopt without a full Remix 2 → RR7 framework mi
   reported it (a user with 12k routes, ~67ms per match) and was closed as a dup of the
   route-ranking discussion [remix#4786](https://github.com/remix-run/remix/discussions/4786).
 - [PR #14866 "Optimize route matching performance with caching"](https://github.com/remix-run/react-router/pull/14866)
-  implemented *exactly this patch* (hoist `decodePath`, cache `compilePath`, cache
+  implemented _exactly this patch_ (hoist `decodePath`, cache `compilePath`, cache
   flatten/rank), claiming **~80% route-matching CPU reduction on a 400+ route app**. It was
   **closed, not merged.**
 - [PR #14967 "perf: cache flattened/ranked route branches"](https://github.com/remix-run/react-router/pull/14967)
-  is the partial fix that *did* ship (in v7): it caches only the branches, threaded via a
+  is the partial fix that _did_ ship (in v7): it caches only the branches, threaded via a
   `precomputedBranches` param through the framework's server-runtime (~15% SSR gain). It
   does **not** cache `compilePath` — that regex rebuild remains even on `main`.
   ([PR #14971](https://github.com/remix-run/react-router/pull/14971) added client-side wins.)

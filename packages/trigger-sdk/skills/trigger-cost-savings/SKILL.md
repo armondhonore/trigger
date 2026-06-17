@@ -76,31 +76,34 @@ Present a prioritized report with estimated impact:
 ## Cost Optimization Report
 
 ### High impact
+
 1. **Right-size `process-images`** — currently `large-2x`, average run 2s. `small-2x` could cut this task's cost by ~16x.
-   `machine: { preset: "small-2x" }`  // was "large-2x"
+   `machine: { preset: "small-2x" }` // was "large-2x"
 
 ### Medium impact
+
 2. **Debounce `sync-user-data`** — 847 runs/day, often bursty.
    `debounce: { key: \`user-${userId}\`, delay: "5s" }`
 
 ### Low impact / best practice
+
 3. **Add `maxDuration` to `generate-report`** — no timeout configured.
-   `maxDuration: 300`  // 5 minutes
+   `maxDuration: 300` // 5 minutes
 ```
 
 ## Machine preset costs (relative)
 
 Larger machines cost proportionally more per second of compute:
 
-| Preset | vCPU | RAM | Relative cost |
-|--------|------|-----|---------------|
-| micro | 0.25 | 0.25 GB | 0.25x |
-| small-1x | 0.5 | 0.5 GB | 1x (baseline) |
-| small-2x | 1 | 1 GB | 2x |
-| medium-1x | 1 | 2 GB | 2x |
-| medium-2x | 2 | 4 GB | 4x |
-| large-1x | 4 | 8 GB | 8x |
-| large-2x | 8 | 16 GB | 16x |
+| Preset    | vCPU | RAM     | Relative cost |
+| --------- | ---- | ------- | ------------- |
+| micro     | 0.25 | 0.25 GB | 0.25x         |
+| small-1x  | 0.5  | 0.5 GB  | 1x (baseline) |
+| small-2x  | 1    | 1 GB    | 2x            |
+| medium-1x | 1    | 2 GB    | 2x            |
+| medium-2x | 2    | 4 GB    | 4x            |
+| large-1x  | 4    | 8 GB    | 8x            |
+| large-2x  | 8    | 16 GB   | 16x           |
 
 ## Key principles
 

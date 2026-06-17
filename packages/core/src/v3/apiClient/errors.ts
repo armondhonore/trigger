@@ -33,10 +33,10 @@ export class ApiError extends Error {
         ? error.message
         : JSON.stringify(error.message)
       : typeof error === "string"
-      ? error
-      : error
-      ? JSON.stringify(error)
-      : undefined;
+        ? error
+        : error
+          ? JSON.stringify(error)
+          : undefined;
 
     if (errorMessage) {
       return errorMessage;

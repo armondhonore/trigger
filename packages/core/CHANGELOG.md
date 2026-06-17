@@ -98,7 +98,6 @@
   ```
 
   **What you get:**
-
   - **AI SDK `useChat` integration** — a custom [`ChatTransport`](https://sdk.vercel.ai/docs/ai-sdk-ui/transport) (`useTriggerChatTransport`) plugs straight into Vercel AI SDK's `useChat` hook. Text streaming, tool calls, reasoning, and `data-*` parts all work natively over Trigger.dev's realtime streams. No custom API routes needed.
   - **First-turn fast path (`chat.headStart`)** — opt-in handler that runs the first turn's `streamText` step in your warm server process while the agent run boots in parallel, cutting cold-start TTFC by roughly half (measured 2801ms → 1218ms on `claude-sonnet-4-6`). The agent owns step 2+ (tool execution, persistence, hooks) so heavy deps stay where they belong. Web Fetch handler works natively in Next.js, Hono, SvelteKit, Remix, Workers, etc.; bridge to Express/Fastify/Koa via `chat.toNodeListener`. New `@trigger.dev/sdk/chat-server` subpath.
   - **Multi-turn durability via Sessions** — every chat is backed by a durable Session that outlives any individual run. Conversations resume across page refreshes, idle timeout, crashes, and deploys; `resume: true` reconnects via `lastEventId` so clients only see new chunks. `sessions.list` enumerates chats for inbox-style UIs.
@@ -168,7 +167,6 @@
 - Fix `list_deploys` MCP tool failing when deployments have null `runtime` or `runtimeVersion` fields. ([#3224](https://github.com/triggerdotdev/trigger.dev/pull/3224))
 - Propagate run tags to span attributes so they can be extracted server-side for LLM cost attribution metadata. ([#3213](https://github.com/triggerdotdev/trigger.dev/pull/3213))
 - Add `get_span_details` MCP tool for inspecting individual spans within a run trace. ([#3255](https://github.com/triggerdotdev/trigger.dev/pull/3255))
-
   - New `get_span_details` tool returns full span attributes, timing, events, and AI enrichment (model, tokens, cost, speed)
   - Span IDs now shown in `get_run_details` trace output for easy discovery
   - New API endpoint `GET /api/v1/runs/:runId/spans/:spanId`
@@ -177,7 +175,6 @@
 - MCP server improvements: new tools, bug fixes, and new flags. ([#3224](https://github.com/triggerdotdev/trigger.dev/pull/3224))
 
   **New tools:**
-
   - `get_query_schema` — discover available TRQL tables and columns
   - `query` — execute TRQL queries against your data
   - `list_dashboards` — list built-in dashboards and their widgets
@@ -190,19 +187,16 @@
   - `dev_server_status` — check dev server status and view recent logs
 
   **New API endpoints:**
-
   - `GET /api/v1/query/schema` — query table schema discovery
   - `GET /api/v1/query/dashboards` — list built-in dashboards
 
   **New features:**
-
   - `--readonly` flag hides write tools (`deploy`, `trigger_task`, `cancel_run`) so the AI cannot make changes
   - `read:query` JWT scope for query endpoint authorization
   - `get_run_details` trace output is now paginated with cursor support
   - MCP tool annotations (`readOnlyHint`, `destructiveHint`) for all tools
 
   **Bug fixes:**
-
   - Fixed `search_docs` tool failing due to renamed upstream Mintlify tool (`SearchTriggerDev` → `search_trigger_dev`)
   - Fixed `list_deploys` failing when deployments have null `runtime`/`runtimeVersion` fields (#3139)
   - Fixed `list_preview_branches` crashing due to incorrect response shape access
@@ -210,7 +204,6 @@
   - Fixed dev CLI leaking build directories on rebuild — deprecated workers now clean up their build dirs when their last run completes
 
   **Context optimizations:**
-
   - `get_query_schema` now requires a table name and returns only one table's schema (was returning all tables)
   - `get_current_worker` no longer inlines payload schemas; use new `get_task_schema` tool instead
   - Query results formatted as text tables instead of JSON (~50% fewer tokens)
@@ -260,7 +253,6 @@
 ### Patch Changes
 
 - Add support for AI SDK v6 (Vercel AI SDK) ([#2919](https://github.com/triggerdotdev/trigger.dev/pull/2919))
-
   - Updated peer dependency to allow `ai@^6.0.0` alongside v4 and v5
   - Updated internal code to handle async validation from AI SDK v6's Schema type
 
@@ -639,7 +631,6 @@
 ### Minor Changes
 
 - Improved Batch Triggering: ([#1502](https://github.com/triggerdotdev/trigger.dev/pull/1502))
-
   - The new Batch Trigger endpoint is now asynchronous and supports up to 500 runs per request.
   - The new endpoint also supports triggering multiple different tasks in a single batch request (support in the SDK coming soon).
   - The existing `batchTrigger` method now supports the new endpoint, and shouldn't require any changes to your code.
@@ -660,7 +651,6 @@
   ```
 
   ### Breaking Changes
-
   - We've removed the `idempotencyKey` option from `triggerAndWait` and `batchTriggerAndWait`, because it can lead to permanently frozen runs in deployed tasks. We're working on upgrading our entire system to support idempotency keys on these methods, and we'll re-add the option once that's complete.
 
 ### Patch Changes
@@ -892,7 +882,6 @@
   All important socket.io RPCs will now be retried with backoff. Actions relying on checkpoints will be replayed if we haven't been checkpointed and restored as expected, e.g. after reconnect.
 
   Other changes:
-
   - Fix retry check in shared queue
   - Fix env var sync spinner
   - Heartbeat between retries
@@ -1069,7 +1058,6 @@
 
 - e04d44866: v3: sanitize errors with null unicode characters in some places
 - 26093896d: When using idempotency keys, triggerAndWait and batchTriggerAndWait will still work even if the existing runs have already been completed (or even partially completed, in the case of batchTriggerAndWait)
-
   - TaskRunExecutionResult.id is now the run friendlyId, not the attempt friendlyId
   - A single TaskRun can now have many batchItems, in the case of batchTriggerAndWait while using idempotency keys
   - A run’s idempotencyKey is now added to the ctx as well as the TaskEvent and displayed in the span view
@@ -1188,7 +1176,6 @@
   All important socket.io RPCs will now be retried with backoff. Actions relying on checkpoints will be replayed if we haven't been checkpointed and restored as expected, e.g. after reconnect.
 
   Other changes:
-
   - Fix retry check in shared queue
   - Fix env var sync spinner
   - Heartbeat between retries
@@ -1518,7 +1505,6 @@
   ```
 
 - 26093896d: When using idempotency keys, triggerAndWait and batchTriggerAndWait will still work even if the existing runs have already been completed (or even partially completed, in the case of batchTriggerAndWait)
-
   - TaskRunExecutionResult.id is now the run friendlyId, not the attempt friendlyId
   - A single TaskRun can now have many batchItems, in the case of batchTriggerAndWait while using idempotency keys
   - A run’s idempotencyKey is now added to the ctx as well as the TaskEvent and displayed in the span view

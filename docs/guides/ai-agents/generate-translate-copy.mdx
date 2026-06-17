@@ -59,10 +59,7 @@ export const generateAndTranslateTask = task({
     // Gate: Validate the generated copy meets the word count target
     const wordCount = generatedCopy.text.split(/\s+/).length;
 
-    if (
-      wordCount < payload.targetWordCount - 10 ||
-      wordCount > payload.targetWordCount + 10
-    ) {
+    if (wordCount < payload.targetWordCount - 10 || wordCount > payload.targetWordCount + 10) {
       throw new Error(
         `Generated copy length (${wordCount} words) is outside acceptable range of ${
           payload.targetWordCount - 10
@@ -103,18 +100,12 @@ On the Test page in the dashboard, select the `generate-and-translate-copy` task
 
 ```json
 {
-  marketingSubject: "The controversial new Jaguar electric concept car",
-  targetLanguage: "Spanish",
-  targetWordCount: 100,
+  "marketingSubject": "The controversial new Jaguar electric concept car",
+  "targetLanguage": "Spanish",
+  "targetWordCount": 100
 }
 ```
 
 This example payload generates copy and then translates it using sequential LLM calls. The translation only begins after the generated copy has been validated against the word count requirements.
 
-<video 
-  src="https://content.trigger.dev/agent-prompt-chaining-3.mp4"
-  controls
-  muted
-  autoPlay
-  loop
-/>
+<video src="https://content.trigger.dev/agent-prompt-chaining-3.mp4" controls muted autoPlay loop />

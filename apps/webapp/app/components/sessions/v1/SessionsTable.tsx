@@ -187,8 +187,8 @@ function SessionDuration({ session }: { session: SessionListItem }) {
     session.status === "CLOSED"
       ? session.closedAt
       : session.status === "EXPIRED"
-      ? session.expiresAt
-      : undefined;
+        ? session.expiresAt
+        : undefined;
 
   if (endedAt) {
     return (

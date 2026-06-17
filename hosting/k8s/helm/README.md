@@ -66,7 +66,7 @@ npx trigger.dev@latest deploy --push
 All secrets must be exactly **32 hexadecimal characters** (16 bytes):
 
 - `sessionSecret` - User authentication sessions
-- `magicLinkSecret` - Passwordless login tokens  
+- `magicLinkSecret` - Passwordless login tokens
 - `encryptionKey` - Sensitive data encryption
 - `managedWorkerSecret` - Worker authentication
 
@@ -82,7 +82,7 @@ for i in {1..4}; do openssl rand -hex 16; done
 # values-production.yaml
 secrets:
   sessionSecret: "your-generated-secret-1"
-  magicLinkSecret: "your-generated-secret-2" 
+  magicLinkSecret: "your-generated-secret-2"
   encryptionKey: "your-generated-secret-3"
   managedWorkerSecret: "your-generated-secret-4"
   objectStore:
@@ -95,15 +95,18 @@ secrets:
 This chart deploys the following components:
 
 ### Core Services
+
 - **Webapp** - Main Trigger.dev application (port 3030)
-- **PostgreSQL** - Primary database with logical replication  
+- **PostgreSQL** - Primary database with logical replication
 - **Redis** - Cache and job queue
 - **Electric** - Real-time sync service (ElectricSQL)
 
 ### Worker Services
+
 - **Supervisor** - Kubernetes worker orchestrator for executing runs
 
-### Supporting Services  
+### Supporting Services
+
 - **ClickHouse** - Analytics database
 - **MinIO** - S3-compatible object storage
 - **Registry** - Private Docker registry for deployed code (EXPERIMENTAL - disabled by default)
@@ -116,12 +119,12 @@ This chart deploys the following components:
 webapp:
   # Application URLs
   appOrigin: "https://trigger.example.com"
-  loginOrigin: "https://trigger.example.com" 
+  loginOrigin: "https://trigger.example.com"
   apiOrigin: "https://trigger.example.com"
 
   # Bootstrap mode (auto-creates worker group)
   bootstrap:
-    enabled: true  # Enable for combined setups
+    enabled: true # Enable for combined setups
     workerGroupName: "bootstrap"
 ```
 
@@ -140,7 +143,7 @@ postgres:
     username: "trigger_user"
     password: "your-password"
 
-# External Redis  
+# External Redis
 redis:
   deploy: false
   external:
@@ -219,12 +222,14 @@ postgres:
 ## Deployment Modes
 
 ### Testing/Development
+
 - Use default values
 - Single replica
 - Lower resource limits
 - Bootstrap mode enabled
 
-### Production  
+### Production
+
 - Custom secrets (required)
 - Multiple replicas with anti-affinity
 - Production resource limits
@@ -334,6 +339,7 @@ persistence:
 ### Health Checks
 
 Health checks are configured for all services:
+
 - HTTP endpoints for web services
 - Database connection tests
 - Readiness and liveness probes
@@ -477,6 +483,7 @@ helm upgrade trigger . --set-string podAnnotations.restartedAt="$(date +%s)"
 ```
 
 This approach:
+
 - ✅ Uses Helm's built-in annotation mechanism
 - ✅ Safe - doesn't recreate immutable resources like PVCs
 - ✅ Targeted - only restarts pods that need updates
@@ -498,20 +505,23 @@ helm upgrade trigger . -f values-production.yaml \
 ## Troubleshooting
 
 ### Check Pod Status
+
 ```bash
 kubectl get pods -l app.kubernetes.io/name=trigger.dev
 ```
 
 ### View Logs
+
 ```bash
 # Webapp logs
 kubectl logs -l app.kubernetes.io/component=webapp
 
-# Database logs  
+# Database logs
 kubectl logs -l app.kubernetes.io/component=postgres
 ```
 
 ### Run Tests
+
 ```bash
 helm test trigger.dev
 ```
@@ -550,7 +560,7 @@ See `values-production-example.yaml` for a complete production configuration exa
 The Helm chart uses three types of versions:
 
 1. **Chart Version** (`Chart.yaml:version`) - Helm chart packaging version
-2. **App Version** (`Chart.yaml:appVersion`) - Trigger.dev application version  
+2. **App Version** (`Chart.yaml:appVersion`) - Trigger.dev application version
 3. **Component Versions** (`values.yaml`) - Individual service versions (Electric, ClickHouse, etc.)
 
 ### Release Process
@@ -558,23 +568,26 @@ The Helm chart uses three types of versions:
 #### For Chart Maintainers
 
 1. **Update Chart Version** for chart changes:
+
    ```bash
    # Edit Chart.yaml
    version: 4.1.0  # Increment for chart changes (semver)
    ```
 
 2. **Update App Version** when Trigger.dev releases new version:
+
    ```bash
-   # Edit Chart.yaml  
+   # Edit Chart.yaml
    appVersion: "v4.1.0"  # Match Trigger.dev release (v-prefixed image tag)
    ```
 
 3. **Release via GitHub**:
+
    ```bash
    # Tag and push
    git tag helm-v4.1.0
    git push origin helm-v4.1.0
-   
+
    # GitHub Actions will automatically build and publish to GHCR
    ```
 
@@ -600,12 +613,14 @@ helm upgrade --install trigger . \
 ### 🔒 Security (REQUIRED)
 
 - [ ] **Generate unique secrets** (never use defaults):
+
   ```bash
   # Generate 4 secrets
   for i in {1..4}; do openssl rand -hex 16; done
   ```
 
 - [ ] **Configure security contexts**:
+
   ```yaml
   webapp:
     podSecurityContext:
@@ -626,6 +641,7 @@ helm upgrade --install trigger . \
 ### 📊 Resource Management (REQUIRED)
 
 - [ ] **Set resource limits and requests** - for example:
+
   ```yaml
   webapp:
     resources:
@@ -635,7 +651,7 @@ helm upgrade --install trigger . \
       requests:
         cpu: 1000m
         memory: 2Gi
-  
+
   postgres:
     primary:
       resources:
@@ -645,7 +661,7 @@ helm upgrade --install trigger . \
         requests:
           cpu: 500m
           memory: 1Gi
-  
+
   redis:
     master:
       resources:
@@ -655,7 +671,7 @@ helm upgrade --install trigger . \
         requests:
           cpu: 250m
           memory: 512Mi
-  
+
   # ClickHouse can be very resource intensive, so we recommend setting limits and requests accordingly
   # Note: not doing this can cause OOM crashes which will cause issues across many different features
   clickhouse:
@@ -666,7 +682,7 @@ helm upgrade --install trigger . \
       requests:
         cpu: 2000m
         memory: 8Gi
-  
+
   supervisor:
     resources:
       limits:
@@ -678,6 +694,7 @@ helm upgrade --install trigger . \
   ```
 
 - [ ] **Configure persistent storage for all services** - for example:
+
   ```yaml
   global:
     storageClass: "fast-nvme" # Default for all services

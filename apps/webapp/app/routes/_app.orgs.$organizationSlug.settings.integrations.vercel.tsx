@@ -1,7 +1,4 @@
-import type {
-  ActionFunctionArgs,
-  LoaderFunctionArgs,
-} from "@remix-run/node";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { fromPromise } from "neverthrow";
 import { Form, useActionData, useNavigation } from "@remix-run/react";
@@ -21,7 +18,14 @@ import { FormButtons } from "~/components/primitives/FormButtons";
 import { Header1 } from "~/components/primitives/Headers";
 import { PageBody, PageContainer } from "~/components/layout/AppLayout";
 import { Paragraph } from "~/components/primitives/Paragraph";
-import { Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow } from "~/components/primitives/Table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableHeaderCell,
+  TableRow,
+} from "~/components/primitives/Table";
 import { VercelIntegrationRepository } from "~/models/vercelIntegration.server";
 import { $transaction, prisma } from "~/db.server";
 import { requireOrganization } from "~/services/org.server";
@@ -48,7 +52,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
   const configurationId = url.searchParams.get("configurationId") ?? undefined;
   const { organization } = await requireOrganization(request, organizationSlug);
-  
+
   // Find Vercel integration for this organization
   let vercelIntegration = await prisma.organizationIntegration.findFirst({
     where: {
@@ -143,7 +147,8 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   }
 
   // Uninstall from Vercel side
-  const uninstallResult = await VercelIntegrationRepository.uninstallVercelIntegration(vercelIntegration);
+  const uninstallResult =
+    await VercelIntegrationRepository.uninstallVercelIntegration(vercelIntegration);
 
   if (uninstallResult.isErr()) {
     logger.error("Failed to uninstall Vercel integration", {
@@ -215,12 +220,12 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
 };
 
 export default function VercelIntegrationPage() {
-  const { organization, vercelIntegration, connectedProjects, teamId, installationId } = 
+  const { organization, vercelIntegration, connectedProjects, teamId, installationId } =
     useTypedLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
   const navigation = useNavigation();
-  const isUninstalling = navigation.state === "submitting" && 
-    navigation.formData?.get("intent") === "uninstall";
+  const isUninstalling =
+    navigation.state === "submitting" && navigation.formData?.get("intent") === "uninstall";
 
   if (!vercelIntegration) {
     return (
@@ -272,11 +277,7 @@ export default function VercelIntegrationPage() {
             <div className="flex flex-col items-end gap-2">
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button
-                    variant="danger/medium"
-                    LeadingIcon={TrashIcon}
-                    disabled={isUninstalling}
-                  >
+                  <Button variant="danger/medium" LeadingIcon={TrashIcon} disabled={isUninstalling}>
                     Remove Integration
                   </Button>
                 </DialogTrigger>
@@ -285,7 +286,7 @@ export default function VercelIntegrationPage() {
                     <DialogTitle>Remove Vercel Integration</DialogTitle>
                   </DialogHeader>
                   <DialogDescription>
-                    This will permanently remove the Vercel integration and disconnect all projects. 
+                    This will permanently remove the Vercel integration and disconnect all projects.
                     This action cannot be undone.
                   </DialogDescription>
                   <FormButtons
@@ -324,7 +325,7 @@ export default function VercelIntegrationPage() {
           <h2 className="mb-4 text-lg font-medium text-text-bright">
             Connected Projects ({connectedProjects.length})
           </h2>
-          
+
           {connectedProjects.length === 0 ? (
             <div className="rounded-lg border border-grid-bright bg-background-bright p-6 text-center">
               <Paragraph className="text-text-dimmed">
@@ -348,9 +349,7 @@ export default function VercelIntegrationPage() {
                     <TableCell className="font-mono text-xs">
                       {projectIntegration.externalEntityId}
                     </TableCell>
-                    <TableCell>
-                      {formatDate(new Date(projectIntegration.createdAt))}
-                    </TableCell>
+                    <TableCell>{formatDate(new Date(projectIntegration.createdAt))}</TableCell>
                     <TableCell>
                       <LinkButton
                         variant="minimal/small"

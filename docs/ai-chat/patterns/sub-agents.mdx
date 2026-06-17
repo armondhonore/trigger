@@ -66,9 +66,9 @@ const prReviewTool = tool({
   },
   // The parent LLM only sees this compressed summary
   toModelOutput: ({ output: message }) => {
-    const lastText = message?.parts?.findLast(
-      (p: { type: string }) => p.type === "text"
-    ) as { text?: string } | undefined;
+    const lastText = message?.parts?.findLast((p: { type: string }) => p.type === "text") as
+      | { text?: string }
+      | undefined;
     return { type: "text", value: lastText?.text ?? "Review complete." };
   },
 });
@@ -105,9 +105,7 @@ const researchTool = tool({
     "Talk to a research agent. Use the same conversationId to continue " +
     "an existing conversation — the agent remembers full context.",
   inputSchema: z.object({
-    conversationId: z
-      .string()
-      .describe("Unique ID for this research thread. Reuse to continue."),
+    conversationId: z.string().describe("Unique ID for this research thread. Reuse to continue."),
     message: z.string().describe("Your message to the research agent"),
   }),
   execute: async function* ({ conversationId, message }, { abortSignal }) {
@@ -124,9 +122,9 @@ const researchTool = tool({
     yield* stream.messages();
   },
   toModelOutput: ({ output: message }) => {
-    const lastText = message?.parts?.findLast(
-      (p: { type: string }) => p.type === "text"
-    ) as { text?: string } | undefined;
+    const lastText = message?.parts?.findLast((p: { type: string }) => p.type === "text") as
+      | { text?: string }
+      | undefined;
     return { type: "text", value: lastText?.text ?? "Done." };
   },
 });
@@ -161,9 +159,7 @@ export const orchestrator = chat
       }
 
       // Cleanup when parent exits
-      await Promise.all(
-        Array.from(subAgents.values()).map((a) => a.close().catch(() => {}))
-      );
+      await Promise.all(Array.from(subAgents.values()).map((a) => a.close().catch(() => {})));
     },
   });
 ```
@@ -183,6 +179,7 @@ For the multi-turn pattern, the parent should clean up sub-agents when it exits 
 Each `yield` from `stream.messages()` sends a complete `UIMessage` containing all the sub-agent's parts accumulated so far. The AI SDK delivers these as `tool-output-available` chunks with `preliminary: true`.
 
 The frontend renders the tool part with:
+
 - `state: "output-available"` and `preliminary: true` while streaming
 - `state: "output-available"` and `preliminary: false` (or absent) when done
 
@@ -206,7 +203,13 @@ toModelOutput: ({ output: message }) => {
 This is important for token efficiency: the sub-agent might use 100K tokens exploring and reasoning, but the parent LLM only consumes the summary.
 
 <Warning>
-  `toModelOutput` only runs when the SDK has your tools at conversion time. On a multi-turn parent, the SDK re-converts the persisted history at the start of each turn, so you must declare the sub-agent tool on the agent config (`chat.agent({ tools })`) for the compression to survive. Without it, the summary holds on turn 1 but turn 2 onward re-ingests the full sub-agent output. In a `chat.customAgent` loop you own the conversion, so pass the tools to `convertToModelMessages(uiMessages, { tools })` yourself. See [Tools: toModelOutput across turns](/ai-chat/tools#tomodeloutput-across-turns).
+  `toModelOutput` only runs when the SDK has your tools at conversion time. On a multi-turn parent,
+  the SDK re-converts the persisted history at the start of each turn, so you must declare the
+  sub-agent tool on the agent config (`chat.agent({tools})`) for the compression to survive. Without
+  it, the summary holds on turn 1 but turn 2 onward re-ingests the full sub-agent output. In a
+  `chat.customAgent` loop you own the conversion, so pass the tools to
+  `convertToModelMessages(uiMessages, {tools})` yourself. See [Tools: toModelOutput across
+  turns](/ai-chat/tools#tomodeloutput-across-turns).
 </Warning>
 
 ## ChatStream.messages()
@@ -232,7 +235,8 @@ execute: async function* ({ topic }, { abortSignal }) {
 ```
 
 <Tip>
-  `stream.messages()` consumes the stream. You can't also call `stream.text()` or iterate over chunks on the same stream. Pick one consumption mode.
+  `stream.messages()` consumes the stream. You can't also call `stream.text()` or iterate over
+  chunks on the same stream. Pick one consumption mode.
 </Tip>
 
 ## Combining with chat.agent()
@@ -319,20 +323,23 @@ const research = tool({
 On the frontend, render the custom data part:
 
 ```tsx
-{message.parts.map((part, i) => {
-  if (part.type === "data-research-status") {
-    const { query, status, resultCount } = part.data;
-    return (
-      <div key={i}>
-        {status === "done" ? `Found ${resultCount} results` : `Researching "${query}"...`}
-      </div>
-    );
-  }
-  // ...other part types
-})}
+{
+  message.parts.map((part, i) => {
+    if (part.type === "data-research-status") {
+      const { query, status, resultCount } = part.data;
+      return (
+        <div key={i}>
+          {status === "done" ? `Found ${resultCount} results` : `Researching "${query}"...`}
+        </div>
+      );
+    }
+    // ...other part types
+  });
+}
 ```
 
 The `target` option accepts:
+
 - `"self"` — current run (default)
 - `"parent"` — parent task's run
 - `"root"` — root task's run (the chat agent)
@@ -373,11 +380,11 @@ export const mySubtask = schemaTask({
 });
 ```
 
-| Helper | Returns | Description |
-|--------|---------|-------------|
-| `ai.toolCallId()` | `string \| undefined` | The AI SDK tool call ID |
-| `ai.chatContext<typeof myChat>()` | `{ chatId, turn, continuation, clientData } \| undefined` | Chat context with typed `clientData`. Returns `undefined` if not in a chat context. |
-| `ai.chatContextOrThrow<typeof myChat>()` | `{ chatId, turn, continuation, clientData }` | Same as above but throws if not in a chat context |
-| `ai.currentToolOptions()` | `ToolCallExecutionOptions \| undefined` | Full tool execution options |
+| Helper                                   | Returns                                                   | Description                                                                         |
+| ---------------------------------------- | --------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `ai.toolCallId()`                        | `string \| undefined`                                     | The AI SDK tool call ID                                                             |
+| `ai.chatContext<typeof myChat>()`        | `{ chatId, turn, continuation, clientData } \| undefined` | Chat context with typed `clientData`. Returns `undefined` if not in a chat context. |
+| `ai.chatContextOrThrow<typeof myChat>()` | `{ chatId, turn, continuation, clientData }`              | Same as above but throws if not in a chat context                                   |
+| `ai.currentToolOptions()`                | `ToolCallExecutionOptions \| undefined`                   | Full tool execution options                                                         |
 
 The subtask body also has read-only access to any [`chat.local`](/ai-chat/chat-local) values initialized in the parent — auto-hydrated from the parent's metadata on first access.

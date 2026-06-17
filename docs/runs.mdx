@@ -27,46 +27,50 @@ Runs can also find themselves in lots of other states depending on what's happen
 ### Initial states
 
 <Icon icon="rectangle-history" iconType="solid" color="#FBBF24" size={17} /> **Pending version**:
-The task is waiting for a version update because it cannot execute without additional information (task, queue, etc.).
+The task is waiting for a version update because it cannot execute without additional information
+(task, queue, etc.).
 
-<Icon icon="clock" iconType="solid" color="#878C99" size={17} /> **Delayed**: When a run is triggered
-with a delay, it enters this state until the specified delay period has passed.
+<Icon icon="clock" iconType="solid" color="#878C99" size={17} /> **Delayed**: When a run is
+triggered with a delay, it enters this state until the specified delay period has passed.
 
-<Icon icon="rectangle-history" iconType="solid" color="#878C99" size={17} /> **Queued**: The run is ready
-to be executed and is waiting in the queue.
+<Icon icon="rectangle-history" iconType="solid" color="#878C99" size={17} /> **Queued**: The run is
+ready to be executed and is waiting in the queue.
 
-<Icon icon="rectangle-history" iconType="solid" color="#878C99" size={17} /> **Dequeued**: The task has been dequeued and is being sent to a worker to start executing.
+<Icon icon="rectangle-history" iconType="solid" color="#878C99" size={17} /> **Dequeued**: The task
+has been dequeued and is being sent to a worker to start executing.
 
 ### Execution states
 
-<Icon icon="spinner-third" iconType="duotone" color="#3B82F6" size={17} /> **Executing**: The task is
-currently being executed by a worker.
+<Icon icon="spinner-third" iconType="duotone" color="#3B82F6" size={17} /> **Executing**: The task
+is currently being executed by a worker.
 
 <Icon icon="hourglass" iconType="solid" color="#878C99" size={17} /> **Waiting**: You have used a
-[triggerAndWait()](/triggering#yourtask-triggerandwait), [batchTriggerAndWait()](/triggering#yourtask-batchtriggerandwait) or a [wait function](/wait). When the wait is complete, the task will resume execution.
+[triggerAndWait()](/triggering#yourtask-triggerandwait),
+[batchTriggerAndWait()](/triggering#yourtask-batchtriggerandwait) or a [wait function](/wait). When
+the wait is complete, the task will resume execution.
 
 ### Final states
 
-<Icon icon="circle-check" iconType="solid" color="#28BF5C" size={17} /> **Completed**: The task has successfully
-finished execution.
+<Icon icon="circle-check" iconType="solid" color="#28BF5C" size={17} /> **Completed**: The task has
+successfully finished execution.
 
-<Icon icon="ban" iconType="solid" color="#878C99" size={17} /> **Canceled**: The run was manually canceled
-by the user.
+<Icon icon="ban" iconType="solid" color="#878C99" size={17} /> **Canceled**: The run was manually
+canceled by the user.
 
-<Icon icon="circle-xmark" iconType="solid" color="#E11D48" size={17} /> **Failed**: The task has failed
-to complete successfully due to an error in the task code.
+<Icon icon="circle-xmark" iconType="solid" color="#E11D48" size={17} /> **Failed**: The task has
+failed to complete successfully due to an error in the task code.
 
 <Icon icon="alarm-exclamation" iconType="solid" color="#E11D48" size={17} /> **Timed out**: Task has
 failed because it exceeded its `maxDuration`.
 
-<Icon icon="fire" iconType="solid" color="#E11D48" size={17} /> **Crashed**: The worker process crashed
-during execution (likely due to an Out of Memory error) and won’t be retried.
+<Icon icon="fire" iconType="solid" color="#E11D48" size={17} /> **Crashed**: The worker process
+crashed during execution (likely due to an Out of Memory error) and won’t be retried.
 
-<Icon icon="bug" iconType="solid" color="#E11D48" size={17} /> **System failure**: An unrecoverable system
-error has occurred.
+<Icon icon="bug" iconType="solid" color="#E11D48" size={17} /> **System failure**: An unrecoverable
+system error has occurred.
 
-<Icon icon="trash-can" iconType="solid" color="#878C99" size={17} /> **Expired**: The run's [Time-to-Live](#time-to-live-ttl)
-(TTL) has passed before it could start executing.
+<Icon icon="trash-can" iconType="solid" color="#878C99" size={17} /> **Expired**: The run's
+[Time-to-Live](#time-to-live-ttl) (TTL) has passed before it could start executing.
 
 ## Attempts
 
@@ -202,7 +206,8 @@ export const longRunningTask = task({
 ```
 
 <Note>
-  Setting `ttl: 0` removes the config-level or task-level TTL, but the platform-level maximum still applies. See [Limits - Maximum run TTL](/limits#maximum-run-ttl) for details.
+  Setting `ttl: 0` removes the config-level or task-level TTL, but the platform-level maximum still
+  applies. See [Limits - Maximum run TTL](/limits#maximum-run-ttl) for details.
 </Note>
 
 If the run hasn't started within the specified TTL, it will automatically expire, returning the status `Expired`. This is useful for time-sensitive tasks where immediate execution is important. For example, when you queue many runs simultaneously and exceed your concurrency limits, some runs might be delayed - using TTL ensures they only execute if they can start within your specified timeframe.

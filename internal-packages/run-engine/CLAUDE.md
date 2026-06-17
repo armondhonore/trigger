@@ -9,6 +9,7 @@ The `RunEngine` class (`src/engine/index.ts`) orchestrates modular systems:
 ### Systems (`src/engine/systems/`)
 
 Each system handles one concern:
+
 - **BatchSystem**: Batch trigger processing with DRR (Deficit Round Robin)
 - **CheckpointSystem**: Execution checkpoints for recovery
 - **DebounceSystem**: Configurable debouncing with delay

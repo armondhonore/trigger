@@ -18,11 +18,11 @@ Caching is provider-specific. This guide covers Anthropic (`@ai-sdk/anthropic`),
 
 A request renders as `tools` → `system` → `messages`. There are three prefix regions worth caching, in order:
 
-| Region | How to cache it | Stability |
-| --- | --- | --- |
-| System prompt (+ tools) | `cacheControl` / `systemProviderOptions` on `chat.toStreamTextOptions()`, or `providerOptions` on `chat.prompt.set()` | Set once, never changes — the highest-value target |
-| Conversation history | `prepareMessages` adds a breakpoint to the last message | Grows append-only across turns |
-| Tool definitions | Stable as long as your tool set doesn't change between turns | Render at position 0 — changing them invalidates everything |
+| Region                  | How to cache it                                                                                                       | Stability                                                   |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| System prompt (+ tools) | `cacheControl` / `systemProviderOptions` on `chat.toStreamTextOptions()`, or `providerOptions` on `chat.prompt.set()` | Set once, never changes — the highest-value target          |
+| Conversation history    | `prepareMessages` adds a breakpoint to the last message                                                               | Grows append-only across turns                              |
+| Tool definitions        | Stable as long as your tool set doesn't change between turns                                                          | Render at position 0 — changing them invalidates everything |
 
 `chat.agent` preserves `providerOptions` through message persistence and rehydration, so a breakpoint you place survives a suspend/resume or a page refresh. The recommended way to place message breakpoints is `prepareMessages` (below) rather than baking `cacheControl` into stored messages — `prepareMessages` runs on every prompt-assembly path, including after compaction, so the breakpoint is always in the right place.
 
@@ -31,7 +31,9 @@ A request renders as `tools` → `system` → `messages`. There are three prefix
 The system prompt (your `chat.prompt` text plus any skills preamble) is usually the largest stable block, so it's the first thing to cache. `chat.toStreamTextOptions()` returns `system` as a plain string by default; opt into caching and it returns a structured system message carrying the cache breakpoint instead.
 
 <Note>
-  System-prompt caching needs AI SDK v6 or later, where the `system` parameter accepts a structured message. On AI SDK v5 `system` is a plain string, so these options won't apply a breakpoint to the system block — cache the conversation via `prepareMessages` instead.
+  System-prompt caching needs AI SDK v6 or later, where the `system` parameter accepts a structured
+  message. On AI SDK v5 `system` is a plain string, so these options won't apply a breakpoint to the
+  system block — cache the conversation via `prepareMessages` instead.
 </Note>
 
 Three ways to opt in, depending on where you'd rather express it.
@@ -132,7 +134,9 @@ export const myChat = chat.agent({
 The system breakpoint and the conversation breakpoint compose: the system block is cached once for the life of the chat, and each turn extends the cached message prefix.
 
 <Note>
-  Anthropic allows **at most 4** cache breakpoints per request, and a prefix must be at least ~1024 tokens (model-dependent) to cache at all — shorter prefixes silently don't cache. One system breakpoint plus one rolling message breakpoint is the typical setup and leaves headroom.
+  Anthropic allows **at most 4** cache breakpoints per request, and a prefix must be at least ~1024
+  tokens (model-dependent) to cache at all — shorter prefixes silently don't cache. One system
+  breakpoint plus one rolling message breakpoint is the typical setup and leaves headroom.
 </Note>
 
 ## Caching and compaction
@@ -185,7 +189,12 @@ The first turn writes the cache (`cacheWriteTokens > 0`, `cacheReadTokens` is 0)
 If `cacheReadTokens` stays 0 across turns with an identical prefix, a silent invalidator is shifting the bytes — see below.
 
 <Warning>
-  Anything that changes the prefix between turns silently kills the cache. Keep the system prompt **byte-stable** — never interpolate a timestamp, request ID, or per-turn value into `chat.prompt`. Don't change the **model** or the **tool set** mid-conversation (tools render at position 0, so adding one invalidates everything after). Inject dynamic per-turn context as a late message via [pending messages](/ai-chat/pending-messages) or [background injection](/ai-chat/background-injection), not into the cached prefix.
+  Anything that changes the prefix between turns silently kills the cache. Keep the system prompt
+  **byte-stable** — never interpolate a timestamp, request ID, or per-turn value into `chat.prompt`.
+  Don't change the **model** or the **tool set** mid-conversation (tools render at position 0, so
+  adding one invalidates everything after). Inject dynamic per-turn context as a late message via
+  [pending messages](/ai-chat/pending-messages) or [background
+  injection](/ai-chat/background-injection), not into the cached prefix.
 </Warning>
 
 ## Next steps

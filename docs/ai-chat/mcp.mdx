@@ -12,12 +12,12 @@ The Trigger.dev MCP server includes tools for having conversations with your cha
 
 ## Available tools
 
-| Tool | Description |
-| --- | --- |
-| `list_agents` | List all agents in the current worker |
-| `start_agent_chat` | Start a conversation with an agent |
-| `send_agent_message` | Send a message and get the response |
-| `close_agent_chat` | Close a conversation |
+| Tool                 | Description                           |
+| -------------------- | ------------------------------------- |
+| `list_agents`        | List all agents in the current worker |
+| `start_agent_chat`   | Start a conversation with an agent    |
+| `send_agent_message` | Send a message and get the response   |
+| `close_agent_chat`   | Close a conversation                  |
 
 See the [MCP Tools Reference](/mcp-tools#agent-chat-tools) for full details on each tool.
 
@@ -31,6 +31,7 @@ See the [MCP Tools Reference](/mcp-tools#agent-chat-tools) for full details on e
     Start a conversation with an agent using `start_agent_chat`. This triggers a run and optionally preloads the agent so it's ready to respond immediately.
 
     If the agent uses `withClientData`, pass the required fields via `clientData`.
+
   </Step>
   <Step title="Send messages">
     Send messages with `send_agent_message`. The agent processes each message and returns the full response text, including which tools were used. The agent retains full context across messages in the same chat.
@@ -77,6 +78,7 @@ AI: Chat abc-123 closed.
 If you haven't set up the MCP server yet, see the [MCP Server introduction](/mcp-introduction) for installation and client configuration.
 
 Agent chat tools require:
+
 - A running dev server (`trigger dev`) or a deployed worker
 - At least one agent defined with [`chat.agent()`](/ai-chat/backend#chat-agent) or [`chat.customAgent()`](/ai-chat/custom-agents)
 
@@ -91,7 +93,8 @@ Under the hood, the MCP tools use the same protocol as the [frontend transport](
 Sessions are held in-memory within the MCP server process. If the MCP server restarts, active sessions are lost — but the underlying agent runs continue until their idle timeout.
 
 <Note>
-  The `get_current_worker` tool also labels agents with `[agent]` in its output, making it easy to identify which tasks are agents even when listing all tasks.
+  The `get_current_worker` tool also labels agents with `[agent]` in its output, making it easy to
+  identify which tasks are agents even when listing all tasks.
 </Note>
 
 ## See also

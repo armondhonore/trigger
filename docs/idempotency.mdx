@@ -25,7 +25,7 @@ sequenceDiagram
     Parent->>SDK: trigger(childTask, {idempotencyKey})
     Note over SDK: Same key, returns existing run
     SDK-->>Parent: Returns original child run
-    
+
     Note over Child: Child task only runs once
 ```
 
@@ -103,13 +103,16 @@ await myTask.trigger({ some: "data" }, { idempotencyKey: myUser.id });
 ```
 
 <Note>
-When you pass a raw string, it defaults to `"run"` scope (scoped to the parent run). See [Default behavior](#default-behavior) for details on how scopes work and how to use global scope instead.
+  When you pass a raw string, it defaults to `"run"` scope (scoped to the parent run). See [Default
+  behavior](#default-behavior) for details on how scopes work and how to use global scope instead.
 </Note>
 
 <Note>Make sure you provide sufficiently unique keys to avoid collisions.</Note>
 
 <Note>
-Idempotency keys are limited to 2048 characters. Keys produced by `idempotencyKeys.create()` are 64-character hashes and always fit; this limit only matters if you pass a long raw string. Requests above the limit return `400`.
+  Idempotency keys are limited to 2048 characters. Keys produced by `idempotencyKeys.create()` are
+  64-character hashes and always fit; this limit only matters if you pass a long raw string.
+  Requests above the limit return `400`.
 </Note>
 
 You can pass the `idempotencyKey` when calling `batchTrigger` as well:
@@ -131,11 +134,11 @@ The `scope` option determines how your idempotency key is processed. When you pr
 
 ### Available scopes
 
-| Scope | What gets hashed | Description | Use case |
-| --- | --- | --- | --- |
-| `"run"` | `key + parentRunId` | Key is combined with the parent run ID | Prevent duplicates within a single parent run (default) |
+| Scope       | What gets hashed                    | Description                                               | Use case                                                |
+| ----------- | ----------------------------------- | --------------------------------------------------------- | ------------------------------------------------------- |
+| `"run"`     | `key + parentRunId`                 | Key is combined with the parent run ID                    | Prevent duplicates within a single parent run (default) |
 | `"attempt"` | `key + parentRunId + attemptNumber` | Key is combined with the parent run ID and attempt number | Allow child tasks to re-run on each retry of the parent |
-| `"global"` | `key` | Key is used as-is, no context added | Ensure a task only runs once ever, regardless of parent |
+| `"global"`  | `key`                               | Key is used as-is, no context added                       | Ensure a task only runs once ever, regardless of parent |
 
 ### `run` scope (default)
 
@@ -153,10 +156,7 @@ export const processOrder = task({
     const idempotencyKey = await idempotencyKeys.create(`send-confirmation-${payload.orderId}`);
 
     // sendEmail will only be triggered once, even if processOrder retries multiple times
-    await sendEmail.trigger(
-      { to: payload.email, subject: "Order confirmed" },
-      { idempotencyKey }
-    );
+    await sendEmail.trigger({ to: payload.email, subject: "Order confirmed" }, { idempotencyKey });
 
     // ... more processing that might fail and cause a retry
   },
@@ -217,7 +217,9 @@ export const onboardUser = task({
 ```
 
 <Note>
-Even with `global` scope, idempotency keys are still isolated to the specific task and environment. Using the same key to trigger *different* tasks will not deduplicate - both tasks will run. See [Environment and task scoping](#environment-and-task-scoping) for more details.
+  Even with `global` scope, idempotency keys are still isolated to the specific task and
+  environment. Using the same key to trigger *different* tasks will not deduplicate - both tasks
+  will run. See [Environment and task scoping](#environment-and-task-scoping) for more details.
 </Note>
 
 ## Default behavior
@@ -265,7 +267,8 @@ await tasks.trigger("my-task", payload, {
 ```
 
 <Note>
-When triggering from backend code, the scope doesn't matter since there's no task context. All scopes effectively behave as global.
+  When triggering from backend code, the scope doesn't matter since there's no task context. All
+  scopes effectively behave as global.
 </Note>
 
 ## `idempotencyKeyTTL` option
@@ -332,9 +335,9 @@ await myTask.trigger(payload, { idempotencyKey: "my-idempotency-key" });
 
 ```ts
 // Key expires after 5 minutes
-await myTask.trigger(payload, { 
-  idempotencyKey: "my-key", 
-  idempotencyKeyTTL: "5m" 
+await myTask.trigger(payload, {
+  idempotencyKey: "my-key",
+  idempotencyKeyTTL: "5m",
 });
 ```
 
@@ -376,11 +379,11 @@ idempotencyKeys.reset(
 ): Promise<{ id: string }>
 ```
 
-| Parameter | Description |
-| --- | --- |
-| `taskIdentifier` | The identifier of the task (e.g., `"my-task"`) |
+| Parameter        | Description                                                      |
+| ---------------- | ---------------------------------------------------------------- |
+| `taskIdentifier` | The identifier of the task (e.g., `"my-task"`)                   |
 | `idempotencyKey` | The idempotency key hash to reset (the 64-character hash string) |
-| `requestOptions` | Optional fetch options for the API request |
+| `requestOptions` | Optional fetch options for the API request                       |
 
 ### Resetting keys created with `idempotencyKeys.create()`
 
@@ -440,12 +443,13 @@ import { idempotencyKeys } from "@trigger.dev/sdk";
 // If the key was created within a task, you need the parent run ID
 await idempotencyKeys.reset("my-task", "my-key", {
   scope: "run",
-  parentRunId: "run_abc123"
+  parentRunId: "run_abc123",
 });
 ```
 
 <Note>
-If you triggered the task from backend code, all scopes behave as global (see [Triggering from backend code](#triggering-from-backend-code)). Use `scope: "global"` when resetting.
+  If you triggered the task from backend code, all scopes behave as global (see [Triggering from
+  backend code](#triggering-from-backend-code)). Use `scope: "global"` when resetting.
 </Note>
 
 ### Resetting attempt-scoped keys
@@ -459,12 +463,13 @@ import { idempotencyKeys } from "@trigger.dev/sdk";
 await idempotencyKeys.reset("my-task", "my-key", {
   scope: "attempt",
   parentRunId: "run_abc123",
-  attemptNumber: 1
+  attemptNumber: 1,
 });
 ```
 
 <Warning>
-If you try to reset a `"run"` or `"attempt"` scoped key from outside a task without providing the required `parentRunId` (and `attemptNumber` for attempt scope), it will throw an error.
+  If you try to reset a `"run"` or `"attempt"` scoped key from outside a task without providing the
+  required `parentRunId` (and `attemptNumber` for attempt scope), it will throw an error.
 </Warning>
 
 ### Resetting from the dashboard
@@ -480,7 +485,8 @@ This is useful when you need to manually allow a task to be re-triggered without
 ![Idempotency section in the run details pane showing the key, scope, and expiration time](/images/idempotency-key-dashboard.png)
 
 <Note>
-Resetting an idempotency key only affects runs in the current environment. The reset is scoped to the specific task identifier and idempotency key combination.
+  Resetting an idempotency key only affects runs in the current environment. The reset is scoped to
+  the specific task identifier and idempotency key combination.
 </Note>
 
 ## Important notes
@@ -500,5 +506,3 @@ The scope determines what gets hashed alongside your key:
 - Same key + different scopes = different hashes = both tasks run
 
 This is why understanding scopes is crucial: the same string key can produce different idempotency behavior depending on the scope and context.
-
-

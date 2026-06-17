@@ -34,8 +34,7 @@ export function Chat() {
   const transport = useTriggerChatTransport<typeof myChat>({
     task: "my-chat",
     accessToken: ({ chatId }) => mintChatAccessToken(chatId),
-    startSession: ({ chatId, clientData }) =>
-      startChatSession({ chatId, clientData }),
+    startSession: ({ chatId, clientData }) => startChatSession({ chatId, clientData }),
   });
 
   const { messages, sendMessage, stop, status } = useChat({ transport });
@@ -47,8 +46,8 @@ The transport is created once on first render and reused across re-renders. Pass
 
 The two callbacks have distinct responsibilities:
 
-- **`accessToken`** is a *pure* PAT mint — the transport invokes it on a 401/403 to refresh the session-scoped token. Customer wraps `auth.createPublicToken({ scopes: { read: { sessions: chatId }, write: { sessions: chatId } } })`, which resolves to a `Promise<string>` (the JWT). Return that string from your `accessToken` callback.
-- **`startSession`** wraps `chat.createStartSessionAction(taskId)` and is called when the transport needs to *create* the session (`transport.preload(chatId)`, or lazily on the first `sendMessage` for a chatId without a cached PAT). The customer's server controls authorization here, alongside any DB writes paired with session creation.
+- **`accessToken`** is a _pure_ PAT mint — the transport invokes it on a 401/403 to refresh the session-scoped token. Customer wraps `auth.createPublicToken({ scopes: { read: { sessions: chatId }, write: { sessions: chatId } } })`, which resolves to a `Promise<string>` (the JWT). Return that string from your `accessToken` callback.
+- **`startSession`** wraps `chat.createStartSessionAction(taskId)` and is called when the transport needs to _create_ the session (`transport.preload(chatId)`, or lazily on the first `sendMessage` for a chatId without a cached PAT). The customer's server controls authorization here, alongside any DB writes paired with session creation.
 
 See [Quick start](/ai-chat/quick-start) for the matching server actions.
 
@@ -71,8 +70,7 @@ type Msg = InferChatUIMessage<typeof myChat>;
 const transport = useTriggerChatTransport<typeof myChat>({
   task: "my-chat",
   accessToken: ({ chatId }) => mintChatAccessToken(chatId),
-  startSession: ({ chatId, clientData }) =>
-      startChatSession({ chatId, clientData }),
+  startSession: ({ chatId, clientData }) => startChatSession({ chatId, clientData }),
 });
 const { messages } = useChat<Msg>({ transport });
 ```
@@ -110,11 +108,11 @@ Every chat is backed by a durable Session — the row that owns the chat's runs,
 
 ### What the transport persists per chat
 
-| Field | Type | Notes |
-| --- | --- | --- |
-| `publicAccessToken` | `string` | Session-scoped JWT (`read:sessions:{chatId} + write:sessions:{chatId}`). Refreshed automatically on 401/403 via `accessToken`. |
-| `lastEventId` | `string \| undefined` | Last SSE event received on `.out`. **Valid for the lifetime of the Session** — keep it across `endRun` / `requestUpgrade` / continuation-run boundaries; only clear when the Session itself closes. The cursor lets the next subscription open past the prior turn's stale `turn-complete` record. |
-| `isStreaming` | `boolean \| undefined` | **Optional.** The transport sets it internally, but you don't have to persist it — the server decides "nothing is streaming" via the session's [`X-Session-Settled`](/ai-chat/client-protocol#x-session-settled-fast-close-on-idle-reconnects) signal on reconnect. If you do persist it, the transport keeps the fast-path short-circuit. If you drop it, reconnects open the SSE and close fast on settled sessions. |
+| Field               | Type                   | Notes                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| ------------------- | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `publicAccessToken` | `string`               | Session-scoped JWT (`read:sessions:{chatId} + write:sessions:{chatId}`). Refreshed automatically on 401/403 via `accessToken`.                                                                                                                                                                                                                                                                                         |
+| `lastEventId`       | `string \| undefined`  | Last SSE event received on `.out`. **Valid for the lifetime of the Session** — keep it across `endRun` / `requestUpgrade` / continuation-run boundaries; only clear when the Session itself closes. The cursor lets the next subscription open past the prior turn's stale `turn-complete` record.                                                                                                                     |
+| `isStreaming`       | `boolean \| undefined` | **Optional.** The transport sets it internally, but you don't have to persist it — the server decides "nothing is streaming" via the session's [`X-Session-Settled`](/ai-chat/client-protocol#x-session-settled-fast-close-on-idle-reconnects) signal on reconnect. If you do persist it, the transport keeps the fast-path short-circuit. If you drop it, reconnects open the SSE and close fast on settled sessions. |
 
 ### Session cleanup (frontend)
 
@@ -124,8 +122,7 @@ Since session creation and updates are handled server-side, the frontend only ne
 const transport = useTriggerChatTransport<typeof myChat>({
   task: "my-chat",
   accessToken: ({ chatId }) => mintChatAccessToken(chatId),
-  startSession: ({ chatId, clientData }) =>
-      startChatSession({ chatId, clientData }),
+  startSession: ({ chatId, clientData }) => startChatSession({ chatId, clientData }),
   sessions: loadedSessions, // Restored from DB on page load
   onSessionChange: (chatId, session) => {
     if (!session) {
@@ -192,8 +189,7 @@ function ChatClient({ chatId, initialMessages, initialSessions }) {
   const transport = useTriggerChatTransport({
     task: "my-chat",
     accessToken: ({ chatId }) => mintChatAccessToken(chatId),
-    startSession: ({ chatId, clientData }) =>
-      startChatSession({ chatId, clientData }),
+    startSession: ({ chatId, clientData }) => startChatSession({ chatId, clientData }),
     sessions: initialSessions,
     onSessionChange: (id, session) => {
       if (!session) deleteSession(id);
@@ -221,8 +217,8 @@ function ChatClient({ chatId, initialMessages, initialSessions }) {
 <Note>
   After resuming, `useChat`'s built-in `stop()` won't send the stop signal to the backend because
   the AI SDK doesn't pass its abort signal through `reconnectToStream`. Use
-  `transport.stopGeneration(chatId)` for reliable stop behavior after resume — see
-  [Stop generation](#stop-generation) for the recommended pattern.
+  `transport.stopGeneration(chatId)` for reliable stop behavior after resume — see [Stop
+  generation](#stop-generation) for the recommended pattern.
 </Note>
 
 <Warning>
@@ -248,8 +244,7 @@ Set default client data on the transport that's included in every request. When 
 const transport = useTriggerChatTransport<typeof myChat>({
   task: "my-chat",
   accessToken: ({ chatId }) => mintChatAccessToken(chatId),
-  startSession: ({ chatId, clientData }) =>
-      startChatSession({ chatId, clientData }),
+  startSession: ({ chatId, clientData }) => startChatSession({ chatId, clientData }),
   clientData: { userId: currentUser.id },
 });
 ```
@@ -305,8 +300,7 @@ The schema also types the `clientData` option on the frontend transport:
 const transport = useTriggerChatTransport<typeof myChat>({
   task: "my-chat",
   accessToken: ({ chatId }) => mintChatAccessToken(chatId),
-  startSession: ({ chatId, clientData }) =>
-      startChatSession({ chatId, clientData }),
+  startSession: ({ chatId, clientData }) => startChatSession({ chatId, clientData }),
   clientData: { userId: currentUser.id },
 });
 ```
@@ -338,17 +332,16 @@ const stop = useCallback(() => {
 ```
 
 <Info>
-  `transport.stopGeneration(chatId)` handles the backend stop signal and closes
-  the SSE connection, while `aiStop()` (from `useChat`) updates the frontend
-  status to `"ready"` and fires the `onFinish` callback.
+  `transport.stopGeneration(chatId)` handles the backend stop signal and closes the SSE connection,
+  while `aiStop()` (from `useChat`) updates the frontend status to `"ready"` and fires the
+  `onFinish` callback.
 </Info>
 
 <Tip>
-  A [PR to the AI SDK](https://github.com/vercel/ai/pull/14350) has been
-  submitted to pass `abortSignal` through `reconnectToStream`, which would make
-  `useChat`'s built-in `stop()` work after resume without needing
-  `stopGeneration`. Until that lands, use the pattern above for reliable stop
-  behavior after page refresh.
+  A [PR to the AI SDK](https://github.com/vercel/ai/pull/14350) has been submitted to pass
+  `abortSignal` through `reconnectToStream`, which would make `useChat`'s built-in `stop()` work
+  after resume without needing `stopGeneration`. Until that lands, use the pattern above for
+  reliable stop behavior after page refresh.
 </Tip>
 
 See [Stop generation](/ai-chat/backend#stop-generation) in the backend docs for how to handle stop signals in your task.
@@ -439,8 +432,8 @@ function Chat({ chatId, transport }) {
 <Info>
   Message IDs are kept in sync between frontend and backend automatically. The backend always
   includes a `generateMessageId` function when streaming responses, ensuring the `start` chunk
-  carries a `messageId` that the frontend uses. This makes the ID-based matching reliable
-  for tool approval updates.
+  carries a `messageId` that the frontend uses. This makes the ID-based matching reliable for tool
+  approval updates.
 </Info>
 
 ## Sending actions
@@ -454,8 +447,7 @@ function ChatControls({ chatId }: { chatId: string }) {
   const transport = useTriggerChatTransport({
     task: "my-chat",
     accessToken: ({ chatId }) => mintChatAccessToken(chatId),
-    startSession: ({ chatId, clientData }) =>
-      startChatSession({ chatId, clientData }),
+    startSession: ({ chatId, clientData }) => startChatSession({ chatId, clientData }),
   });
 
   const { setMessages } = useChat({ transport });
@@ -508,8 +500,7 @@ function Chat({ chatId }: { chatId: string }) {
   const transport = useTriggerChatTransport({
     task: "my-chat",
     accessToken: ({ chatId }) => mintChatAccessToken(chatId),
-    startSession: ({ chatId, clientData }) =>
-      startChatSession({ chatId, clientData }),
+    startSession: ({ chatId, clientData }) => startChatSession({ chatId, clientData }),
     multiTab: true,
   });
 
@@ -553,7 +544,9 @@ function Chat({ chatId }: { chatId: string }) {
 - Tracks read-only state via the transport's `BroadcastChannel` coordinator
 
 <Note>
-  Multi-tab coordination is same-browser only (`BroadcastChannel` is a browser API). It gracefully degrades to a no-op in Node.js, SSR, or browsers without `BroadcastChannel` support. Cross-device coordination requires server-side involvement.
+  Multi-tab coordination is same-browser only (`BroadcastChannel` is a browser API). It gracefully
+  degrades to a no-op in Node.js, SSR, or browsers without `BroadcastChannel` support. Cross-device
+  coordination requires server-side involvement.
 </Note>
 
 ## Self-hosting
@@ -564,8 +557,7 @@ If you're self-hosting Trigger.dev, pass the `baseURL` option:
 const transport = useTriggerChatTransport({
   task: "my-chat",
   accessToken: ({ chatId }) => mintChatAccessToken(chatId),
-  startSession: ({ chatId, clientData }) =>
-      startChatSession({ chatId, clientData }),
+  startSession: ({ chatId, clientData }) => startChatSession({ chatId, clientData }),
   baseURL: "https://your-trigger-instance.com",
 });
 ```

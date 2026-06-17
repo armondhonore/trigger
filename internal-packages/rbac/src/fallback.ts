@@ -80,7 +80,10 @@ class RoleBaseAccessFallbackController implements RoleBaseAccessController {
     // pre-RBAC routes that haven't been migrated, but it's a dead
     // code path for any route that uses `createLoaderApiRoute` /
     // `createActionApiRoute`.
-    const rawToken = request.headers.get("Authorization")?.replace(/^Bearer /, "").trim();
+    const rawToken = request.headers
+      .get("Authorization")
+      ?.replace(/^Bearer /, "")
+      .trim();
     if (!rawToken) return { ok: false, status: 401, error: "Invalid or Missing API key" };
 
     if (options?.allowJWT && isPublicJWT(rawToken)) {
@@ -150,9 +153,7 @@ class RoleBaseAccessFallbackController implements RoleBaseAccessController {
         },
       },
       parentEnvironment: { select: { id: true, apiKey: true } },
-      childEnvironments: branchName
-        ? { where: { branchName, archivedAt: null } }
-        : undefined,
+      childEnvironments: branchName ? { where: { branchName, archivedAt: null } } : undefined,
     } as const;
     let env = await this.replica.runtimeEnvironment.findFirst({
       where: { apiKey: rawToken },
@@ -383,7 +384,9 @@ function isPublicJWT(token: string): boolean {
   const parts = token.split(".");
   if (parts.length !== 3) return false;
   try {
-    const payload = JSON.parse(Buffer.from(parts[1].replace(/-/g, "+").replace(/_/g, "/"), "base64").toString("utf8"));
+    const payload = JSON.parse(
+      Buffer.from(parts[1].replace(/-/g, "+").replace(/_/g, "/"), "base64").toString("utf8")
+    );
     return payload !== null && typeof payload === "object" && payload.pub === true;
   } catch {
     return false;
@@ -394,7 +397,9 @@ function extractJWTSub(token: string): string | undefined {
   const parts = token.split(".");
   if (parts.length !== 3) return undefined;
   try {
-    const payload = JSON.parse(Buffer.from(parts[1].replace(/-/g, "+").replace(/_/g, "/"), "base64").toString("utf8"));
+    const payload = JSON.parse(
+      Buffer.from(parts[1].replace(/-/g, "+").replace(/_/g, "/"), "base64").toString("utf8")
+    );
     return payload !== null && typeof payload === "object" && typeof payload.sub === "string"
       ? payload.sub
       : undefined;

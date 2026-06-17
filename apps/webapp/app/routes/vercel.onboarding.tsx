@@ -149,11 +149,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
         organizationId: params.data.organizationId,
         userId,
       });
-      throw redirectWithErrorMessage(
-        "/",
-        request,
-        "Organization not found. Please try again."
-      );
+      throw redirectWithErrorMessage("/", request, "Organization not found. Please try again.");
     }
 
     return typedjson({
@@ -293,13 +289,12 @@ export default function VercelOnboardingPage() {
     return (
       <AppContainer className="bg-charcoal-900">
         <BackgroundWrapper>
-          <MainCenteredContainer variant="onboarding" className="max-w-[26rem] rounded-lg border border-grid-bright bg-background-dimmed p-5 shadow-lg">
+          <MainCenteredContainer
+            variant="onboarding"
+            className="max-w-[26rem] rounded-lg border border-grid-bright bg-background-dimmed p-5 shadow-lg"
+          >
             <FormTitle title="Installation Expired" description={data.error} />
-            <Button
-              variant="primary/medium"
-              onClick={() => window.close()}
-              className="w-full"
-            >
+            <Button variant="primary/medium" onClick={() => window.close()} className="w-full">
               Close
             </Button>
           </MainCenteredContainer>
@@ -325,7 +320,10 @@ export default function VercelOnboardingPage() {
     return (
       <AppContainer className="bg-charcoal-900">
         <BackgroundWrapper>
-          <MainCenteredContainer variant="onboarding" className="max-w-[26rem] rounded-lg border border-grid-bright bg-background-dimmed p-5 shadow-lg">
+          <MainCenteredContainer
+            variant="onboarding"
+            className="max-w-[26rem] rounded-lg border border-grid-bright bg-background-dimmed p-5 shadow-lg"
+          >
             <FormTitle
               LeadingIcon={<BuildingOfficeIcon className="size-7 text-indigo-500" />}
               title="Select Organization"
@@ -351,7 +349,8 @@ export default function VercelOnboardingPage() {
                     defaultValue={data.organizations[0]?.id}
                     text={(v) =>
                       typeof v === "string"
-                        ? data.organizations.find((o) => o.id === v)?.title || "Choose an organization"
+                        ? data.organizations.find((o) => o.id === v)?.title ||
+                          "Choose an organization"
                         : "Choose an organization"
                     }
                   >
@@ -401,7 +400,10 @@ export default function VercelOnboardingPage() {
   return (
     <AppContainer className="bg-charcoal-900">
       <BackgroundWrapper>
-        <MainCenteredContainer variant="onboarding" className="max-w-[26rem] rounded-lg border border-grid-bright bg-background-dimmed p-5 shadow-lg">
+        <MainCenteredContainer
+          variant="onboarding"
+          className="max-w-[26rem] rounded-lg border border-grid-bright bg-background-dimmed p-5 shadow-lg"
+        >
           <FormTitle
             LeadingIcon={<FolderIcon className="size-7 text-indigo-500" />}
             title="Select Project"
@@ -428,7 +430,8 @@ export default function VercelOnboardingPage() {
                   defaultValue={data.organization.projects[0]?.id}
                   text={(v) =>
                     typeof v === "string"
-                      ? data.organization.projects.find((p) => p.id === v)?.name || "Choose a project"
+                      ? data.organization.projects.find((p) => p.id === v)?.name ||
+                        "Choose a project"
                       : "Choose a project"
                   }
                 >

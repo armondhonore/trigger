@@ -11,7 +11,11 @@ import RcBanner from "/snippets/ai-chat-rc-banner.mdx";
 This page explains how `chat.agent` is put together, what each piece does on a single turn, and how a chat survives across turns. It is not an API tour — for that, see [Backend](/ai-chat/backend), [Frontend](/ai-chat/frontend), and the [Reference](/ai-chat/reference). For the byte-level wire format, see [Client Protocol](/ai-chat/client-protocol).
 
 <Note>
-**What you don't have to think about**: SSE reconnects, WebSocket backpressure, container cold starts, whether a worker is currently running, or how to re-deliver chunks the client missed during a reload. The platform handles those. **What you do have to think about**: idempotency in your `run()` function, and how much state you keep in memory between turns versus persist in your own database.
+  **What you don't have to think about**: SSE reconnects, WebSocket backpressure, container cold
+  starts, whether a worker is currently running, or how to re-deliver chunks the client missed
+  during a reload. The platform handles those. **What you do have to think about**: idempotency in
+  your `run()` function, and how much state you keep in memory between turns versus persist in your
+  own database.
 </Note>
 
 ## The primary noun: the chat session
@@ -36,7 +40,7 @@ There is no run yet for this session. The frontend's first `sendMessage` posts t
 
 ### Streaming
 
-The agent task is running. It reads the new message off `.in`, fires `onTurnStart`, runs your `run()` function, and pipes `streamText()` chunks onto `.out`. The browser is SSE-subscribed to `.out` and renders chunks as they land. When `streamText()` ends, the task writes a `trigger:turn-complete` control record (an S2 record with an empty body and a special header) and immediately trims `.out` back to the *previous* turn's completion marker — keeping the outbox bounded to roughly one turn of chunks at steady state. Moves to **Idle** after `onTurnComplete` runs and the post-turn snapshot is written.
+The agent task is running. It reads the new message off `.in`, fires `onTurnStart`, runs your `run()` function, and pipes `streamText()` chunks onto `.out`. The browser is SSE-subscribed to `.out` and renders chunks as they land. When `streamText()` ends, the task writes a `trigger:turn-complete` control record (an S2 record with an empty body and a special header) and immediately trims `.out` back to the _previous_ turn's completion marker — keeping the outbox bounded to roughly one turn of chunks at steady state. Moves to **Idle** after `onTurnComplete` runs and the post-turn snapshot is written.
 
 ### Idle (awaiting next message)
 
@@ -117,7 +121,7 @@ This is what lets you write `run()` as a single long-lived function with statefu
 
 After every turn the agent writes a `ChatSnapshotV1` blob to S3 — full accumulated `UIMessage[]` plus the current `lastOutEventId` cursor. This is chat-specific and lives one layer above the engine. It has nothing to do with CRIU or Firecracker.
 
-The chat snapshot bridges run *boundaries*. If a run exits cleanly — because it hit `maxTurns`, called `chat.endRun()` or `chat.requestUpgrade()`, was cancelled, crashed, or got bumped to a new version after a deploy — the engine checkpoint is gone with it. When the next user message arrives, the server triggers a fresh run with `continuation: true`. That new run reads the S3 snapshot, replays any post-snapshot chunks from `.out`, merges by message ID, and starts its first turn with the full conversation history already in memory.
+The chat snapshot bridges run _boundaries_. If a run exits cleanly — because it hit `maxTurns`, called `chat.endRun()` or `chat.requestUpgrade()`, was cancelled, crashed, or got bumped to a new version after a deploy — the engine checkpoint is gone with it. When the next user message arrives, the server triggers a fresh run with `continuation: true`. That new run reads the S3 snapshot, replays any post-snapshot chunks from `.out`, merges by message ID, and starts its first turn with the full conversation history already in memory.
 
 The chat snapshot carries only message history — not process memory. `chat.local`, in-memory caches, open connections all need to be reinitialized on a continuation. This is why `onBoot` (every fresh worker) is the right place to initialize `chat.local`, not `onChatStart` (only the very first turn of the chat). See [Persistence and replay](/ai-chat/patterns/persistence-and-replay) for the full snapshot model.
 
@@ -131,13 +135,13 @@ Unlike the other two layers, this one is client-side. The server doesn't even ne
 
 ### Which layer covers which failure mode
 
-| What happened | Recovery layer | Same run? | In-memory state preserved? |
-| --- | --- | --- | --- |
-| Idle gap mid-conversation (suspend → resume) | Engine checkpoint | Yes | Yes |
-| Run exited cleanly (`endRun`, `requestUpgrade`, `maxTurns`) | Chat snapshot | No (fresh continuation run) | No |
-| Run crashed mid-turn (OOM, exception) | Chat snapshot + `.out` tail replay | (retried as a new attempt) | No |
-| Browser tab reloaded mid-stream | `lastEventId` cursor on `.out` | (run unaffected) | (n/a) |
-| Deploy rolled out a new version mid-chat | Chat snapshot, via `requestUpgrade` flow | No | No |
+| What happened                                               | Recovery layer                           | Same run?                   | In-memory state preserved? |
+| ----------------------------------------------------------- | ---------------------------------------- | --------------------------- | -------------------------- |
+| Idle gap mid-conversation (suspend → resume)                | Engine checkpoint                        | Yes                         | Yes                        |
+| Run exited cleanly (`endRun`, `requestUpgrade`, `maxTurns`) | Chat snapshot                            | No (fresh continuation run) | No                         |
+| Run crashed mid-turn (OOM, exception)                       | Chat snapshot + `.out` tail replay       | (retried as a new attempt)  | No                         |
+| Browser tab reloaded mid-stream                             | `lastEventId` cursor on `.out`           | (run unaffected)            | (n/a)                      |
+| Deploy rolled out a new version mid-chat                    | Chat snapshot, via `requestUpgrade` flow | No                          | No                         |
 
 No single layer covers every case. The engine checkpoint alone can't survive a run exit (there's nothing to restore). The chat snapshot alone can't survive a tab refresh mid-turn (chunks already streamed would be lost). The `lastEventId` cursor alone can't bridge run boundaries (the new run wouldn't know the history). Together they cover every realistic failure.
 
@@ -155,29 +159,31 @@ All three look identical to the browser. Only the agent task knows which path it
 
 ## Lifecycle hooks: where you plug in
 
-| Hook | When it fires | Typical use |
-| --- | --- | --- |
-| `onBoot` | Once per worker process, before any chat work | Initialize `chat.local` resources |
-| `onPreload` | Once per chat lifetime, if the chat was preloaded before the first message | Warm caches, fetch the user's profile |
-| `onChatStart` | Once per chat lifetime, on the first turn of a fresh chat (not on continuation) | First-message persistence, system-prompt setup |
-| `onValidateMessages` | Every turn, before merging the incoming message | Reject or transform user input |
-| `hydrateMessages` | Every turn, instead of snapshot+replay | Use your DB as the source of truth |
-| `onTurnStart` | Every turn, before `run()` | Compact history, persist the user message |
-| `onBeforeTurnComplete` | Every turn, after streaming, before the turn-complete record | Emit a final custom chunk |
-| `onTurnComplete` | Every turn, after the turn-complete record is written | Persist the assistant message and `lastEventId` |
-| `onChatSuspend` / `onChatResume` | At the idle → suspend / suspend → wake transitions | Release/reacquire expensive resources |
+| Hook                             | When it fires                                                                   | Typical use                                     |
+| -------------------------------- | ------------------------------------------------------------------------------- | ----------------------------------------------- |
+| `onBoot`                         | Once per worker process, before any chat work                                   | Initialize `chat.local` resources               |
+| `onPreload`                      | Once per chat lifetime, if the chat was preloaded before the first message      | Warm caches, fetch the user's profile           |
+| `onChatStart`                    | Once per chat lifetime, on the first turn of a fresh chat (not on continuation) | First-message persistence, system-prompt setup  |
+| `onValidateMessages`             | Every turn, before merging the incoming message                                 | Reject or transform user input                  |
+| `hydrateMessages`                | Every turn, instead of snapshot+replay                                          | Use your DB as the source of truth              |
+| `onTurnStart`                    | Every turn, before `run()`                                                      | Compact history, persist the user message       |
+| `onBeforeTurnComplete`           | Every turn, after streaming, before the turn-complete record                    | Emit a final custom chunk                       |
+| `onTurnComplete`                 | Every turn, after the turn-complete record is written                           | Persist the assistant message and `lastEventId` |
+| `onChatSuspend` / `onChatResume` | At the idle → suspend / suspend → wake transitions                              | Release/reacquire expensive resources           |
 
 See [Lifecycle hooks](/ai-chat/lifecycle-hooks) for the full signatures and firing order.
 
 ## When chat.agent is the right primitive
 
 **Good fit**:
+
 - Multi-turn conversational agents where the user is expected to come back later.
 - Long-running agent loops with tool calls, where a single turn can take a minute or more.
 - Cases where you want page reloads to resume the in-flight response without re-running the model.
 - Cases where you can't predict idle gaps — humans go to lunch.
 
 **Not a good fit**:
+
 - Single-shot completions where you don't need durability or resume. Call your model directly.
 - Workflows where you control both ends and want a custom protocol. Use a [raw `task()` with chat primitives](/ai-chat/custom-agents) directly without the `chat.agent` wrapper.
 - High-fanout broadcasting (one source, many subscribers). Use Trigger.dev realtime streams against a regular task instead.

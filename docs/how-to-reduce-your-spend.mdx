@@ -202,10 +202,7 @@ When a task might be triggered multiple times in quick succession, use debounce 
 
 ```ts
 // Multiple rapid triggers consolidate into 1 run
-await updateIndex.trigger(
-  { docId: "doc-123" },
-  { debounce: { key: "doc-123", delay: "5s" } }
-);
+await updateIndex.trigger({ docId: "doc-123" }, { debounce: { key: "doc-123", delay: "5s" } });
 
 // Use trailing mode to process the most recent payload
 await processUpdate.trigger(

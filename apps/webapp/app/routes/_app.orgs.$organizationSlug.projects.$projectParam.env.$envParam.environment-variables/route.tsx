@@ -19,14 +19,7 @@ import {
 } from "@remix-run/react";
 import { type ActionFunctionArgs, type LoaderFunctionArgs, json } from "@remix-run/server-runtime";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import {
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-  type RefObject,
-} from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type RefObject } from "react";
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
 import { z } from "zod";
 import { EnvironmentCombo } from "~/components/environments/EnvironmentLabel";
@@ -538,13 +531,9 @@ function EnvironmentVariableTableRow({
   const borderedCellClassName = getBorderedCellClassName(variable);
 
   return (
-    <TableRow
-      className={variable.isLastTime ? "after:bg-charcoal-600" : "after:bg-transparent"}
-    >
+    <TableRow className={variable.isLastTime ? "after:bg-charcoal-600" : "after:bg-transparent"}>
       <TableCell className={cellClassName}>
-        {variable.isFirstTime ? (
-          <CopyableText value={variable.key} className="font-mono" />
-        ) : null}
+        {variable.isFirstTime ? <CopyableText value={variable.key} className="font-mono" /> : null}
       </TableCell>
       <TableCell className={cn(cellClassName, borderedCellClassName, "after:left-3")}>
         {variable.isSecret ? (
@@ -652,8 +641,7 @@ function EnvironmentVariablesVirtualTableBody({
 
   const virtualItems = rowVirtualizer.getVirtualItems();
   const topSpacerHeight = virtualItems[0]?.start ?? 0;
-  const bottomSpacerHeight =
-    rowVirtualizer.getTotalSize() - (virtualItems.at(-1)?.end ?? 0);
+  const bottomSpacerHeight = rowVirtualizer.getTotalSize() - (virtualItems.at(-1)?.end ?? 0);
 
   return (
     <TableBody>

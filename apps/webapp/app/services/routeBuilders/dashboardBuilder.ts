@@ -56,10 +56,7 @@ export type DashboardLoaderOptions<TParams, TSearchParams, TContext extends Auth
   // is fed to `rbac.authenticateSession` as the auth scope AND passed
   // through to the handler in `args.context`, so the route does each
   // lookup once.
-  context?: (
-    params: InferZod<TParams>,
-    request: Request
-  ) => TContext | Promise<TContext>;
+  context?: (params: InferZod<TParams>, request: Request) => TContext | Promise<TContext>;
   authorization?: AuthorizationOption;
   // Where to send unauthenticated requests. Defaults to /login with a
   // redirectTo back to the original path.
@@ -82,12 +79,10 @@ export function dashboardLoader<
   TParams extends AnyZodSchema | undefined = undefined,
   TSearchParams extends AnyZodSchema | undefined = undefined,
   TContext extends AuthScope = AuthScope,
-  TReturn extends Response = Response
+  TReturn extends Response = Response,
 >(
   options: DashboardLoaderOptions<TParams, TSearchParams, TContext>,
-  handler: (
-    args: DashboardLoaderHandlerArgs<TParams, TSearchParams, TContext>
-  ) => Promise<TReturn>
+  handler: (args: DashboardLoaderHandlerArgs<TParams, TSearchParams, TContext>) => Promise<TReturn>
 ) {
   return async function loader({ request, params }: LoaderFunctionArgs): Promise<TReturn> {
     // Server-only — see comment at top. Node caches the module after the
@@ -107,8 +102,11 @@ export function dashboardLoader<
   };
 }
 
-export type DashboardActionOptions<TParams, TSearchParams, TContext extends AuthScope> =
-  DashboardLoaderOptions<TParams, TSearchParams, TContext>;
+export type DashboardActionOptions<
+  TParams,
+  TSearchParams,
+  TContext extends AuthScope,
+> = DashboardLoaderOptions<TParams, TSearchParams, TContext>;
 
 export type DashboardActionHandlerArgs<TParams, TSearchParams, TContext> =
   DashboardLoaderHandlerArgs<TParams, TSearchParams, TContext>;
@@ -117,12 +115,10 @@ export function dashboardAction<
   TParams extends AnyZodSchema | undefined = undefined,
   TSearchParams extends AnyZodSchema | undefined = undefined,
   TContext extends AuthScope = AuthScope,
-  TReturn extends Response = Response
+  TReturn extends Response = Response,
 >(
   options: DashboardActionOptions<TParams, TSearchParams, TContext>,
-  handler: (
-    args: DashboardActionHandlerArgs<TParams, TSearchParams, TContext>
-  ) => Promise<TReturn>
+  handler: (args: DashboardActionHandlerArgs<TParams, TSearchParams, TContext>) => Promise<TReturn>
 ) {
   return async function action({ request, params }: ActionFunctionArgs): Promise<TReturn> {
     const { authenticateAndAuthorize } = await import("./dashboardBuilder.server");

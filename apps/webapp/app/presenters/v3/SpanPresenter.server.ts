@@ -253,17 +253,17 @@ export class SpanPresenter extends BasePresenter {
     const output = !isFinished
       ? undefined
       : run.outputType === "application/store"
-      ? `/resources/packets/${run.runtimeEnvironment.id}/${run.output}`
-      : typeof run.output !== "undefined" && run.output !== null
-      ? await prettyPrintPacket(run.output, run.outputType ?? undefined)
-      : undefined;
+        ? `/resources/packets/${run.runtimeEnvironment.id}/${run.output}`
+        : typeof run.output !== "undefined" && run.output !== null
+          ? await prettyPrintPacket(run.output, run.outputType ?? undefined)
+          : undefined;
 
     const payload =
       run.payloadType === "application/store"
         ? `/resources/packets/${run.runtimeEnvironment.id}/${run.payload}`
         : typeof run.payload !== "undefined" && run.payload !== null
-        ? await prettyPrintPacket(run.payload, run.payloadType ?? undefined)
-        : undefined;
+          ? await prettyPrintPacket(run.payload, run.payloadType ?? undefined)
+          : undefined;
 
     let error: TaskRunError | undefined = undefined;
 
@@ -350,9 +350,9 @@ export class SpanPresenter extends BasePresenter {
             sessionRun.session.closedAt != null
               ? ("CLOSED" as const)
               : sessionRun.session.expiresAt != null &&
-                sessionRun.session.expiresAt.getTime() < Date.now()
-              ? ("EXPIRED" as const)
-              : ("ACTIVE" as const),
+                  sessionRun.session.expiresAt.getTime() < Date.now()
+                ? ("EXPIRED" as const)
+                : ("ACTIVE" as const),
           reason: sessionRun.reason,
           triggeredAt: sessionRun.triggeredAt,
         }

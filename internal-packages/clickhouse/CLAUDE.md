@@ -8,7 +8,7 @@ Goose-format SQL migrations live in `schema/`. Two rules below are load-bearing 
 
 ### Rule 1: number to `max + 1`, never slot in
 
-Goose runs in strict mode in the deploy pipeline. If a migration file numbered *below* the version currently recorded in `goose_db_version` ever shows up, goose refuses to apply it and the deploy fails:
+Goose runs in strict mode in the deploy pipeline. If a migration file numbered _below_ the version currently recorded in `goose_db_version` ever shows up, goose refuses to apply it and the deploy fails:
 
 ```
 goose run: error: found 1 missing migrations before current version 30:

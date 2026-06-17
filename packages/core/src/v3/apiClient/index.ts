@@ -118,10 +118,7 @@ import {
   RealtimeRunSkipColumns,
   type SSEStreamPart,
 } from "./runStream.js";
-import {
-  controlSubtype,
-  type ControlEvent,
-} from "../sessionStreams/wireProtocol.js";
+import { controlSubtype, type ControlEvent } from "../sessionStreams/wireProtocol.js";
 import {
   CreateEnvironmentVariableParams,
   ImportEnvironmentVariablesParams,
@@ -1866,9 +1863,7 @@ export class ApiClient {
     );
   }
 
-  async listDashboards(
-    requestOptions?: ZodFetchOptions
-  ): Promise<ListDashboardsResponseBody> {
+  async listDashboards(requestOptions?: ZodFetchOptions): Promise<ListDashboardsResponseBody> {
     return zodfetch(
       ListDashboardsResponseBody,
       `${this.baseUrl}/api/v1/query/dashboards`,
@@ -1947,11 +1942,7 @@ export class ApiClient {
     return headers;
   }
 
-  resolvePrompt(
-    slug: string,
-    body: ResolvePromptRequestBody,
-    requestOptions?: ZodFetchOptions
-  ) {
+  resolvePrompt(slug: string, body: ResolvePromptRequestBody, requestOptions?: ZodFetchOptions) {
     return zodfetch(
       ResolvePromptResponseBody,
       `${this.baseUrl}/api/v1/prompts/${slug}`,
@@ -1982,7 +1973,11 @@ export class ApiClient {
     );
   }
 
-  promotePromptVersion(slug: string, body: PromotePromptVersionRequestBody, requestOptions?: ZodFetchOptions) {
+  promotePromptVersion(
+    slug: string,
+    body: PromotePromptVersionRequestBody,
+    requestOptions?: ZodFetchOptions
+  ) {
     return zodfetch(
       PromptOkResponseBody,
       `${this.baseUrl}/api/v1/prompts/${slug}/promote`,
@@ -1991,7 +1986,11 @@ export class ApiClient {
     );
   }
 
-  createPromptOverride(slug: string, body: CreatePromptOverrideRequestBody, requestOptions?: ZodFetchOptions) {
+  createPromptOverride(
+    slug: string,
+    body: CreatePromptOverrideRequestBody,
+    requestOptions?: ZodFetchOptions
+  ) {
     return zodfetch(
       PromptOverrideCreatedResponseBody,
       `${this.baseUrl}/api/v1/prompts/${slug}/override`,
@@ -2000,7 +1999,11 @@ export class ApiClient {
     );
   }
 
-  updatePromptOverride(slug: string, body: UpdatePromptOverrideRequestBody, requestOptions?: ZodFetchOptions) {
+  updatePromptOverride(
+    slug: string,
+    body: UpdatePromptOverrideRequestBody,
+    requestOptions?: ZodFetchOptions
+  ) {
     return zodfetch(
       PromptOkResponseBody,
       `${this.baseUrl}/api/v1/prompts/${slug}/override`,
@@ -2018,7 +2021,11 @@ export class ApiClient {
     );
   }
 
-  reactivatePromptOverride(slug: string, body: ReactivatePromptOverrideRequestBody, requestOptions?: ZodFetchOptions) {
+  reactivatePromptOverride(
+    slug: string,
+    body: ReactivatePromptOverrideRequestBody,
+    requestOptions?: ZodFetchOptions
+  ) {
     return zodfetch(
       PromptOkResponseBody,
       `${this.baseUrl}/api/v1/prompts/${slug}/override/reactivate`,

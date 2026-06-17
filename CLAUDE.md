@@ -74,6 +74,7 @@ containerTest("should use both", async ({ prisma, redisOptions }) => {
 ### Imports
 
 **Prefer static imports over dynamic imports.** Only use dynamic `import()` when:
+
 - Circular dependencies cannot be resolved otherwise
 - Code splitting is genuinely needed for performance
 - The module must be loaded conditionally at runtime

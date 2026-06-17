@@ -103,7 +103,9 @@ export class RunStreamPresenter {
         });
 
         // Subscribe to trace updates
-        const { unsubscribe, eventEmitter } = await tracePubSub.subscribeToTrace(resolvedRun.traceId);
+        const { unsubscribe, eventEmitter } = await tracePubSub.subscribeToTrace(
+          resolvedRun.traceId
+        );
 
         // Only send max every 1 second
         const throttledSend = throttle(

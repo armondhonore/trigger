@@ -20,7 +20,6 @@ Supabase and Trigger.dev can be used together to create powerful workflows trigg
 - A Supabase Database Webhook triggers an Edge Function when a row including a video URL is inserted into a table
 - The Edge Function triggers a Trigger.dev task, passing the `video_url` column data from the new table row as the payload
 - The Trigger.dev task then:
-
   - Uses [FFmpeg](https://www.ffmpeg.org/) to extract the audio track from a video URL
   - Uses [Deepgram](https://deepgram.com) to transcribe the extracted audio
   - Updates the original table row using the `record.id` in Supabase with the new transcription using `update`
@@ -379,20 +378,21 @@ Then, go to 'Database' <Icon icon="circle-1" iconType="solid" size={20} color="A
 
 ![How to create a new webhook](/images/supabase-create-webhook-1.png)
 
-<Icon icon="circle-1" iconType="solid" size={20} color="A8FF53" /> Call the hook `edge-function-hook`.
+<Icon icon="circle-1" iconType="solid" size={20} color="A8FF53" /> Call the hook
+`edge-function-hook`.
 
-<Icon icon="circle-2" iconType="solid" size={20} color="A8FF53" /> Select the new table you have created:
-`public` `video_transcriptions`.
+<Icon icon="circle-2" iconType="solid" size={20} color="A8FF53" /> Select the new table you have
+created: `public` `video_transcriptions`.
 
 <Icon icon="circle-3" iconType="solid" size={20} color="A8FF53" /> Choose the `insert` event.
 
 ![How to create a new webhook 2](/images/supabase-create-webhook-2.png)
 
-<Icon icon="circle-4" iconType="solid" size={20} color="A8FF53" /> Under 'Webhook configuration', select
-'Supabase Edge Functions'{" "}
+<Icon icon="circle-4" iconType="solid" size={20} color="A8FF53" /> Under 'Webhook configuration',
+select 'Supabase Edge Functions'
 
-<Icon icon="circle-5" iconType="solid" size={20} color="A8FF53" /> Under 'Edge Function', choose `POST`
-and select the Edge Function you have created: `video-processing-handler`.{" "}
+<Icon icon="circle-5" iconType="solid" size={20} color="A8FF53" /> Under 'Edge Function', choose
+`POST` and select the Edge Function you have created: `video-processing-handler`.
 
 <Icon icon="circle-6" iconType="solid" size={20} color="A8FF53" /> Under 'HTTP Headers', add a new header with the key `Authorization` and the value `Bearer <your-api-key>` (replace `<your-api-key>` with the `anon` `public` API key you copied earlier).
 
@@ -402,7 +402,7 @@ and select the Edge Function you have created: `video-processing-handler`.{" "}
   functions.
 </Info>
 
-<Icon icon="circle-7" iconType="solid" size={20} color="A8FF53" /> Click 'Create webhook'.{" "}
+<Icon icon="circle-7" iconType="solid" size={20} color="A8FF53" /> Click 'Create webhook'.
 
 ![How to create a new webhook 3](/images/supabase-create-webhook-3.png)
 

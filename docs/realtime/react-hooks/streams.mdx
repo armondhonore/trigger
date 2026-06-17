@@ -166,18 +166,8 @@ Pass the input stream's `id` (string), the run ID, and options such as `accessTo
 import { useInputStreamSend } from "@trigger.dev/react-hooks";
 import { approval } from "@/trigger/streams";
 
-export function ApprovalForm({
-  runId,
-  accessToken,
-}: {
-  runId: string;
-  accessToken: string;
-}) {
-  const { send, isLoading, isReady } = useInputStreamSend(
-    approval.id,
-    runId,
-    { accessToken }
-  );
+export function ApprovalForm({ runId, accessToken }: { runId: string; accessToken: string }) {
+  const { send, isLoading, isReady } = useInputStreamSend(approval.id, runId, { accessToken });
 
   return (
     <button

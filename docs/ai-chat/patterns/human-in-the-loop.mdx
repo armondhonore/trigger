@@ -99,8 +99,7 @@ function ChatView({ chatId }: { chatId: string }) {
   const transport = useTriggerChatTransport({
     task: "my-chat",
     accessToken: ({ chatId }) => mintChatAccessToken(chatId),
-    startSession: ({ chatId, clientData }) =>
-      startChatSession({ chatId, clientData }),
+    startSession: ({ chatId, clientData }) => startChatSession({ chatId, clientData }),
   });
   const { messages, sendMessage, addToolOutput } = useChat({
     id: chatId,
@@ -163,7 +162,8 @@ onTurnComplete: async ({ finishReason, responseMessage }) => {
 ```
 
 <Note>
-  `finishReason` is only undefined for manual `chat.pipe()` flows or aborted streams. For the common `run() → return streamText(...)` pattern it's always populated.
+  `finishReason` is only undefined for manual `chat.pipe()` flows or aborted streams. For the common
+  `run() → return streamText(...)` pattern it's always populated.
 </Note>
 
 ### Via response parts

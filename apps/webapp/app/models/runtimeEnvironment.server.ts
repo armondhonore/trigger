@@ -38,7 +38,7 @@ type PrismaEnvWithAuthAndParent = Prisma.RuntimeEnvironmentGetPayload<{
 // plain number (lossless at this scale). The optional union accepts both
 // query shapes — with parentEnvironment loaded, or without it.
 export function toAuthenticated(
-  env: PrismaEnvWithAuth | PrismaEnvWithAuthAndParent,
+  env: PrismaEnvWithAuth | PrismaEnvWithAuthAndParent
 ): AuthenticatedEnvironment {
   return {
     id: env.id,

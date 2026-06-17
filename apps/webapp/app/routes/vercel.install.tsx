@@ -70,4 +70,3 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   return redirect(vercelInstallUrl);
 };
-

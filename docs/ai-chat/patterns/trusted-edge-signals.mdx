@@ -175,7 +175,10 @@ function rewriteAppend(body: string, cf: CfTrustData) {
   }
   if (parsed.kind !== "message") return body;
   const payload = (parsed.payload as Record<string, unknown>) ?? {};
-  parsed.payload = { ...payload, metadata: injectCf(payload.metadata as Record<string, unknown>, cf) };
+  parsed.payload = {
+    ...payload,
+    metadata: injectCf(payload.metadata as Record<string, unknown>, cf),
+  };
   return JSON.stringify(parsed);
 }
 
@@ -185,8 +188,7 @@ export default {
     const target = new URL(incoming.pathname + incoming.search, env.TRIGGER_API_UPSTREAM);
     const cf = readCfTrustData(request);
 
-    const isSessionsCreate =
-      request.method === "POST" && incoming.pathname === "/api/v1/sessions";
+    const isSessionsCreate = request.method === "POST" && incoming.pathname === "/api/v1/sessions";
     const isAppend =
       request.method === "POST" &&
       /^\/realtime\/v1\/sessions\/[^/]+\/in\/append$/.test(incoming.pathname);
@@ -269,7 +271,7 @@ export const myAgent = chat
   });
 ```
 
-Because the schema requires `__cf` on every turn, any request that *doesn't* go through the proxy fails at the agent boundary — the turn produces a `[ERROR]` span on the trace and an empty `turn-complete` on the wire (see [the client protocol error-detection note](/ai-chat/client-protocol#step-3-send-messages-stops-and-actions)). That gives you a server-side enforcement check for "did this request actually come through the trusted path?"
+Because the schema requires `__cf` on every turn, any request that _doesn't_ go through the proxy fails at the agent boundary — the turn produces a `[ERROR]` span on the trace and an empty `turn-complete` on the wire (see [the client protocol error-detection note](/ai-chat/client-protocol#step-3-send-messages-stops-and-actions)). That gives you a server-side enforcement check for "did this request actually come through the trusted path?"
 
 ## Browser transport configuration
 
@@ -307,8 +309,7 @@ import { chat } from "@trigger.dev/sdk/ai";
 
 export const startSession = chat.createStartSessionAction("my-agent", {
   tokenTTL: "1h",
-  baseURL: ({ endpoint }) =>
-    endpoint === "sessions" ? WORKER : DIRECT,
+  baseURL: ({ endpoint }) => (endpoint === "sessions" ? WORKER : DIRECT),
 });
 ```
 

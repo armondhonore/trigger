@@ -55,17 +55,17 @@ The frontend side is one hook — `useTriggerChatTransport` connects `useChat` t
 
 ## Where each part is covered
 
-| Part                                                  | Page                                           |
-| ----------------------------------------------------- | ---------------------------------------------- |
-| `chat.agent()` options, the turn loop, piping         | [Backend](/ai-chat/backend)                    |
-| Hooks around each turn (`onTurnComplete`, hydration)  | [Lifecycle hooks](/ai-chat/lifecycle-hooks)    |
-| Declaring tools, typed payloads, `toModelOutput`      | [Tools](/ai-chat/tools)                        |
-| `useChat` wiring, tokens, starting sessions           | [Frontend](/ai-chat/frontend)                  |
-| Driving a chat from your server instead of a browser  | [Server-side chat](/ai-chat/server-chat)       |
-| The durable substrate under every agent               | [Sessions](/ai-chat/sessions)                  |
-| Per-run typed state inside the loop                   | [chat.local](/ai-chat/chat-local)              |
-| Type-safe payloads, client data, and messages         | [Types](/ai-chat/types)                        |
-| Building without the managed lifecycle                | [Custom agents](/ai-chat/custom-agents)        |
-| End-to-end mechanics: what survives a refresh and why | [How it works](/ai-chat/how-it-works)          |
+| Part                                                  | Page                                        |
+| ----------------------------------------------------- | ------------------------------------------- |
+| `chat.agent()` options, the turn loop, piping         | [Backend](/ai-chat/backend)                 |
+| Hooks around each turn (`onTurnComplete`, hydration)  | [Lifecycle hooks](/ai-chat/lifecycle-hooks) |
+| Declaring tools, typed payloads, `toModelOutput`      | [Tools](/ai-chat/tools)                     |
+| `useChat` wiring, tokens, starting sessions           | [Frontend](/ai-chat/frontend)               |
+| Driving a chat from your server instead of a browser  | [Server-side chat](/ai-chat/server-chat)    |
+| The durable substrate under every agent               | [Sessions](/ai-chat/sessions)               |
+| Per-run typed state inside the loop                   | [chat.local](/ai-chat/chat-local)           |
+| Type-safe payloads, client data, and messages         | [Types](/ai-chat/types)                     |
+| Building without the managed lifecycle                | [Custom agents](/ai-chat/custom-agents)     |
+| End-to-end mechanics: what survives a refresh and why | [How it works](/ai-chat/how-it-works)       |
 
 Beyond this section: [Features](/ai-chat/fast-starts) covers opt-in capabilities (Head Start, compaction, steering, actions), and [Patterns](/ai-chat/patterns/sub-agents) covers production recipes (sub-agents, HITL approvals, persistence, recovery).

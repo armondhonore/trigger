@@ -16,6 +16,7 @@ This package is designed to be **bundle-safe**. It does NOT bundle any schema li
 2. **External conversions** (Zod 3, Yup, Effect) require the conversion libraries to be available at runtime
 
 This design ensures that:
+
 - ✅ Your bundle size stays small
 - ✅ You only include the schema libraries you actually use
 - ✅ Tree-shaking works properly
@@ -39,13 +40,13 @@ This design ensures that:
 ### Basic Usage (Built-in conversions only)
 
 ```typescript
-import { schemaToJsonSchema } from '@trigger.dev/schema-to-json';
-import { type } from 'arktype';
+import { schemaToJsonSchema } from "@trigger.dev/schema-to-json";
+import { type } from "arktype";
 
 // Works immediately for schemas with built-in conversion
 const arkSchema = type({
-  name: 'string',
-  age: 'number',
+  name: "string",
+  age: "number",
 });
 
 const result = schemaToJsonSchema(arkSchema);
@@ -56,8 +57,8 @@ console.log(result);
 ### Full Usage (With external conversion libraries)
 
 ```typescript
-import { schemaToJsonSchema, initializeSchemaConverters } from '@trigger.dev/schema-to-json';
-import { z } from 'zod';
+import { schemaToJsonSchema, initializeSchemaConverters } from "@trigger.dev/schema-to-json";
+import { z } from "zod";
 
 // Initialize converters once in your app (loads conversion libraries if available)
 await initializeSchemaConverters();
@@ -92,12 +93,14 @@ console.log(result);
 Convert a schema to JSON Schema format.
 
 **Parameters:**
+
 - `schema` - The schema to convert
 - `options` (optional)
   - `name` - Name to use for the schema (supported by some converters)
   - `additionalProperties` - Additional properties to merge into the result
 
 **Returns:**
+
 - `{ jsonSchema, schemaType }` - The converted JSON Schema and detected type
 - `undefined` - If the schema cannot be converted
 

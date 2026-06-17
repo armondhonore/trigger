@@ -113,17 +113,18 @@ export const paymentTask = task({
 
 ```ts
 await myTask.trigger(payload, {
-  delay: "1h",           // Delay execution
-  ttl: "10m",            // Cancel if not started within TTL
+  delay: "1h", // Delay execution
+  ttl: "10m", // Cancel if not started within TTL
   idempotencyKey: key,
   queue: "my-queue",
-  machine: "large-1x",   // micro, small-1x, small-2x, medium-1x, medium-2x, large-1x, large-2x
+  machine: "large-1x", // micro, small-1x, small-2x, medium-1x, medium-2x, large-1x, large-2x
   maxAttempts: 3,
-  tags: ["user_123"],    // Max 10 tags
-  debounce: {            // Consolidate rapid triggers
+  tags: ["user_123"], // Max 10 tags
+  debounce: {
+    // Consolidate rapid triggers
     key: "unique-key",
     delay: "5s",
-    mode: "trailing",    // "leading" (default) or "trailing"
+    mode: "trailing", // "leading" (default) or "trailing"
   },
 });
 ```
@@ -134,21 +135,27 @@ Consolidate multiple triggers into a single execution:
 
 ```ts
 // Rapid triggers with same key = single execution
-await myTask.trigger({ userId: "123" }, {
-  debounce: {
-    key: "user-123-update",
-    delay: "5s",
-  },
-});
+await myTask.trigger(
+  { userId: "123" },
+  {
+    debounce: {
+      key: "user-123-update",
+      delay: "5s",
+    },
+  }
+);
 
 // Trailing mode: use payload from LAST trigger
-await myTask.trigger({ data: "latest" }, {
-  debounce: {
-    key: "my-key",
-    delay: "10s",
-    mode: "trailing",
-  },
-});
+await myTask.trigger(
+  { data: "latest" },
+  {
+    debounce: {
+      key: "my-key",
+      delay: "10s",
+      mode: "trailing",
+    },
+  }
+);
 ```
 
 Use cases: user activity updates, webhook deduplication, search indexing, notification batching.
@@ -170,15 +177,15 @@ for (const result of results) {
 
 ## Machine Presets
 
-| Preset      | vCPU | Memory |
-|-------------|------|--------|
-| micro       | 0.25 | 0.25GB |
-| small-1x    | 0.5  | 0.5GB  |
-| small-2x    | 1    | 1GB    |
-| medium-1x   | 1    | 2GB    |
-| medium-2x   | 2    | 4GB    |
-| large-1x    | 4    | 8GB    |
-| large-2x    | 8    | 16GB   |
+| Preset    | vCPU | Memory |
+| --------- | ---- | ------ |
+| micro     | 0.25 | 0.25GB |
+| small-1x  | 0.5  | 0.5GB  |
+| small-2x  | 1    | 1GB    |
+| medium-1x | 1    | 2GB    |
+| medium-2x | 2    | 4GB    |
+| large-1x  | 4    | 8GB    |
+| large-2x  | 8    | 16GB   |
 
 ## Design Principles
 

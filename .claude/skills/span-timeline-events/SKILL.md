@@ -52,15 +52,15 @@ Sibling spans (same parent) are sorted by `start_time ASC` from the ClickHouse q
 
 `getAdminOnlyForEvent()` controls visibility. Events default to **admin-only** (`true`).
 
-| Event | Admin-only | Friendly name |
-|-------|-----------|---------------|
-| `dequeue` | No | Dequeued |
-| `fork` | No | Launched |
-| `import` | No (if no fork event) | Importing task file |
-| `create_attempt` | Yes | Attempt created |
-| `lazy_payload` | Yes | Lazy attempt initialized |
-| `pod_scheduled` | Yes | Pod scheduled |
-| (default) | Yes | (raw event name) |
+| Event            | Admin-only            | Friendly name            |
+| ---------------- | --------------------- | ------------------------ |
+| `dequeue`        | No                    | Dequeued                 |
+| `fork`           | No                    | Launched                 |
+| `import`         | No (if no fork event) | Importing task file      |
+| `create_attempt` | Yes                   | Attempt created          |
+| `lazy_payload`   | Yes                   | Lazy attempt initialized |
+| `pod_scheduled`  | Yes                   | Pod scheduled            |
+| (default)        | Yes                   | (raw event name)         |
 
 ## Adding New Timeline Events
 

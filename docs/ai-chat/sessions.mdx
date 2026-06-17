@@ -105,29 +105,31 @@ const { id, runId, publicAccessToken, isCached } = await sessions.start({
   taskIdentifier: "my-chat",
   triggerConfig: {
     tags: [`chat:${chatId}`],
-    basePayload: { /* whatever your task's payload shape is */ },
+    basePayload: {
+      /* whatever your task's payload shape is */
+    },
   },
 });
 ```
 
-| Field | Type | Notes |
-|---|---|---|
-| `type` | `string` | Free-form discriminator. `chat.agent` uses `"chat.agent"`. |
-| `externalId` | `string?` | Your stable identity. Cannot start with `session_` (reserved). |
-| `taskIdentifier` | `string` | Task this session triggers runs against. |
-| `triggerConfig` | `SessionTriggerConfig` | Trigger options applied to every run: `tags`, `queue`, `machine`, `maxAttempts`, `idleTimeoutInSeconds`, `basePayload`. |
-| `tags` | `string[]?` | Up to 10 tags on the Session row (separate from `triggerConfig.tags`). |
-| `metadata` | `Record<string, unknown>?` | Arbitrary JSON. |
-| `expiresAt` | `Date?` | Hard retention deadline. |
+| Field            | Type                       | Notes                                                                                                                   |
+| ---------------- | -------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `type`           | `string`                   | Free-form discriminator. `chat.agent` uses `"chat.agent"`.                                                              |
+| `externalId`     | `string?`                  | Your stable identity. Cannot start with `session_` (reserved).                                                          |
+| `taskIdentifier` | `string`                   | Task this session triggers runs against.                                                                                |
+| `triggerConfig`  | `SessionTriggerConfig`     | Trigger options applied to every run: `tags`, `queue`, `machine`, `maxAttempts`, `idleTimeoutInSeconds`, `basePayload`. |
+| `tags`           | `string[]?`                | Up to 10 tags on the Session row (separate from `triggerConfig.tags`).                                                  |
+| `metadata`       | `Record<string, unknown>?` | Arbitrary JSON.                                                                                                         |
+| `expiresAt`      | `Date?`                    | Hard retention deadline.                                                                                                |
 
 Returns `CreatedSessionResponseBody`:
 
-| Field | Type | Notes |
-|---|---|---|
-| `id` | `string` | Server-assigned `session_*` friendlyId. |
-| `runId` | `string` | The first run created alongside the session. |
-| `publicAccessToken` | `string` | Session-scoped PAT (`read:sessions:{id} + write:sessions:{id}`). |
-| `isCached` | `boolean` | `true` if the session already existed (idempotent upsert). |
+| Field               | Type      | Notes                                                            |
+| ------------------- | --------- | ---------------------------------------------------------------- |
+| `id`                | `string`  | Server-assigned `session_*` friendlyId.                          |
+| `runId`             | `string`  | The first run created alongside the session.                     |
+| `publicAccessToken` | `string`  | Session-scoped PAT (`read:sessions:{id} + write:sessions:{id}`). |
+| `isCached`          | `boolean` | `true` if the session already existed (idempotent upsert).       |
 
 ### `sessions.retrieve(idOrExternalId, requestOptions?)`
 
@@ -165,15 +167,15 @@ for await (const s of sessions.list({
 }
 ```
 
-| Filter | Type | Notes |
-|---|---|---|
-| `type` | `string \| string[]` | e.g. `"chat.agent"` |
-| `tag` | `string \| string[]` | Matches `triggerConfig.tags` |
-| `taskIdentifier` | `string \| string[]` | Filter by task |
-| `externalId` | `string` | Exact match |
-| `status` | `"ACTIVE" \| "CLOSED" \| "EXPIRED"` | Lifecycle state |
-| `period` / `from` / `to` | window | Time-range filter |
-| `limit` / `after` / `before` | cursor | Pagination (1–100 per page; default 20) |
+| Filter                       | Type                                | Notes                                   |
+| ---------------------------- | ----------------------------------- | --------------------------------------- |
+| `type`                       | `string \| string[]`                | e.g. `"chat.agent"`                     |
+| `tag`                        | `string \| string[]`                | Matches `triggerConfig.tags`            |
+| `taskIdentifier`             | `string \| string[]`                | Filter by task                          |
+| `externalId`                 | `string`                            | Exact match                             |
+| `status`                     | `"ACTIVE" \| "CLOSED" \| "EXPIRED"` | Lifecycle state                         |
+| `period` / `from` / `to`     | window                              | Time-range filter                       |
+| `limit` / `after` / `before` | cursor                              | Pagination (1–100 per page; default 20) |
 
 ### `sessions.open(idOrExternalId)`
 
@@ -292,8 +294,12 @@ Hybrid: stay warm for `idleTimeoutInSeconds`, then suspend via `wait` if nothing
 const next = await session.in.waitWithIdleTimeout<MyEvent>({
   idleTimeoutInSeconds: 30,
   timeout: "1h",
-  onSuspend: () => { /* persist before suspending */ },
-  onResume: () => { /* re-hydrate after resume */ },
+  onSuspend: () => {
+    /* persist before suspending */
+  },
+  onResume: () => {
+    /* re-hydrate after resume */
+  },
 });
 ```
 

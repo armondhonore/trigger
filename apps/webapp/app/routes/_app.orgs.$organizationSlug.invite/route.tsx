@@ -82,9 +82,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const offerableRoleIds = systemRoles
     ? result.roles
         .filter(
-          (r) =>
-            assignableSet.has(r.id) &&
-            isAtOrBelow(systemRoles, inviterRole?.id ?? null, r.id)
+          (r) => assignableSet.has(r.id) && isAtOrBelow(systemRoles, inviterRole?.id ?? null, r.id)
         )
         .map((r) => r.id)
     : [];
@@ -171,10 +169,7 @@ export const action: ActionFunction = async ({ request, params }) => {
   // (plan-tier) and at or below the inviter's own level.
   let resolvedRbacRoleId: string | null = null;
   const submittedRbacRoleId = submission.value.rbacRoleId;
-  if (
-    submittedRbacRoleId &&
-    submittedRbacRoleId !== NO_RBAC_ROLE
-  ) {
+  if (submittedRbacRoleId && submittedRbacRoleId !== NO_RBAC_ROLE) {
     const org = await $replica.organization.findFirst({
       where: { slug: organizationSlug },
       select: { id: true },
@@ -199,13 +194,7 @@ export const action: ActionFunction = async ({ request, params }) => {
           { status: 400 }
         );
       }
-      if (
-        !isAtOrBelow(
-          systemRoles,
-          inviterRole?.id ?? null,
-          submittedRbacRoleId
-        )
-      ) {
+      if (!isAtOrBelow(systemRoles, inviterRole?.id ?? null, submittedRbacRoleId)) {
         return json(
           { errors: { body: "You can only invite members at or below your own role" } },
           { status: 403 }
@@ -274,9 +263,7 @@ export default function Page() {
   // Default to the lowest-tier offered role (the loader returns roles
   // in its allRoles order, which the plugin emits Owner→Member; the
   // last entry is the most restrictive).
-  const defaultRoleId = showRolePicker
-    ? offerable[offerable.length - 1].id
-    : NO_RBAC_ROLE;
+  const defaultRoleId = showRolePicker ? offerable[offerable.length - 1].id : NO_RBAC_ROLE;
   const [selectedRoleId, setSelectedRoleId] = useState(defaultRoleId);
 
   const [form, { emails }] = useForm({
@@ -386,9 +373,7 @@ export default function Page() {
                   items={offerable}
                   variant="tertiary/medium"
                   dropdownIcon
-                  text={(v) =>
-                    offerable.find((r) => r.id === v)?.name ?? "Pick a role"
-                  }
+                  text={(v) => offerable.find((r) => r.id === v)?.name ?? "Pick a role"}
                   setValue={(next) => {
                     if (typeof next === "string") setSelectedRoleId(next);
                   }}
@@ -402,8 +387,7 @@ export default function Page() {
                   }
                 </Select>
                 <Paragraph variant="extra-small" className="text-text-dimmed">
-                  Invitees join with this role. They can be promoted later
-                  from the Team page.
+                  Invitees join with this role. They can be promoted later from the Team page.
                 </Paragraph>
               </InputGroup>
             ) : null}

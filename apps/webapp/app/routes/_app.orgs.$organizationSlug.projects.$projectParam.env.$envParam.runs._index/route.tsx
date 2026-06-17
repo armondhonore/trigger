@@ -67,7 +67,11 @@ import { throwNotFound } from "~/utils/httpErrors";
 import { ListPagination } from "../../components/ListPagination";
 import { CreateBulkActionInspector } from "../resources.orgs.$organizationSlug.projects.$projectParam.env.$envParam.runs.bulkaction";
 import { Callout } from "~/components/primitives/Callout";
-import { isRunsListLoading, RUNS_BULK_INSPECTOR_OPEN_VALUE, shouldRevalidateRunsList } from "./shouldRevalidateRunsList";
+import {
+  isRunsListLoading,
+  RUNS_BULK_INSPECTOR_OPEN_VALUE,
+  shouldRevalidateRunsList,
+} from "./shouldRevalidateRunsList";
 import { useRunsLiveReload } from "./useRunsLiveReload";
 
 export { shouldRevalidateRunsList as shouldRevalidate };
@@ -272,8 +276,7 @@ function RunsList({
     !isShowingBulkActionInspector
   );
   // Keep content mounted until onCollapseChange reports the panel is fully collapsed.
-  const showBulkInspectorContent =
-    isShowingBulkActionInspector || !isBulkInspectorPanelCollapsed;
+  const showBulkInspectorContent = isShowingBulkActionInspector || !isBulkInspectorPanelCollapsed;
 
   return (
     <ResizablePanelGroup orientation="horizontal" className="max-h-full">

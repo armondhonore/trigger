@@ -22,7 +22,10 @@ import { Spinner } from "~/components/primitives/Spinner";
 import { TextLink } from "~/components/primitives/TextLink";
 import { authenticator } from "~/services/auth.server";
 import { commitSession, getUserSession } from "~/services/sessionStorage.server";
-import { setRedirectTo, commitSession as commitRedirectSession } from "~/services/redirectTo.server";
+import {
+  setRedirectTo,
+  commitSession as commitRedirectSession,
+} from "~/services/redirectTo.server";
 import { sanitizeRedirectPath } from "~/utils";
 import {
   checkMagicLinkEmailRateLimit,

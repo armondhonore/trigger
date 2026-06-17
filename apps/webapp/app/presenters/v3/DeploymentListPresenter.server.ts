@@ -234,7 +234,12 @@ LIMIT ${pageSize} OFFSET ${pageSize * (page - 1)};`;
         );
 
         let vercelDeploymentUrl: string | null = null;
-        if (hasVercelIntegration && deployment.integrationDeploymentId && vercelTeamSlug && vercelProjectName) {
+        if (
+          hasVercelIntegration &&
+          deployment.integrationDeploymentId &&
+          vercelTeamSlug &&
+          vercelProjectName
+        ) {
           vercelDeploymentUrl = buildVercelDeploymentUrl(
             vercelTeamSlug,
             vercelProjectName,

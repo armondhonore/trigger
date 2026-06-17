@@ -26,6 +26,7 @@ A batch of fixes for edge cases around message delivery, stopping, and error han
     });
   },
   ```
+
 - **Full tag sets on chat runs.** Runs triggered by chat sessions can now carry the full set of dashboard tags instead of being silently truncated.
 - **Stream hygiene for custom agents.** Manual `chat.writeTurnComplete()` callers now trim the output stream the way `chat.agent` does, sending a custom action no longer leaves a second stream reader running, and a long-lived `watch` subscription no longer grows its dedupe set without bound.
 

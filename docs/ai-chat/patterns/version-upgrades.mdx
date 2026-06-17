@@ -56,8 +56,7 @@ export function Chat() {
   const transport = useTriggerChatTransport({
     task: "my-chat",
     accessToken: ({ chatId }) => mintChatAccessToken(chatId),
-    startSession: ({ chatId, clientData }) =>
-      startChatSession({ chatId, clientData }),
+    startSession: ({ chatId, clientData }) => startChatSession({ chatId, clientData }),
     // Bump this when you ship a breaking change to the chat UI or tools
     clientData: { userId: user.id, protocolVersion: "v2" },
   });
@@ -101,6 +100,7 @@ export const myChat = chat
 The transport includes `clientData` in every payload — both the initial trigger and subsequent records on the session's `.in` channel — so the agent always has the current value.
 
 This pattern is useful when:
+
 - Your frontend is backwards-compatible across several agent versions, but occasionally ships breaking changes
 - You want explicit control over when upgrades happen rather than upgrading on every deploy
 - Multiple frontend versions may be active at the same time (e.g., users with cached tabs)
@@ -111,16 +111,14 @@ For automatic upgrade on every deploy, pass your platform's build ID via `client
 
 ```tsx title="app/components/Chat.tsx"
 // Vercel sets this at build time, or use your own build ID
-const APP_VERSION = process.env.NEXT_PUBLIC_VERCEL_DEPLOYMENT_ID
-  ?? process.env.NEXT_PUBLIC_BUILD_ID
-  ?? "dev";
+const APP_VERSION =
+  process.env.NEXT_PUBLIC_VERCEL_DEPLOYMENT_ID ?? process.env.NEXT_PUBLIC_BUILD_ID ?? "dev";
 
 export function Chat() {
   const transport = useTriggerChatTransport({
     task: "my-chat",
     accessToken: ({ chatId }) => mintChatAccessToken(chatId),
-    startSession: ({ chatId, clientData }) =>
-      startChatSession({ chatId, clientData }),
+    startSession: ({ chatId, clientData }) => startChatSession({ chatId, clientData }),
     clientData: { userId: user.id, appVersion: APP_VERSION },
   });
   // ...

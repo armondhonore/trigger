@@ -43,7 +43,9 @@ export const myChat = chat.agent({
     return streamText({
       ...chat.toStreamTextOptions({ registry }),
       messages,
-      tools: { /* ... */ },
+      tools: {
+        /* ... */
+      },
       abortSignal: signal,
       stopWhen: stepCountIs(15),
     });
@@ -55,12 +57,12 @@ The `prepareStep` for injection is automatically included when you spread `chat.
 
 ### Options
 
-| Option | Type | Description |
-|--------|------|-------------|
-| `shouldInject` | `(event: PendingMessagesBatchEvent) => boolean` | Decide whether to inject the batch. Called once per step boundary. If absent, no injection happens. |
-| `prepare` | `(event: PendingMessagesBatchEvent) => ModelMessage[]` | Transform the batch before injection. Default: convert each message via `convertToModelMessages`. |
-| `onReceived` | `(event) => void` | Called when a message arrives during streaming (per-message). |
-| `onInjected` | `(event) => void` | Called after a batch is injected. |
+| Option         | Type                                                   | Description                                                                                         |
+| -------------- | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------- |
+| `shouldInject` | `(event: PendingMessagesBatchEvent) => boolean`        | Decide whether to inject the batch. Called once per step boundary. If absent, no injection happens. |
+| `prepare`      | `(event: PendingMessagesBatchEvent) => ModelMessage[]` | Transform the batch before injection. Default: convert each message via `convertToModelMessages`.   |
+| `onReceived`   | `(event) => void`                                      | Called when a message arrives during streaming (per-message).                                       |
+| `onInjected`   | `(event) => void`                                      | Called after a batch is injected.                                                                   |
 
 ### shouldInject
 
@@ -81,15 +83,15 @@ pendingMessages: {
 
 The event includes:
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `messages` | `UIMessage[]` | All pending messages (batch) |
-| `modelMessages` | `ModelMessage[]` | Current conversation |
-| `steps` | `CompactionStep[]` | Completed steps |
-| `stepNumber` | `number` | Current step (0-indexed) |
-| `chatId` | `string` | Chat session ID |
-| `turn` | `number` | Current turn |
-| `clientData` | `unknown` | Frontend metadata |
+| Field           | Type               | Description                  |
+| --------------- | ------------------ | ---------------------------- |
+| `messages`      | `UIMessage[]`      | All pending messages (batch) |
+| `modelMessages` | `ModelMessage[]`   | Current conversation         |
+| `steps`         | `CompactionStep[]` | Completed steps              |
+| `stepNumber`    | `number`           | Current step (0-indexed)     |
+| `chatId`        | `string`           | Chat session ID              |
+| `turn`          | `number`           | Current turn                 |
+| `clientData`    | `unknown`          | Frontend metadata            |
 
 ### prepare
 
@@ -112,6 +114,7 @@ pendingMessages: {
 ### Stream chunk
 
 When messages are injected, the SDK automatically writes a `data-pending-message-injected` stream chunk containing the message IDs and text. The frontend uses this to:
+
 - Confirm which messages were injected
 - Remove them from the pending overlay
 - Render them inline at the injection point in the assistant response
@@ -154,10 +157,12 @@ Pass `pendingMessages` to the constructor and wire up the message listener manua
 const conversation = new chat.MessageAccumulator({
   pendingMessages: {
     shouldInject: () => true,
-    prepare: ({ messages }) => [{
-      role: "user",
-      content: `[Steering]: ${messages.map(m => m.parts[0]?.text).join(", ")}`,
-    }],
+    prepare: ({ messages }) => [
+      {
+        role: "user",
+        content: `[Steering]: ${messages.map((m) => m.parts[0]?.text).join(", ")}`,
+      },
+    ],
   },
 });
 
@@ -191,12 +196,12 @@ for (let turn = 0; turn < 100; turn++) {
 
 ### MessageAccumulator methods
 
-| Method | Description |
-|--------|-------------|
-| `steer(message, modelMessages?)` | Queue a UIMessage for injection (sync) |
-| `steerAsync(message)` | Queue a UIMessage, converting to model messages automatically |
-| `drainSteering()` | Get and clear unconsumed steering messages |
-| `prepareStep()` | Returns a prepareStep function handling injection + compaction |
+| Method                           | Description                                                    |
+| -------------------------------- | -------------------------------------------------------------- |
+| `steer(message, modelMessages?)` | Queue a UIMessage for injection (sync)                         |
+| `steerAsync(message)`            | Queue a UIMessage, converting to model messages automatically  |
+| `drainSteering()`                | Get and clear unconsumed steering messages                     |
+| `prepareStep()`                  | Returns a prepareStep function handling injection + compaction |
 
 ## Frontend: usePendingMessages hook
 
@@ -210,8 +215,7 @@ function Chat({ chatId }: { chatId: string }) {
   const transport = useTriggerChatTransport({
     task: "my-chat",
     accessToken: ({ chatId }) => mintChatAccessToken(chatId),
-    startSession: ({ chatId, clientData }) =>
-      startChatSession({ chatId, clientData }),
+    startSession: ({ chatId, clientData }) => startChatSession({ chatId, clientData }),
   });
 
   const { messages, setMessages, sendMessage, stop, status } = useChat({
@@ -240,7 +244,9 @@ function Chat({ chatId }: { chatId: string }) {
                 // Render injected messages inline at the injection point
                 <div key={i}>
                   {pending.getInjectedMessages(part).map((m) => (
-                    <div key={m.id} className="injected-message">{m.text}</div>
+                    <div key={m.id} className="injected-message">
+                      {m.text}
+                    </div>
                   ))}
                 </div>
               ) : (
@@ -259,23 +265,29 @@ function Chat({ chatId }: { chatId: string }) {
           <span>{msg.text}</span>
           <span>{msg.mode === "steering" ? "Steering" : "Queued"}</span>
           {msg.mode === "queued" && status === "streaming" && (
-            <button onClick={() => pending.promoteToSteering(msg.id)}>
-              Steer instead
-            </button>
+            <button onClick={() => pending.promoteToSteering(msg.id)}>Steer instead</button>
           )}
         </div>
       ))}
 
       {/* Send form */}
-      <form onSubmit={(e) => {
-        e.preventDefault();
-        pending.steer(input); // Steers during streaming, sends normally when ready
-        setInput("");
-      }}>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          pending.steer(input); // Steers during streaming, sends normally when ready
+          setInput("");
+        }}
+      >
         <input value={input} onChange={(e) => setInput(e.target.value)} />
         <button type="submit">Send</button>
         {status === "streaming" && (
-          <button type="button" onClick={() => { pending.queue(input); setInput(""); }}>
+          <button
+            type="button"
+            onClick={() => {
+              pending.queue(input);
+              setInput("");
+            }}
+          >
             Queue
           </button>
         )}
@@ -287,24 +299,24 @@ function Chat({ chatId }: { chatId: string }) {
 
 ### Hook API
 
-| Property/Method | Type | Description |
-|----------------|------|-------------|
-| `pending` | `PendingMessage[]` | Current pending messages with `id`, `text`, `mode`, and `injected` status |
-| `steer(text)` | `(text: string) => void` | Send a steering message during streaming, or normal message when ready |
-| `queue(text)` | `(text: string) => void` | Queue for next turn during streaming, or send normally when ready |
-| `promoteToSteering(id)` | `(id: string) => void` | Convert a queued message to steering (sends via input stream immediately) |
-| `isInjectionPoint(part)` | `(part: unknown) => boolean` | Check if an assistant message part is an injection confirmation |
-| `getInjectedMessageIds(part)` | `(part: unknown) => string[]` | Get message IDs from an injection point |
-| `getInjectedMessages(part)` | `(part: unknown) => InjectedMessage[]` | Get messages (id + text) from an injection point |
+| Property/Method               | Type                                   | Description                                                               |
+| ----------------------------- | -------------------------------------- | ------------------------------------------------------------------------- |
+| `pending`                     | `PendingMessage[]`                     | Current pending messages with `id`, `text`, `mode`, and `injected` status |
+| `steer(text)`                 | `(text: string) => void`               | Send a steering message during streaming, or normal message when ready    |
+| `queue(text)`                 | `(text: string) => void`               | Queue for next turn during streaming, or send normally when ready         |
+| `promoteToSteering(id)`       | `(id: string) => void`                 | Convert a queued message to steering (sends via input stream immediately) |
+| `isInjectionPoint(part)`      | `(part: unknown) => boolean`           | Check if an assistant message part is an injection confirmation           |
+| `getInjectedMessageIds(part)` | `(part: unknown) => string[]`          | Get message IDs from an injection point                                   |
+| `getInjectedMessages(part)`   | `(part: unknown) => InjectedMessage[]` | Get messages (id + text) from an injection point                          |
 
 ### PendingMessage
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `id` | `string` | Unique message ID |
-| `text` | `string` | Message text |
-| `mode` | `"steering" \| "queued"` | How the message is being handled |
-| `injected` | `boolean` | Whether the backend confirmed injection |
+| Field      | Type                     | Description                             |
+| ---------- | ------------------------ | --------------------------------------- |
+| `id`       | `string`                 | Unique message ID                       |
+| `text`     | `string`                 | Message text                            |
+| `mode`     | `"steering" \| "queued"` | How the message is being handled        |
+| `injected` | `boolean`                | Whether the backend confirmed injection |
 
 ### Message lifecycle
 
@@ -319,14 +331,19 @@ function Chat({ chatId }: { chatId: string }) {
 The `TriggerChatTransport` exposes a `sendPendingMessage` method for sending messages via input stream without disrupting the active stream subscription:
 
 ```ts
-const sent = await transport.sendPendingMessage(chatId, {
-  id: crypto.randomUUID(),
-  role: "user",
-  parts: [{ type: "text", text: "and compare to vercel" }],
-}, { model: "gpt-4o" });
+const sent = await transport.sendPendingMessage(
+  chatId,
+  {
+    id: crypto.randomUUID(),
+    role: "user",
+    parts: [{ type: "text", text: "and compare to vercel" }],
+  },
+  { model: "gpt-4o" }
+);
 ```
 
 Unlike `sendMessage()` from useChat, this does NOT:
+
 - Add the message to useChat's local state
 - Cancel the active stream subscription
 - Start a new response stream

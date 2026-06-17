@@ -10,7 +10,12 @@ import { useOrganization, type MatchedOrganization } from "~/hooks/useOrganizati
 import { useProject } from "~/hooks/useProject";
 import { cn } from "~/utils/cn";
 import { branchesPath, docsPath, v3BillingPath } from "~/utils/pathBuilder";
-import { EnvironmentCombo, EnvironmentIcon, EnvironmentLabel, environmentFullTitle } from "../environments/EnvironmentLabel";
+import {
+  EnvironmentCombo,
+  EnvironmentIcon,
+  EnvironmentLabel,
+  environmentFullTitle,
+} from "../environments/EnvironmentLabel";
 import { ButtonContent } from "../primitives/Buttons";
 import { Header2 } from "../primitives/Headers";
 import { Paragraph } from "../primitives/Paragraph";
@@ -223,8 +228,8 @@ function Branches({
     branchEnvironments.length === 0
       ? "no-branches"
       : activeBranches.length === 0
-      ? "no-active-branches"
-      : "has-branches";
+        ? "no-active-branches"
+        : "has-branches";
 
   const currentBranchIsArchived = environment.archivedAt !== null;
 

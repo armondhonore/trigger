@@ -51,11 +51,7 @@ export async function resolveRunForMutation(input: {
 
   if (buffer) {
     const entry = await buffer.getEntry(input.runParam);
-    if (
-      entry &&
-      entry.envId === input.environmentId &&
-      entry.orgId === input.organizationId
-    ) {
+    if (entry && entry.envId === input.environmentId && entry.orgId === input.organizationId) {
       return { source: "buffer", friendlyId: input.runParam };
     }
   }

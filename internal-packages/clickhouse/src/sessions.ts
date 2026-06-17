@@ -153,10 +153,7 @@ export function getSessionsQueryBuilder(ch: ClickhouseReader, settings?: ClickHo
   });
 }
 
-export function getSessionsCountQueryBuilder(
-  ch: ClickhouseReader,
-  settings?: ClickHouseSettings
-) {
+export function getSessionsCountQueryBuilder(ch: ClickhouseReader, settings?: ClickHouseSettings) {
   return ch.queryBuilder({
     name: "getSessionsCount",
     baseQuery: "SELECT count() as count FROM trigger_dev.sessions_v1 FINAL",
@@ -171,10 +168,7 @@ export const SessionTagsQueryResult = z.object({
 
 export type SessionTagsQueryResult = z.infer<typeof SessionTagsQueryResult>;
 
-export function getSessionTagsQueryBuilder(
-  ch: ClickhouseReader,
-  settings?: ClickHouseSettings
-) {
+export function getSessionTagsQueryBuilder(ch: ClickhouseReader, settings?: ClickHouseSettings) {
   return ch.queryBuilder({
     name: "getSessionTags",
     baseQuery: "SELECT DISTINCT arrayJoin(tags) as tag FROM trigger_dev.sessions_v1",

@@ -7,11 +7,7 @@ import { json, redirect } from "@remix-run/server-runtime";
 import type { RbacAbility } from "@trigger.dev/rbac";
 import { rbac } from "~/services/rbac.server";
 import { getUserId } from "~/services/session.server";
-import type {
-  AuthorizationOption,
-  DashboardLoaderOptions,
-  SessionUser,
-} from "./dashboardBuilder";
+import type { AuthorizationOption, DashboardLoaderOptions, SessionUser } from "./dashboardBuilder";
 import { fromZodError } from "zod-validation-error";
 import type { z } from "zod";
 
@@ -33,11 +29,7 @@ function isAuthorized(ability: RbacAbility, authorization: AuthorizationOption):
 
 type AuthScope = { organizationId?: string; projectId?: string };
 
-export async function authenticateAndAuthorize<
-  TParams,
-  TSearchParams,
-  TContext extends AuthScope
->(
+export async function authenticateAndAuthorize<TParams, TSearchParams, TContext extends AuthScope>(
   request: Request,
   rawParams: unknown,
   options: DashboardLoaderOptions<TParams, TSearchParams, TContext>
@@ -83,9 +75,9 @@ export async function authenticateAndAuthorize<
     parsedSearchParams = parsed.data;
   }
 
-  const ctx = (options.context
-    ? await options.context(parsedParams, request)
-    : ({} as TContext)) as TContext;
+  const ctx = (
+    options.context ? await options.context(parsedParams, request) : ({} as TContext)
+  ) as TContext;
   // Resolve userId from the session cookie *here* (the dashboard
   // request boundary) and feed it into the rbac plugin context. The
   // plugin no longer takes a `helpers.getSessionUserId` callback —

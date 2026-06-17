@@ -102,8 +102,12 @@ Even with `extractNewToolResults`, transient failures (e.g. an audit-log POST th
 ```ts
 await auditLog.upsert({
   where: { toolCallId: r.toolCallId },
-  create: { /* ... */ },
-  update: { /* timestamp, retry count, etc. */ },
+  create: {
+    /* ... */
+  },
+  update: {
+    /* timestamp, retry count, etc. */
+  },
 });
 ```
 
@@ -115,8 +119,8 @@ await auditLog.upsert({
 type ChatNewToolResult = {
   toolCallId: string;
   toolName: string;
-  output: unknown;      // The tool's return value (carries the resolved value; in output-error state see errorText)
-  errorText?: string;   // Set iff the part is in output-error state
+  output: unknown; // The tool's return value (carries the resolved value; in output-error state see errorText)
+  errorText?: string; // Set iff the part is in output-error state
 };
 ```
 
@@ -131,11 +135,11 @@ hydrateMessages: async ({ chatId, incomingMessages }) => {
   for (const msg of incomingMessages) {
     for (const r of chat.history.extractNewToolResults(msg)) {
       // Fires once per ask_user / approval / similar resolution
-      await auditLog.record({ chatId, /* ... */ });
+      await auditLog.record({ chatId /* ... */ });
     }
   }
   return await db.getMessages(chatId);
-}
+};
 ```
 
 This is the original motivator for the helper — see the [HITL pattern's net-new-tool-result section](/ai-chat/patterns/human-in-the-loop#acting-once-per-net-new-tool-result).
