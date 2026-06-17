@@ -1,7 +1,7 @@
 import {
   type RuntimeEnvironment,
   type PrismaClient,
-  RuntimeEnvironmentType,
+  type RuntimeEnvironmentType,
 } from "@trigger.dev/database";
 import { prisma } from "~/db.server";
 import { logger } from "~/services/logger.server";

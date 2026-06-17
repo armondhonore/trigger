@@ -5,11 +5,11 @@ import {
   resourceCatalog,
   type PromptManifest,
   type TaskManifest,
-  TriggerConfig,
+  type TriggerConfig,
 } from "@trigger.dev/core/v3";
 import {
   StandardResourceCatalog,
-  TracingDiagnosticLogLevel,
+  type TracingDiagnosticLogLevel,
   TracingSDK,
 } from "@trigger.dev/core/v3/workers";
 import { sendMessageInCatalog, ZodSchemaParsedError } from "@trigger.dev/core/v3/zodMessageHandler";

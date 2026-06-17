@@ -1,19 +1,19 @@
 import { assertExhaustive } from "../../utils.js";
 import { clock } from "../clock-api.js";
 import { lifecycleHooks } from "../lifecycle-hooks-api.js";
-import { DebugLogPropertiesInput } from "../runEngineWorker/index.js";
+import { type DebugLogPropertiesInput } from "../runEngineWorker/index.js";
 import {
-  BatchTaskRunExecutionResult,
-  CompletedWaitpoint,
-  TaskRunContext,
-  TaskRunExecutionResult,
-  TaskRunFailedExecutionResult,
-  TaskRunSuccessfulExecutionResult,
-  WaitpointTokenResult,
+  type BatchTaskRunExecutionResult,
+  type CompletedWaitpoint,
+  type TaskRunContext,
+  type TaskRunExecutionResult,
+  type TaskRunFailedExecutionResult,
+  type TaskRunSuccessfulExecutionResult,
+  type WaitpointTokenResult,
 } from "../schemas/index.js";
 import { tryCatch } from "../tryCatch.js";
-import { ExecutorToWorkerProcessConnection } from "../zodIpc.js";
-import { RuntimeManager } from "./manager.js";
+import { type ExecutorToWorkerProcessConnection } from "../zodIpc.js";
+import { type RuntimeManager } from "./manager.js";
 import { preventMultipleWaits } from "./preventMultipleWaits.js";
 
 /** A function that resolves a waitpoint */

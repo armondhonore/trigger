@@ -2,8 +2,8 @@ import {
   RunTimeline,
   RunTimelineEvent,
   SpanTimeline,
-  SpanTimelineProps,
-  TimelineSpanRun,
+  type SpanTimelineProps,
+  type TimelineSpanRun,
 } from "~/components/run/RunTimeline";
 import { Header2 } from "~/components/primitives/Headers";
 

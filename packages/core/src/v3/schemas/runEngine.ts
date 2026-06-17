@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Enum, MachinePreset, RuntimeEnvironmentType, TaskRunExecution } from "./common.js";
+import { type Enum, MachinePreset, type RuntimeEnvironmentType, TaskRunExecution } from "./common.js";
 import { EnvironmentType } from "./schemas.js";
 import type * as DB_TYPES from "@trigger.dev/database";
 

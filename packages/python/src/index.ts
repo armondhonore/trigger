@@ -1,5 +1,5 @@
 import {
-  AsyncIterableStream,
+  type AsyncIterableStream,
   createAsyncIterableStreamFromAsyncIterable,
   SemanticInternalAttributes,
   taskContext,
@@ -8,7 +8,7 @@ import { logger } from "@trigger.dev/sdk/v3";
 import { carrierFromContext } from "@trigger.dev/core/v3/otel";
 import assert from "node:assert";
 import fs from "node:fs";
-import { Result, x, Options as XOptions } from "tinyexec";
+import { type Result, x, type Options as XOptions } from "tinyexec";
 import { createTempFileSync, withTempFile } from "./utils/tempFiles.js";
 
 export type PythonExecOptions = Partial<XOptions> & {

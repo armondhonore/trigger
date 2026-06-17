@@ -1,6 +1,6 @@
-import { context, Context } from "@opentelemetry/api";
+import { context, type Context } from "@opentelemetry/api";
 import { getGlobal, registerGlobal, unregisterGlobal } from "../utils/globals.js";
-import { TraceContextManager } from "./types.js";
+import { type TraceContextManager } from "./types.js";
 
 const API_NAME = "trace-context";
 

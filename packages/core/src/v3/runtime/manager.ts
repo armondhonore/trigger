@@ -1,8 +1,8 @@
 import {
-  BatchTaskRunExecutionResult,
-  TaskRunContext,
-  TaskRunExecutionResult,
-  WaitpointTokenResult,
+  type BatchTaskRunExecutionResult,
+  type TaskRunContext,
+  type TaskRunExecutionResult,
+  type WaitpointTokenResult,
 } from "../schemas/index.js";
 
 export interface RuntimeManager {

@@ -1,17 +1,17 @@
 import {
-  BackgroundWorkerMetadata,
-  BackgroundWorkerSourceFileMetadata,
-  CreateBackgroundWorkerRequestBody,
-  PromptResource,
-  QueueManifest,
-  TaskResource,
+  type BackgroundWorkerMetadata,
+  type BackgroundWorkerSourceFileMetadata,
+  type CreateBackgroundWorkerRequestBody,
+  type PromptResource,
+  type QueueManifest,
+  type TaskResource,
 } from "@trigger.dev/core/v3";
 import { BackgroundWorkerId, stringifyDuration } from "@trigger.dev/core/v3/isomorphic";
 import type { BackgroundWorker, TaskQueue, TaskQueueType } from "@trigger.dev/database";
 import cronstrue from "cronstrue";
-import { $transaction, Prisma, PrismaClientOrTransaction } from "~/db.server";
+import { $transaction, Prisma, type PrismaClientOrTransaction } from "~/db.server";
 import { sanitizeQueueName } from "~/models/taskQueue.server";
-import { AuthenticatedEnvironment } from "~/services/apiAuth.server";
+import { type AuthenticatedEnvironment } from "~/services/apiAuth.server";
 import { logger } from "~/services/logger.server";
 import { syncTaskIdentifiers } from "~/services/taskIdentifierRegistry.server";
 import {

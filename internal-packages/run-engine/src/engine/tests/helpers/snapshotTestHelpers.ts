@@ -1,10 +1,10 @@
 import { generateFriendlyId, WaitpointId } from "@trigger.dev/core/v3/isomorphic";
 import {
-  PrismaClient,
-  TaskRunExecutionSnapshot,
-  TaskRunExecutionStatus,
-  Waitpoint,
-  WaitpointStatus,
+  type PrismaClient,
+  type TaskRunExecutionSnapshot,
+  type TaskRunExecutionStatus,
+  type Waitpoint,
+  type WaitpointStatus,
 } from "@trigger.dev/database";
 import type { AuthenticatedEnvironment } from "../setup.js";
 

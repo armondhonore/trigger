@@ -2,7 +2,7 @@ import { trace } from "@opentelemetry/api";
 import { clientWebsocketMessages, serverWebsocketMessages } from "@trigger.dev/core/v3";
 import type { StructuredLogger } from "@trigger.dev/core/v3/utils/structuredLogger";
 import {
-  MessageCatalogToSocketIoEvents,
+  type MessageCatalogToSocketIoEvents,
   ZodMessageHandler,
   ZodMessageSender,
 } from "@trigger.dev/core/v3/zodMessageHandler";

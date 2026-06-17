@@ -1,10 +1,10 @@
-import { ClickHouseClient } from "@clickhouse/client";
+import { type ClickHouseClient } from "@clickhouse/client";
 import { readdir, readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import {
   AbstractStartedContainer,
   GenericContainer,
-  StartedTestContainer,
+  type StartedTestContainer,
   Wait,
 } from "testcontainers";
 

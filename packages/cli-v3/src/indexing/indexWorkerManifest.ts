@@ -6,9 +6,9 @@ import {
   UncaughtExceptionError,
 } from "@trigger.dev/core/v3/errors";
 import {
-  BuildRuntime,
+  type BuildRuntime,
   indexerToWorkerMessages,
-  WorkerManifest,
+  type WorkerManifest,
 } from "@trigger.dev/core/v3/schemas";
 import { parseMessageFromCatalog } from "@trigger.dev/core/v3/zodMessageHandler";
 import { fork } from "node:child_process";

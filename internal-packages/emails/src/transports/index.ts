@@ -1,8 +1,8 @@
-import { ReactElement } from "react";
-import { AwsSesMailTransport, AwsSesMailTransportOptions } from "./aws-ses";
-import { NullMailTransport, NullMailTransportOptions } from "./null";
-import { ResendMailTransport, ResendMailTransportOptions } from "./resend";
-import { SmtpMailTransport, SmtpMailTransportOptions } from "./smtp";
+import { type ReactElement } from "react";
+import { AwsSesMailTransport, type AwsSesMailTransportOptions } from "./aws-ses";
+import { NullMailTransport, type NullMailTransportOptions } from "./null";
+import { ResendMailTransport, type ResendMailTransportOptions } from "./resend";
+import { SmtpMailTransport, type SmtpMailTransportOptions } from "./smtp";
 
 export type MailMessage = {
   to: string;

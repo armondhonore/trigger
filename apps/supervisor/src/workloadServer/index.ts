@@ -16,7 +16,7 @@ import {
   type WorkloadRunAttemptCompleteResponseBody,
   WorkloadRunAttemptStartRequestBody,
   type WorkloadRunAttemptStartResponseBody,
-  WorkloadRunSnapshotsSinceResponseBody,
+  type WorkloadRunSnapshotsSinceResponseBody,
   type WorkloadServerToClientEvents,
   type WorkloadSuspendRunResponseBody,
 } from "@trigger.dev/core/v3/workers";

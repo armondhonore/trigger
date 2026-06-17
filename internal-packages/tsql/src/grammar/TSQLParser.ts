@@ -12,17 +12,17 @@ import { ParserATNSimulator } from "antlr4ts/atn/ParserATNSimulator";
 import { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
 import { ParseTreeVisitor } from "antlr4ts/tree/ParseTreeVisitor";
 import { RecognitionException } from "antlr4ts/RecognitionException";
-import { RuleContext } from "antlr4ts/RuleContext";
+import { type RuleContext } from "antlr4ts/RuleContext";
 //import { RuleVersion } from "antlr4ts/RuleVersion";
-import { TerminalNode } from "antlr4ts/tree/TerminalNode";
+import { type TerminalNode } from "antlr4ts/tree/TerminalNode";
 import { Token } from "antlr4ts/Token";
-import { TokenStream } from "antlr4ts/TokenStream";
-import { Vocabulary } from "antlr4ts/Vocabulary";
+import { type TokenStream } from "antlr4ts/TokenStream";
+import { type Vocabulary } from "antlr4ts/Vocabulary";
 import { VocabularyImpl } from "antlr4ts/VocabularyImpl";
 
 import * as Utils from "antlr4ts/misc/Utils";
 
-import { TSQLParserVisitor } from "./TSQLParserVisitor";
+import { type TSQLParserVisitor } from "./TSQLParserVisitor";
 
 export class TSQLParser extends Parser {
   public static readonly ALL = 1;
@@ -9756,7 +9756,7 @@ export class TSQLParser extends Parser {
     "\x04\x13\t\x13\x04\x14\t\x14\x04\x15\t\x15\x04\x16\t\x16\x04\x17\t\x17" +
     "\x04\x18\t\x18\x04\x19\t\x19\x04\x1A\t\x1A\x04\x1B\t\x1B\x04\x1C\t\x1C" +
     '\x04\x1D\t\x1D\x04\x1E\t\x1E\x04\x1F\t\x1F\x04 \t \x04!\t!\x04"\t"\x04' +
-    "#\t#\x04$\t$\x04%\t%\x04&\t&\x04\'\t\'\x04(\t(\x04)\t)\x04*\t*\x04+\t" +
+    "#\t#\x04$\t$\x04%\t%\x04&\t&\x04'\t'\x04(\t(\x04)\t)\x04*\t*\x04+\t" +
     "+\x04,\t,\x04-\t-\x04.\t.\x04/\t/\x040\t0\x041\t1\x042\t2\x043\t3\x04" +
     "4\t4\x045\t5\x046\t6\x047\t7\x048\t8\x049\t9\x04:\t:\x04;\t;\x04<\t<\x04" +
     "=\t=\x04>\t>\x04?\t?\x04@\t@\x04A\tA\x04B\tB\x04C\tC\x04D\tD\x04E\tE\x04" +
@@ -9799,8 +9799,8 @@ export class TSQLParser extends Parser {
     "\x1F\x03\x1F\x03\x1F\x03 \x03 \x03 \x03 \x03 \x03 \x03 \x03 \x03 \x03" +
     ' \x03 \x03 \x03 \x07 \u01E8\n \f \x0E \u01EB\v \x03!\x03!\x03!\x03"\x03' +
     '"\x03"\x03#\x03#\x03#\x03#\x03#\x03#\x03#\x03#\x05#\u01FB\n#\x03$\x03' +
-    "$\x03$\x03%\x03%\x03%\x03%\x03&\x03&\x03&\x03&\x03\'\x03\'\x03\'\x03\'" +
-    "\x03\'\x03(\x03(\x03(\x03(\x05(\u0211\n(\x03(\x03(\x05(\u0215\n(\x03(" +
+    "$\x03$\x03%\x03%\x03%\x03%\x03&\x03&\x03&\x03&\x03'\x03'\x03'\x03'" +
+    "\x03'\x03(\x03(\x03(\x03(\x05(\u0211\n(\x03(\x03(\x05(\u0215\n(\x03(" +
     "\x03(\x03(\x03(\x05(\u021B\n(\x03(\x03(\x03(\x05(\u0220\n(\x03)\x03)\x03" +
     ")\x03*\x03*\x03*\x03+\x03+\x03+\x05+\u022B\n+\x03+\x05+\u022E\n+\x03+" +
     "\x03+\x03+\x03+\x05+\u0234\n+\x03+\x03+\x03+\x03+\x03+\x03+\x05+\u023C" +
@@ -9874,7 +9874,7 @@ export class TSQLParser extends Parser {
     "\x84\x02\x86\x02\x88\x02\x8A\x02\x8C\x02\x8E\x02\x90\x02\x92\x02\x94\x02" +
     "\x96\x02\x98\x02\x9A\x02\x9C\x02\x9E\x02\xA0\x02\xA2\x02\xA4\x02\xA6\x02" +
     "\xA8\x02\xAA\x02\xAC\x02\xAE\x02\xB0\x02\xB2\x02\xB4\x02\x02\x14\x04\x02" +
-    "\"\"\'\'\x04\x02\x14\x14OO\x04\x020088\x05\x02\x03\x03\x06\x06\n\n\x06" +
+    "\"\"''\x04\x02\x14\x14OO\x04\x020088\x05\x02\x03\x03\x06\x06\n\n\x06" +
     "\x02\x03\x03\x05\x06\n\nUU\x04\x0288NN\x04\x02\x03\x03\x06\x06\x04\x02" +
     "BByy\x04\x02\t\t\x18\x19\x04\x02!!66\x04\x02LLQQ\x05\x02\f\f77__\x04\x02" +
     "--::\x03\x02pq\x04\x02{{\x91\x91\t\x02\x17\x17**<=KKSSffll\x15\x02\x03" +
@@ -9985,7 +9985,7 @@ export class TSQLParser extends Parser {
     "\u015A\x03\x02\x02\x02\u015A\u015C\x03";
   private static readonly _serializedATNSegment1: string =
     "\x02\x02\x02\u015B\u0159\x03\x02\x02\x02\u015C\u015D\x07\x99\x02\x02\u015D" +
-    "\'\x03\x02\x02\x02\u015E\u015F\x05\x06\x04\x02\u015F\u0160\x07x\x02\x02" +
+    "'\x03\x02\x02\x02\u015E\u015F\x05\x06\x04\x02\u015F\u0160\x07x\x02\x02" +
     "\u0160\u0161\x05\x06\x04\x02\u0161)\x03\x02\x02\x02\u0162\u0167\x05(\x15" +
     "\x02\u0163\u0164\x07y\x02\x02\u0164\u0166\x05(\x15\x02\u0165\u0163\x03" +
     "\x02\x02\x02\u0166\u0169\x03\x02\x02\x02\u0167\u0165\x03\x02\x02\x02\u0167" +
@@ -10030,7 +10030,7 @@ export class TSQLParser extends Parser {
     "\x02\x02\x02\u01B7\u01B9\x05> \x02\u01B8\u01B7\x03\x02\x02\x02\u01B8\u01B9" +
     "\x03\x02\x02\x02\u01B9\u01BB\x03\x02\x02\x02\u01BA\u01BC\x05H%\x02\u01BB" +
     "\u01BA\x03\x02\x02\x02\u01BB\u01BC\x03\x02\x02\x02\u01BC\u01BE\x03\x02" +
-    "\x02\x02\u01BD\u01BF\x05L\'\x02\u01BE\u01BD\x03\x02\x02\x02\u01BE\u01BF" +
+    "\x02\x02\u01BD\u01BF\x05L'\x02\u01BE\u01BD\x03\x02\x02\x02\u01BE\u01BF" +
     "\x03\x02\x02\x02\u01BF\u01C2\x03\x02\x02\x02\u01C0\u01C3\x05N(\x02\u01C1" +
     "\u01C3\x05P)\x02\u01C2\u01C0\x03\x02\x02\x02\u01C2\u01C1\x03\x02\x02\x02" +
     "\u01C2\u01C3\x03\x02\x02\x02\u01C3\u01C5\x03\x02\x02\x02\u01C4\u01C6\x05" +

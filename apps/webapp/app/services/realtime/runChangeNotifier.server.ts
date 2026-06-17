@@ -1,4 +1,4 @@
-import { createRedisClient, RedisClient, RedisWithClusterOptions } from "~/redis.server";
+import { createRedisClient, type RedisClient, type RedisWithClusterOptions } from "~/redis.server";
 import { logger } from "../logger.server";
 
 export const CHANGE_RECORD_VERSION = 1;

@@ -1,9 +1,9 @@
-import { AnyRunShape } from "@trigger.dev/core/v3";
+import { type AnyRunShape } from "@trigger.dev/core/v3";
 import {
-  ListRunResponseItem,
-  RetrieveRunResponse,
-  RetrieveRunTraceResponseBody,
-  RetrieveSpanDetailResponseBody,
+  type ListRunResponseItem,
+  type RetrieveRunResponse,
+  type RetrieveRunTraceResponseBody,
+  type RetrieveSpanDetailResponseBody,
 } from "@trigger.dev/core/v3/schemas";
 import type { CursorPageResponse } from "@trigger.dev/core/v3/zodfetch";
 

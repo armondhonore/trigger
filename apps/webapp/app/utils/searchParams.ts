@@ -1,4 +1,4 @@
-import { z, ZodType } from "zod";
+import { z, type ZodType } from "zod";
 import { fromZodError } from "zod-validation-error";
 
 /**

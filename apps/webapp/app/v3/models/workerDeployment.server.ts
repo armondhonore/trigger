@@ -1,16 +1,16 @@
 import type { Prettify } from "@trigger.dev/core";
 import {
-  BackgroundWorker,
-  PrismaClientOrTransaction,
-  RunEngineVersion,
-  WorkerDeploymentType,
+  type BackgroundWorker,
+  type PrismaClientOrTransaction,
+  type RunEngineVersion,
+  type WorkerDeploymentType,
 } from "@trigger.dev/database";
 import {
   CURRENT_DEPLOYMENT_LABEL,
   CURRENT_UNMANAGED_DEPLOYMENT_LABEL,
 } from "@trigger.dev/core/v3/isomorphic";
-import { Prisma, prisma } from "~/db.server";
-import { AuthenticatedEnvironment } from "~/services/apiAuth.server";
+import { type Prisma, prisma } from "~/db.server";
+import { type AuthenticatedEnvironment } from "~/services/apiAuth.server";
 
 export type CurrentWorkerDeployment = Prettify<
   NonNullable<Awaited<ReturnType<typeof findCurrentWorkerDeployment>>>

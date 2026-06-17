@@ -5,11 +5,11 @@ import {
   sanitizeError,
   shouldLookupRetrySettings,
   shouldRetryError,
-  TaskRunError,
+  type TaskRunError,
   taskRunErrorEnhancer,
-  TaskRunExecutionRetry,
+  type TaskRunExecutionRetry,
 } from "@trigger.dev/core/v3";
-import { PrismaClientOrTransaction } from "@trigger.dev/database";
+import { type PrismaClientOrTransaction } from "@trigger.dev/database";
 import { MAX_TASK_RUN_ATTEMPTS } from "./consts.js";
 import { ServiceValidationError } from "./errors.js";
 

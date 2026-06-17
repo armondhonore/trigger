@@ -1,21 +1,21 @@
 import { z } from "zod";
 import { fromZodError, ValidationError } from "zod-validation-error";
-import { RetryOptions } from "../schemas/index.js";
+import { type RetryOptions } from "../schemas/index.js";
 import { calculateNextRetryDelay } from "../utils/retries.js";
 import { ApiConnectionError, ApiError, ApiSchemaValidationError } from "./errors.js";
 
-import { Attributes, context, propagation, Span, trace } from "@opentelemetry/api";
+import { type Attributes, context, propagation, type Span, trace } from "@opentelemetry/api";
 import { suppressTracing } from "@opentelemetry/core";
 import { SemanticInternalAttributes } from "../semanticInternalAttributes.js";
 import type { TriggerTracer } from "../tracer.js";
 import { accessoryAttributes } from "../utils/styleAttributes.js";
 import {
   CursorPage,
-  CursorPageParams,
-  CursorPageResponse,
+  type CursorPageParams,
+  type CursorPageResponse,
   OffsetLimitPage,
-  OffsetLimitPageParams,
-  OffsetLimitPageResponse,
+  type OffsetLimitPageParams,
+  type OffsetLimitPageResponse,
 } from "./pagination.js";
 import { EventSource, type ErrorEvent } from "eventsource";
 import { randomUUID } from "../utils/crypto.js";
@@ -603,14 +603,14 @@ async function waitForRetry(
 }
 
 // https://stackoverflow.com/a/34491287
-export function isEmptyObj(obj: Object | null | undefined): boolean {
+export function isEmptyObj(obj: object | null | undefined): boolean {
   if (!obj) return true;
   for (const _k in obj) return false;
   return true;
 }
 
 // https://eslint.org/docs/latest/rules/no-prototype-builtins
-export function hasOwn(obj: Object, key: string): boolean {
+export function hasOwn(obj: object, key: string): boolean {
   return Object.prototype.hasOwnProperty.call(obj, key);
 }
 

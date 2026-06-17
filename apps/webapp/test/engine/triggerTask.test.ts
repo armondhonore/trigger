@@ -18,25 +18,25 @@ import { RunEngine } from "@internal/run-engine";
 import { setupAuthenticatedEnvironment, setupBackgroundWorker } from "@internal/run-engine/tests";
 import { assertNonNullable, containerTest } from "@internal/testcontainers";
 import { trace } from "@opentelemetry/api";
-import { IOPacket } from "@trigger.dev/core/v3";
-import { TaskRun } from "@trigger.dev/database";
+import { type IOPacket } from "@trigger.dev/core/v3";
+import { type TaskRun } from "@trigger.dev/database";
 import { Redis } from "ioredis";
 import { IdempotencyKeyConcern } from "~/runEngine/concerns/idempotencyKeys.server";
 import { DefaultQueueManager } from "~/runEngine/concerns/queues.server";
 import { NoopTaskMetadataCache, RedisTaskMetadataCache } from "~/services/taskMetadataCache.server";
 import {
-  EntitlementValidationParams,
-  MaxAttemptsValidationParams,
-  ParentRunValidationParams,
-  PayloadProcessor,
-  TagValidationParams,
-  TracedEventSpan,
-  TraceEventConcern,
-  TriggerRacepoints,
-  TriggerRacepointSystem,
-  TriggerTaskRequest,
-  TriggerTaskValidator,
-  ValidationResult,
+  type EntitlementValidationParams,
+  type MaxAttemptsValidationParams,
+  type ParentRunValidationParams,
+  type PayloadProcessor,
+  type TagValidationParams,
+  type TracedEventSpan,
+  type TraceEventConcern,
+  type TriggerRacepoints,
+  type TriggerRacepointSystem,
+  type TriggerTaskRequest,
+  type TriggerTaskValidator,
+  type ValidationResult,
 } from "~/runEngine/types";
 import { RunEngineTriggerTaskService } from "../../app/runEngine/services/triggerTask.server";
 import { promiseWithResolvers } from "@trigger.dev/core";

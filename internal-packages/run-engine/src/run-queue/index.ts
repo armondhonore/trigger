@@ -6,42 +6,42 @@ import {
   type Result,
 } from "@internal/redis";
 import {
-  Attributes,
+  type Attributes,
   context,
   getMeter,
-  Meter,
-  ObservableResult,
+  type Meter,
+  type ObservableResult,
   propagation,
   SEMATTRS_MESSAGE_ID,
   SEMATTRS_MESSAGING_OPERATION,
   SEMATTRS_MESSAGING_SYSTEM,
-  Span,
+  type Span,
   SpanKind,
-  SpanOptions,
-  Tracer,
+  type SpanOptions,
+  type Tracer,
   ValueType,
 } from "@internal/tracing";
 import { promiseWithResolvers, tryCatch } from "@trigger.dev/core";
-import { Logger, LogLevel } from "@trigger.dev/core/logger";
+import { Logger, type LogLevel } from "@trigger.dev/core/logger";
 import { calculateNextRetryDelay, flattenAttributes } from "@trigger.dev/core/v3";
 import { type RetryOptions } from "@trigger.dev/core/v3/schemas";
 import { Decimal } from "@trigger.dev/database";
 import { CronSchema, Worker, type WorkerConcurrencyOptions } from "@trigger.dev/redis-worker";
 import { nanoid } from "nanoid";
-import { Readable } from "node:stream";
+import { type Readable } from "node:stream";
 import { setInterval, setTimeout } from "node:timers/promises";
 import { z } from "zod";
 import {
   attributesFromAuthenticatedEnv,
-  MinimalAuthenticatedEnvironment,
+  type MinimalAuthenticatedEnvironment,
 } from "../shared/index.js";
 import {
-  InputPayload,
+  type InputPayload,
   OutputPayload,
-  OutputPayloadV2,
-  RunQueueKeyProducer,
-  RunQueueKeyProducerEnvironment,
-  RunQueueSelectionStrategy,
+  type OutputPayloadV2,
+  type RunQueueKeyProducer,
+  type RunQueueKeyProducerEnvironment,
+  type RunQueueSelectionStrategy,
 } from "./types.js";
 import { WorkerQueueResolver } from "./workerQueueResolver.js";
 

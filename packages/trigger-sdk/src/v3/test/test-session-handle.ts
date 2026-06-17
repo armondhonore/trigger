@@ -9,8 +9,8 @@ import {
   SessionHandle,
   SessionInputChannel,
   SessionOutputChannel,
-  SessionPipeStreamOptions,
-  SessionSubscribeOptions,
+  type SessionPipeStreamOptions,
+  type SessionSubscribeOptions,
 } from "../sessions.js";
 
 /**

@@ -3,12 +3,12 @@ import { ApiError } from "../src/v3/apiClient/errors.js";
 import { ConsoleInterceptor } from "../src/v3/consoleInterceptor.js";
 import {
   lifecycleHooks,
-  RetryOptions,
-  RunFnParams,
-  ServerBackgroundWorker,
-  TaskMetadataWithFunctions,
+  type RetryOptions,
+  type RunFnParams,
+  type ServerBackgroundWorker,
+  type TaskMetadataWithFunctions,
   TaskRunErrorCodes,
-  TaskRunExecution,
+  type TaskRunExecution,
 } from "../src/v3/index.js";
 import { StandardLifecycleHooksManager } from "../src/v3/lifecycleHooks/manager.js";
 import { TracingSDK } from "../src/v3/otel/tracingSDK.js";

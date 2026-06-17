@@ -1,7 +1,7 @@
 import { Ratelimit } from "@upstash/ratelimit";
-import { RedisOptions } from "ioredis";
+import { type RedisOptions } from "ioredis";
 import { env } from "~/env.server";
-import { createRedisClient, RedisWithClusterOptions } from "~/redis.server";
+import { createRedisClient, type RedisWithClusterOptions } from "~/redis.server";
 import { logger } from "./logger.server";
 
 type Options = {

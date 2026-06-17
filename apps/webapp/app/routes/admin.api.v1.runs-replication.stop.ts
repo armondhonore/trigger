@@ -1,4 +1,4 @@
-import { ActionFunctionArgs, json } from "@remix-run/server-runtime";
+import { type ActionFunctionArgs, json } from "@remix-run/server-runtime";
 import { requireAdminApiRequest } from "~/services/personalAccessToken.server";
 import { getRunsReplicationGlobal } from "~/services/runsReplicationGlobal.server";
 import { runsReplicationInstance } from "~/services/runsReplicationInstance.server";

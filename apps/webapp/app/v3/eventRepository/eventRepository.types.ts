@@ -1,4 +1,4 @@
-import { Attributes, Tracer } from "@opentelemetry/api";
+import { type Attributes, type Tracer } from "@opentelemetry/api";
 import type {
   ExceptionEventProperties,
   SpanEvents,

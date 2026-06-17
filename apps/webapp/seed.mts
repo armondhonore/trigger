@@ -1,7 +1,7 @@
 import { prisma } from "./app/db.server";
 import { createOrganization } from "./app/models/organization.server";
 import { createProject } from "./app/models/project.server";
-import { AuthenticationMethod, Organization, Prisma, User } from "@trigger.dev/database";
+import { AuthenticationMethod, type Organization, type Prisma, type User } from "@trigger.dev/database";
 
 async function seed() {
   console.log("🌱 Starting seed...");

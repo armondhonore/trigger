@@ -1,4 +1,4 @@
-import { ActionFunctionArgs, json } from "@remix-run/server-runtime";
+import { type ActionFunctionArgs, json } from "@remix-run/server-runtime";
 import { requireAdminApiRequest } from "~/services/personalAccessToken.server";
 import { z } from "zod";
 import { env } from "~/env.server";

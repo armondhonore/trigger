@@ -1,10 +1,10 @@
 import { json } from "@remix-run/server-runtime";
-import { CreateBatchRequestBody, CreateBatchResponse, generateJWT } from "@trigger.dev/core/v3";
+import { CreateBatchRequestBody, type CreateBatchResponse, generateJWT } from "@trigger.dev/core/v3";
 import { prisma } from "~/db.server";
 import { env } from "~/env.server";
 import { BatchRateLimitExceededError } from "~/runEngine/concerns/batchLimits.server";
 import { CreateBatchService } from "~/runEngine/services/createBatch.server";
-import { AuthenticatedEnvironment, getOneTimeUseToken } from "~/services/apiAuth.server";
+import { type AuthenticatedEnvironment, getOneTimeUseToken } from "~/services/apiAuth.server";
 import { logger } from "~/services/logger.server";
 import { createActionApiRoute } from "~/services/routeBuilders/apiBuilder.server";
 import {

@@ -1,7 +1,7 @@
-import { WorkerManifest, generateFriendlyId } from "@trigger.dev/core/v3";
+import { type WorkerManifest, generateFriendlyId } from "@trigger.dev/core/v3";
 import { TaskRunProcess } from "../../executions/taskRunProcess.js";
-import { RunnerEnv } from "./env.js";
-import { RunLogger, SendDebugLogOptions } from "./logger.js";
+import { type RunnerEnv } from "./env.js";
+import { type RunLogger, type SendDebugLogOptions } from "./logger.js";
 
 export interface TaskRunProcessProviderOptions {
   workerManifest: WorkerManifest;

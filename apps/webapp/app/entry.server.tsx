@@ -14,7 +14,7 @@ import { bootstrap } from "./bootstrap";
 import { LocaleContextProvider } from "./components/primitives/LocaleProvider";
 import {
   OperatingSystemContextProvider,
-  OperatingSystemPlatform,
+  type OperatingSystemPlatform,
 } from "./components/primitives/OperatingSystemProvider";
 import { Prisma } from "./db.server";
 import { env } from "./env.server";

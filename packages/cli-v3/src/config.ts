@@ -1,14 +1,14 @@
 import {
-  BuildRuntime,
-  CompatibilityFlag,
-  CompatibilityFlagFeatures,
-  ResolveEnvironmentVariablesFunction,
-  TriggerConfig,
+  type BuildRuntime,
+  type CompatibilityFlag,
+  type CompatibilityFlagFeatures,
+  type ResolveEnvironmentVariablesFunction,
+  type TriggerConfig,
 } from "@trigger.dev/core/v3";
-import { DEFAULT_RUNTIME, ResolvedConfig } from "@trigger.dev/core/v3/build";
+import { DEFAULT_RUNTIME, type ResolvedConfig } from "@trigger.dev/core/v3/build";
 import * as c12 from "c12";
 import { defu } from "defu";
-import * as esbuild from "esbuild";
+import type * as esbuild from "esbuild";
 import { readdir } from "node:fs/promises";
 import { basename, dirname, isAbsolute, join, relative } from "node:path";
 import { findWorkspaceDir, resolveLockfile, resolvePackageJSON, resolveTSConfig } from "pkg-types";

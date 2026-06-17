@@ -1,5 +1,5 @@
 import { render } from "@react-email/render";
-import { EmailError, MailMessage, MailTransport, PlainTextMailMessage } from "./index";
+import { EmailError, type MailMessage, type MailTransport, type PlainTextMailMessage } from "./index";
 import nodemailer from "nodemailer";
 import { SESv2Client, SendEmailCommand } from "@aws-sdk/client-sesv2";
 

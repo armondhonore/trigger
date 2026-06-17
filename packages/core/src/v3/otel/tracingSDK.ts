@@ -2,7 +2,7 @@ import {
   DiagConsoleLogger,
   DiagLogLevel,
   TraceFlags,
-  TracerProvider,
+  type TracerProvider,
   diag,
   metrics,
 } from "@opentelemetry/api";
@@ -16,15 +16,15 @@ import { registerInstrumentations, type Instrumentation } from "@opentelemetry/i
 import {
   detectResources,
   processDetector,
-  Resource,
+  type Resource,
   resourceFromAttributes,
 } from "@opentelemetry/resources";
 import {
   BatchLogRecordProcessor,
-  LogRecordExporter,
-  LogRecordProcessor,
+  type LogRecordExporter,
+  type LogRecordProcessor,
   LoggerProvider,
-  ReadableLogRecord,
+  type ReadableLogRecord,
   SimpleLogRecordProcessor,
 } from "@opentelemetry/sdk-logs";
 import {
@@ -34,13 +34,13 @@ import {
   type MetricReader,
   type PushMetricExporter,
 } from "@opentelemetry/sdk-metrics";
-import { RandomIdGenerator, SpanProcessor } from "@opentelemetry/sdk-trace-base";
+import { RandomIdGenerator, type SpanProcessor } from "@opentelemetry/sdk-trace-base";
 import {
   BatchSpanProcessor,
   NodeTracerProvider,
-  ReadableSpan,
+  type ReadableSpan,
   SimpleSpanProcessor,
-  SpanExporter,
+  type SpanExporter,
 } from "@opentelemetry/sdk-trace-node";
 import { VERSION } from "../../version.js";
 import {

@@ -4,7 +4,7 @@ import {
   MeterProvider,
   PeriodicExportingMetricReader,
 } from "@opentelemetry/sdk-metrics";
-import { Prisma, PrismaClient } from "@trigger.dev/database";
+import { Prisma, type PrismaClient } from "@trigger.dev/database";
 
 /**
  * Copies a run's TaskRunExecutionSnapshot rows from the primary database into the

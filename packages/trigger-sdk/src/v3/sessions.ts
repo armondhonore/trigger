@@ -18,7 +18,7 @@ import type {
   WriterStreamOptions,
 } from "@trigger.dev/core/v3";
 import {
-  CursorPagePromise,
+  type CursorPagePromise,
   InputStreamOncePromise,
   ManualWaitpointPromise,
   SemanticInternalAttributes,

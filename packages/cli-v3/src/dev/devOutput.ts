@@ -1,13 +1,13 @@
 import { formatDurationMilliseconds } from "@trigger.dev/core/v3";
-import { ResolvedConfig } from "@trigger.dev/core/v3/build";
+import { type ResolvedConfig } from "@trigger.dev/core/v3/build";
 import {
   createTaskMetadataFailedErrorStack,
   DuplicateTaskIdsError,
   TaskIndexingImportError,
   TaskMetadataParseError,
 } from "@trigger.dev/core/v3/errors";
-import { TaskRunError, TaskRunErrorCodes } from "@trigger.dev/core/v3/schemas";
-import { DevCommandOptions } from "../commands/dev.js";
+import { type TaskRunError, TaskRunErrorCodes } from "@trigger.dev/core/v3/schemas";
+import { type DevCommandOptions } from "../commands/dev.js";
 import {
   aiHelpLink,
   chalkError,
@@ -23,9 +23,9 @@ import {
   prettyError,
   prettyPrintDate,
 } from "../utilities/cliOutput.js";
-import { eventBus, EventBusEventArgs } from "../utilities/eventBus.js";
+import { eventBus, type EventBusEventArgs } from "../utilities/eventBus.js";
 import { logger } from "../utilities/logger.js";
-import { Socket } from "socket.io-client";
+import { type Socket } from "socket.io-client";
 import { BundleError } from "../build/bundle.js";
 import { analyzeWorker } from "../utilities/analyze.js";
 

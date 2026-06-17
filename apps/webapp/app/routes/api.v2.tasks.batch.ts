@@ -1,13 +1,13 @@
 import { json } from "@remix-run/server-runtime";
 import {
   BatchTriggerTaskV3RequestBody,
-  BatchTriggerTaskV3Response,
+  type BatchTriggerTaskV3Response,
   generateJWT,
 } from "@trigger.dev/core/v3";
 import { prisma } from "~/db.server";
 import { env } from "~/env.server";
 import { RunEngineBatchTriggerService } from "~/runEngine/services/batchTrigger.server";
-import { AuthenticatedEnvironment, getOneTimeUseToken } from "~/services/apiAuth.server";
+import { type AuthenticatedEnvironment, getOneTimeUseToken } from "~/services/apiAuth.server";
 import { logger } from "~/services/logger.server";
 import { createActionApiRoute, everyResource } from "~/services/routeBuilders/apiBuilder.server";
 import {

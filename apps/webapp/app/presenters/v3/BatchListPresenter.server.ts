@@ -93,7 +93,7 @@ export class BatchListPresenter extends BasePresenter {
         createdAt: Date;
         updatedAt: Date;
         completedAt: Date | null;
-        runCount: BigInt;
+        runCount: bigint;
         batchVersion: string;
       }[]
     >`

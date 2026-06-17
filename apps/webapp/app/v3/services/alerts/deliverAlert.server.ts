@@ -12,7 +12,7 @@ import {
   type DeploymentSuccessWebhook,
   isOOMRunError,
   type RunFailedWebhook,
-  RunStatus,
+  type RunStatus,
   TaskRunError,
 } from "@trigger.dev/core/v3";
 import { type ProjectAlertChannelType, type ProjectAlertType } from "@trigger.dev/database";

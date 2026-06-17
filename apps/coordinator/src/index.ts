@@ -7,7 +7,7 @@ import {
   PlatformToCoordinatorMessages,
   ProdWorkerSocketData,
   ProdWorkerToCoordinatorMessages,
-  WaitReason,
+  type WaitReason,
 } from "@trigger.dev/core/v3";
 import { ZodNamespace } from "@trigger.dev/core/v3/zodNamespace";
 import { ZodSocketConnection } from "@trigger.dev/core/v3/zodSocket";

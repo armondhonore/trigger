@@ -1,18 +1,18 @@
 import { z } from "zod";
 import {
-  WorkloadHeartbeatRequestBody,
+  type WorkloadHeartbeatRequestBody,
   WorkloadHeartbeatResponseBody,
-  WorkloadRunAttemptCompleteRequestBody,
+  type WorkloadRunAttemptCompleteRequestBody,
   WorkloadRunAttemptCompleteResponseBody,
   WorkloadRunAttemptStartResponseBody,
   WorkloadDequeueFromVersionResponseBody,
-  WorkloadRunAttemptStartRequestBody,
+  type WorkloadRunAttemptStartRequestBody,
   WorkloadSuspendRunResponseBody,
   WorkloadContinueRunExecutionResponseBody,
-  WorkloadDebugLogRequestBody,
+  type WorkloadDebugLogRequestBody,
   WorkloadRunSnapshotsSinceResponseBody,
 } from "./schemas.js";
-import { WorkloadClientCommonOptions } from "./types.js";
+import { type WorkloadClientCommonOptions } from "./types.js";
 import { getDefaultWorkloadHeaders } from "./util.js";
 import { wrapZodFetch } from "../../zodfetch.js";
 

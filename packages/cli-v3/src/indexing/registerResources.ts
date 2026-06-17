@@ -1,4 +1,4 @@
-import { BuildManifest, ImportTaskFileErrors, resourceCatalog } from "@trigger.dev/core/v3";
+import { type BuildManifest, type ImportTaskFileErrors, resourceCatalog } from "@trigger.dev/core/v3";
 import { normalizeImportPath } from "../utilities/normalizeImportPath.js";
 
 export async function registerResources(

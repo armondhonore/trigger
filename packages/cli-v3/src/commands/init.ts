@@ -1,14 +1,14 @@
 import { intro, isCancel, log, multiselect, outro, select, text } from "@clack/prompts";
 import { context, trace } from "@opentelemetry/api";
 import {
-  GetProjectResponseBody,
-  LogLevel,
+  type GetProjectResponseBody,
+  type LogLevel,
   flattenAttributes,
   tryCatch,
 } from "@trigger.dev/core/v3";
 import { recordSpanException } from "@trigger.dev/core/v3/workers";
 import chalk from "chalk";
-import { Command, Option as CommandOption } from "commander";
+import { type Command, Option as CommandOption } from "commander";
 import { applyEdits, findNodeAtLocation, getNodeValue, modify, parseTree } from "jsonc-parser";
 import { writeFile } from "node:fs/promises";
 import { join, relative, resolve } from "node:path";

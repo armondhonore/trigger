@@ -1,17 +1,17 @@
 "use client";
 
 import {
-  AnyTask,
-  ApiClient,
-  InferRunTypes,
-  InferStreamType,
-  RealtimeDefinedStream,
-  RealtimeRun,
-  RealtimeRunSkipColumns,
+  type AnyTask,
+  type ApiClient,
+  type InferRunTypes,
+  type InferStreamType,
+  type RealtimeDefinedStream,
+  type RealtimeRun,
+  type RealtimeRunSkipColumns,
 } from "@trigger.dev/core/v3";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
-import { KeyedMutator, useSWR } from "../utils/trigger-swr.js";
-import { useApiClient, UseApiClientOptions } from "./useApiClient.js";
+import { type KeyedMutator, useSWR } from "../utils/trigger-swr.js";
+import { useApiClient, type UseApiClientOptions } from "./useApiClient.js";
 import { createThrottledQueue } from "../utils/throttle.js";
 
 export type UseRealtimeRunOptions = UseApiClientOptions & {

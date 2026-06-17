@@ -3,8 +3,8 @@ import { describe, expect, vi } from "vitest";
 import { RUN_QUEUE_RESUME_PRIORITY_TIMESTAMP_OFFSET } from "../constants.js";
 import { FairQueueSelectionStrategy } from "../fairQueueSelectionStrategy.js";
 import { RunQueueFullKeyProducer } from "../keyProducer.js";
-import { EnvQueues, RunQueueKeyProducer } from "../types.js";
-import { createRedisClient, RedisOptions } from "@internal/redis";
+import { type EnvQueues, type RunQueueKeyProducer } from "../types.js";
+import { createRedisClient, type RedisOptions } from "@internal/redis";
 
 vi.setConfig({ testTimeout: 60_000 }); // 30 seconds timeout
 

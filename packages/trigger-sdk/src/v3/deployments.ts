@@ -6,7 +6,7 @@ import type {
 } from "@trigger.dev/core/v3";
 import {
   apiClientManager,
-  CursorPagePromise,
+  type CursorPagePromise,
   isRequestOptions,
   mergeRequestOptions,
 } from "@trigger.dev/core/v3";

@@ -2,7 +2,7 @@ import type { ActionFunctionArgs } from "@remix-run/server-runtime";
 import { json } from "@remix-run/server-runtime";
 import {
   GetPersonalAccessTokenRequestSchema,
-  GetPersonalAccessTokenResponse,
+  type GetPersonalAccessTokenResponse,
 } from "@trigger.dev/core/v3";
 import { generateErrorMessage } from "zod-error";
 import { logger } from "~/services/logger.server";

@@ -1,14 +1,14 @@
 import {
   accessoryAttributes,
   apiClientManager,
-  ApiPromise,
-  ApiRequestOptions,
+  type ApiPromise,
+  type ApiRequestOptions,
   flattenAttributes,
-  ListQueueOptions,
+  type ListQueueOptions,
   mergeRequestOptions,
-  OffsetLimitPagePromise,
-  QueueItem,
-  RetrieveQueueParam,
+  type OffsetLimitPagePromise,
+  type QueueItem,
+  type RetrieveQueueParam,
 } from "@trigger.dev/core/v3";
 import { tracer } from "./tracer.js";
 

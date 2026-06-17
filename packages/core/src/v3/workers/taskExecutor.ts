@@ -1,7 +1,7 @@
-import { Context, context, SpanKind } from "@opentelemetry/api";
+import { type Context, context, SpanKind } from "@opentelemetry/api";
 import { promiseWithResolvers } from "../../utils.js";
-import { ApiError, RateLimitError } from "../apiClient/errors.js";
-import { ConsoleInterceptor } from "../consoleInterceptor.js";
+import { type ApiError, type RateLimitError } from "../apiClient/errors.js";
+import { type ConsoleInterceptor } from "../consoleInterceptor.js";
 import {
   isCompleteTaskWithOutput,
   isInternalError,
@@ -22,28 +22,28 @@ import {
   waitUntil,
 } from "../index.js";
 import {
-  AnyOnMiddlewareHookFunction,
-  RegisteredHookFunction,
-  TaskCompleteResult,
-  TaskInitOutput,
-  TaskWait,
+  type AnyOnMiddlewareHookFunction,
+  type RegisteredHookFunction,
+  type TaskCompleteResult,
+  type TaskInitOutput,
+  type TaskWait,
 } from "../lifecycleHooks/types.js";
-import { recordSpanException, TracingSDK } from "../otel/index.js";
+import { recordSpanException, type TracingSDK } from "../otel/index.js";
 import { runTimelineMetrics } from "../run-timeline-metrics-api.js";
 import {
   COLD_VARIANT,
-  RetryOptions,
-  TaskRunContext,
+  type RetryOptions,
+  type TaskRunContext,
   TaskRunErrorCodes,
-  TaskRunExecution,
-  TaskRunExecutionResult,
-  TaskRunExecutionRetry,
+  type TaskRunExecution,
+  type TaskRunExecutionResult,
+  type TaskRunExecutionRetry,
   WARM_VARIANT,
 } from "../schemas/index.js";
 import { SemanticInternalAttributes } from "../semanticInternalAttributes.js";
-import { TriggerTracer } from "../tracer.js";
+import { type TriggerTracer } from "../tracer.js";
 import { tryCatch } from "../tryCatch.js";
-import { HandleErrorModificationOptions, TaskMetadataWithFunctions } from "../types/index.js";
+import { type HandleErrorModificationOptions, type TaskMetadataWithFunctions } from "../types/index.js";
 import {
   conditionallyExportPacket,
   conditionallyImportPacket,

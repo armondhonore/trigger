@@ -1,5 +1,5 @@
-import { Callback, Result } from "ioredis";
-import { createRedisClient, RedisClient, RedisWithClusterOptions } from "~/redis.server";
+import { type Callback, type Result } from "ioredis";
+import { createRedisClient, type RedisClient, type RedisWithClusterOptions } from "~/redis.server";
 import { logger } from "../logger.server";
 
 export type RealtimeConcurrencyLimiterOptions = {

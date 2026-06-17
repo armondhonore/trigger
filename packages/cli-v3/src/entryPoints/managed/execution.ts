@@ -4,25 +4,25 @@ import {
   SuspendedProcessError,
   type TaskRunExecutionMetrics,
   type TaskRunExecutionResult,
-  TaskRunExecutionRetry,
-  TaskRunExecutionStatus,
+  type TaskRunExecutionRetry,
+  type TaskRunExecutionStatus,
   type TaskRunFailedExecutionResult,
-  WorkerManifest,
+  type WorkerManifest,
 } from "@trigger.dev/core/v3";
 import { type WorkloadRunAttemptStartResponseBody } from "@trigger.dev/core/v3/workers";
 import { TaskRunProcess } from "../../executions/taskRunProcess.js";
-import { RunLogger, SendDebugLogOptions } from "./logger.js";
-import { RunnerEnv } from "./env.js";
-import { WorkloadHttpClient } from "@trigger.dev/core/v3/workers";
+import { type RunLogger, type SendDebugLogOptions } from "./logger.js";
+import { type RunnerEnv } from "./env.js";
+import { type WorkloadHttpClient } from "@trigger.dev/core/v3/workers";
 import { setTimeout as sleep } from "timers/promises";
 import { RunExecutionSnapshotPoller } from "./poller.js";
 import { assertExhaustive, tryCatch } from "@trigger.dev/core/utils";
-import { Metadata, MetadataClient } from "./overrides.js";
+import { type Metadata, MetadataClient } from "./overrides.js";
 import { randomBytes } from "node:crypto";
-import { SnapshotManager, SnapshotState } from "./snapshot.js";
+import { SnapshotManager, type SnapshotState } from "./snapshot.js";
 import type { SupervisorSocket } from "./controller.js";
 import { RunNotifier } from "./notifier.js";
-import { TaskRunProcessProvider } from "./taskRunProcessProvider.js";
+import { type TaskRunProcessProvider } from "./taskRunProcessProvider.js";
 
 class ExecutionAbortError extends Error {
   constructor(message: string) {

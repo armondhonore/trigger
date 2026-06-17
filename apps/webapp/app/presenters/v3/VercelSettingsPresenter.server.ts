@@ -5,15 +5,15 @@ import { logger } from "~/services/logger.server";
 import { OrgIntegrationRepository } from "~/models/orgIntegration.server";
 import {
   VercelIntegrationRepository,
-  VercelCustomEnvironment,
-  VercelEnvironmentVariable,
+  type VercelCustomEnvironment,
+  type VercelEnvironmentVariable,
 } from "~/models/vercelIntegration.server";
 import { type GitHubAppInstallation } from "~/routes/resources.orgs.$organizationSlug.projects.$projectParam.env.$envParam.github";
 import { EnvironmentVariablesRepository } from "~/v3/environmentVariables/environmentVariablesRepository.server";
 import { isReservedForExternalSync } from "~/v3/environmentVariableRules.server";
 import {
   VercelProjectIntegrationDataSchema,
-  VercelProjectIntegrationData,
+  type VercelProjectIntegrationData,
 } from "~/v3/vercel/vercelProjectIntegrationSchema";
 import { BasePresenter } from "./basePresenter.server";
 

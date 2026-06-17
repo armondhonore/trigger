@@ -1,5 +1,5 @@
 import {
-  AsyncIterableStream,
+  type AsyncIterableStream,
   createAsyncIterableStreamFromAsyncIterable,
 } from "../streams/asyncIterableStream.js";
 import type {

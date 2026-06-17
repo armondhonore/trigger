@@ -1,7 +1,7 @@
-import { Attributes } from "@opentelemetry/api";
+import { type Attributes } from "@opentelemetry/api";
 import { RandomIdGenerator } from "@opentelemetry/sdk-trace-base";
 import { parseTraceparent } from "@trigger.dev/core/v3/isomorphic";
-import { ExceptionEventProperties, SpanEvents, TaskRunError } from "@trigger.dev/core/v3/schemas";
+import { type ExceptionEventProperties, type SpanEvents, type TaskRunError } from "@trigger.dev/core/v3/schemas";
 import { unflattenAttributes } from "@trigger.dev/core/v3/utils/flattenAttributes";
 import { createHash } from "node:crypto";
 

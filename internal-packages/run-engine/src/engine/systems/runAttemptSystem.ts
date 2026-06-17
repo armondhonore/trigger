@@ -4,30 +4,30 @@ import {
   DefaultStatefulContext,
   Namespace,
   RedisCacheStore,
-  UnkeyCache,
+  type UnkeyCache,
 } from "@internal/cache";
-import { RedisOptions } from "@internal/redis";
+import { type RedisOptions } from "@internal/redis";
 import { startSpan } from "@internal/tracing";
 import { tryCatch } from "@trigger.dev/core/utils";
 import {
-  CompleteRunAttemptResult,
-  ExecutionResult,
+  type CompleteRunAttemptResult,
+  type ExecutionResult,
   FlushedRunMetadata,
   GitMeta,
-  MachinePreset,
-  MachinePresetName,
-  StartRunAttemptResult,
-  TaskRunContext,
-  TaskRunError,
-  TaskRunExecution,
-  TaskRunExecutionDeployment,
-  TaskRunExecutionOrganization,
-  TaskRunExecutionProject,
-  TaskRunExecutionQueue,
-  TaskRunExecutionResult,
-  TaskRunFailedExecutionResult,
-  TaskRunInternalError,
-  TaskRunSuccessfulExecutionResult,
+  type MachinePreset,
+  type MachinePresetName,
+  type StartRunAttemptResult,
+  type TaskRunContext,
+  type TaskRunError,
+  type TaskRunExecution,
+  type TaskRunExecutionDeployment,
+  type TaskRunExecutionOrganization,
+  type TaskRunExecutionProject,
+  type TaskRunExecutionQueue,
+  type TaskRunExecutionResult,
+  type TaskRunFailedExecutionResult,
+  type TaskRunInternalError,
+  type TaskRunSuccessfulExecutionResult,
 } from "@trigger.dev/core/v3/schemas";
 import {
   extractIdempotencyKeyScope,
@@ -36,9 +36,9 @@ import {
 import { parsePacket } from "@trigger.dev/core/v3/utils/ioSerialization";
 import {
   $transaction,
-  PrismaClientOrTransaction,
-  RuntimeEnvironmentType,
-  TaskRun,
+  type PrismaClientOrTransaction,
+  type RuntimeEnvironmentType,
+  type TaskRun,
 } from "@trigger.dev/database";
 import { MAX_TASK_RUN_ATTEMPTS } from "../consts.js";
 import { runStatusFromError, ServiceValidationError } from "../errors.js";
@@ -51,17 +51,17 @@ import {
   isInitialState,
   isPendingExecuting,
 } from "../statuses.js";
-import { RunEngineOptions } from "../types.js";
-import { BatchSystem } from "./batchSystem.js";
-import { DelayedRunSystem } from "./delayedRunSystem.js";
+import { type RunEngineOptions } from "../types.js";
+import { type BatchSystem } from "./batchSystem.js";
+import { type DelayedRunSystem } from "./delayedRunSystem.js";
 import {
-  EnhancedExecutionSnapshot,
+  type EnhancedExecutionSnapshot,
   executionResultFromSnapshot,
-  ExecutionSnapshotSystem,
+  type ExecutionSnapshotSystem,
   getLatestExecutionSnapshot,
 } from "./executionSnapshotSystem.js";
-import { SystemResources } from "./systems.js";
-import { WaitpointSystem } from "./waitpointSystem.js";
+import { type SystemResources } from "./systems.js";
+import { type WaitpointSystem } from "./waitpointSystem.js";
 import { BatchId, RunId } from "@trigger.dev/core/v3/isomorphic";
 import type { AuthenticatedEnvironment } from "../../shared/index.js";
 

@@ -1,7 +1,7 @@
 export function isValidGitBranchName(branch: string): boolean {
   if (!branch) return false;
 
-  if (/[ \~\^:\?\*\[\\]/.test(branch)) return false;
+  if (/[ ~^:?*[\\]/.test(branch)) return false;
 
   for (let i = 0; i < branch.length; i++) {
     const code = branch.charCodeAt(i);

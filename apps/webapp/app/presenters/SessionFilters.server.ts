@@ -1,6 +1,6 @@
 import {
   getSessionFiltersFromSearchParams,
-  SessionListSearchFilters,
+  type SessionListSearchFilters,
 } from "~/components/sessions/v1/SessionFilters";
 import { type SessionStatus } from "~/services/sessionsRepository/sessionsRepository.server";
 

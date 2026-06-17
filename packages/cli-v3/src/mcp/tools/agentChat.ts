@@ -1,6 +1,6 @@
 import { z } from "zod";
 import {
-  ApiClient,
+  type ApiClient,
   controlSubtype,
   SSEStreamSubscription,
   TRIGGER_CONTROL_SUBTYPE,

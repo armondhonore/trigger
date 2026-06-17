@@ -1,4 +1,4 @@
-import { json, LoaderFunctionArgs } from "@remix-run/server-runtime";
+import { json, type LoaderFunctionArgs } from "@remix-run/server-runtime";
 import { z } from "zod";
 import { $replica, prisma } from "~/db.server";
 import { requireAdminApiRequest } from "~/services/personalAccessToken.server";

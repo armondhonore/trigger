@@ -1,4 +1,4 @@
-import { createRedisClient, Redis, type RedisOptions } from "@internal/redis";
+import { createRedisClient, type Redis, type RedisOptions } from "@internal/redis";
 import { startSpan, type Tracer } from "@internal/tracing";
 import {
   createCache,
@@ -10,10 +10,10 @@ import {
 import { randomUUID } from "crypto";
 import seedrandom from "seedrandom";
 import {
-  EnvDescriptor,
-  EnvQueues,
-  RunQueueKeyProducer,
-  RunQueueSelectionStrategy,
+  type EnvDescriptor,
+  type EnvQueues,
+  type RunQueueKeyProducer,
+  type RunQueueSelectionStrategy,
 } from "./types.js";
 
 export type FairQueueSelectionStrategyBiases = {

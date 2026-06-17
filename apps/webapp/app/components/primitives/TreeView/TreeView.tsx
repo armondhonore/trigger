@@ -1,8 +1,8 @@
-import { VirtualItem, Virtualizer, useVirtualizer } from "@tanstack/react-virtual";
+import { type VirtualItem, type Virtualizer, useVirtualizer } from "@tanstack/react-virtual";
 import { motion } from "framer-motion";
 import {
-  MutableRefObject,
-  RefObject,
+  type MutableRefObject,
+  type RefObject,
   useCallback,
   useEffect,
   useMemo,
@@ -10,7 +10,7 @@ import {
   useRef,
 } from "react";
 import { cn } from "~/utils/cn";
-import { NodeState, NodesState, reducer } from "./reducer";
+import { type NodeState, type NodesState, reducer } from "./reducer";
 import { concreteStateFromInput, selectedIdFromState } from "./utils";
 
 export type TreeViewProps<TData> = {
@@ -255,7 +255,7 @@ export function useTree<TData, TFilterValue>({
       previousNodeCount.current = tree.length;
       dispatch({ type: "UPDATE_TREE", payload: { tree } });
     }
-  }, [previousNodeCount.current, tree.length]);
+  }, [tree.length]);
 
   //update the filter, if it's changed
   const previousFilter = useRef(filter);

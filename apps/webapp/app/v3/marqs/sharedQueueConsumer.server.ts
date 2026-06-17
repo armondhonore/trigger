@@ -1,35 +1,35 @@
 import {
-  Context,
+  type Context,
   ROOT_CONTEXT,
-  Span,
+  type Span,
   SpanKind,
-  SpanOptions,
+  type SpanOptions,
   SpanStatusCode,
   context,
   trace,
 } from "@opentelemetry/api";
 import {
-  AckCallbackResult,
-  MachinePreset,
-  V3ProdTaskRunExecution,
-  V3ProdTaskRunExecutionPayload,
-  TaskRunError,
+  type AckCallbackResult,
+  type MachinePreset,
+  type V3ProdTaskRunExecution,
+  type V3ProdTaskRunExecutionPayload,
+  type TaskRunError,
   TaskRunErrorCodes,
-  TaskRunExecution,
-  TaskRunExecutionLazyAttemptPayload,
-  TaskRunExecutionResult,
-  TaskRunFailedExecutionResult,
-  TaskRunSuccessfulExecutionResult,
+  type TaskRunExecution,
+  type TaskRunExecutionLazyAttemptPayload,
+  type TaskRunExecutionResult,
+  type TaskRunFailedExecutionResult,
+  type TaskRunSuccessfulExecutionResult,
   parsePacket,
-  serverWebsocketMessages,
+  type serverWebsocketMessages,
   SemanticInternalAttributes,
 } from "@trigger.dev/core/v3";
-import { ZodMessageSender } from "@trigger.dev/core/v3/zodMessageHandler";
+import { type ZodMessageSender } from "@trigger.dev/core/v3/zodMessageHandler";
 import {
-  BackgroundWorker,
-  BackgroundWorkerTask,
-  Prisma,
-  TaskRunStatus,
+  type BackgroundWorker,
+  type BackgroundWorkerTask,
+  type Prisma,
+  type TaskRunStatus,
 } from "@trigger.dev/database";
 import { z } from "zod";
 import { $replica, prisma } from "~/db.server";
@@ -41,11 +41,11 @@ import { logger } from "~/services/logger.server";
 import { singleton } from "~/utils/singleton";
 import { marqs } from "~/v3/marqs/index.server";
 import {
-  RuntimeEnvironmentForEnvRepo,
+  type RuntimeEnvironmentForEnvRepo,
   RuntimeEnvironmentForEnvRepoPayload,
   resolveVariablesForEnvironment,
 } from "../environmentVariables/environmentVariablesRepository.server";
-import { EnvironmentVariable } from "../environmentVariables/repository";
+import { type EnvironmentVariable } from "../environmentVariables/repository";
 import { FailedTaskRunService } from "../failedTaskRun.server";
 import { generateFriendlyId } from "../friendlyIdentifiers";
 import { socketIo } from "../handleSocketIo.server";
@@ -66,7 +66,7 @@ import {
 } from "../taskStatus";
 import { tracer } from "../tracer.server";
 import { getMaxDuration } from "../utils/maxDuration";
-import { MessagePayload } from "./types";
+import { type MessagePayload } from "./types";
 
 const WithTraceContext = z.object({
   traceparent: z.string().optional(),

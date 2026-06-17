@@ -1,6 +1,6 @@
 import { confirm, intro, isCancel, log, multiselect, outro } from "@clack/prompts";
 import chalk from "chalk";
-import { Command, Option as CommandOption } from "commander";
+import { type Command, Option as CommandOption } from "commander";
 import { dirname, join } from "node:path";
 import { readPackageJSON, resolvePackageJSON } from "pkg-types";
 import * as semver from "semver";
@@ -9,9 +9,9 @@ import { OutroCommandError, wrapCommandAction } from "../cli/common.js";
 import {
   BundledSkillsLoader,
   loadRulesManifest,
-  ManifestVersion,
-  RulesManifest,
-  RulesManifestVersionOption,
+  type ManifestVersion,
+  type RulesManifest,
+  type RulesManifestVersionOption,
 } from "../rules/manifest.js";
 import { sourceDir } from "../sourceDir.js";
 import { cliLink } from "../utilities/cliOutput.js";

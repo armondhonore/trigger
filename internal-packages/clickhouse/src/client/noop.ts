@@ -1,14 +1,14 @@
-import { Result } from "@trigger.dev/core/v3";
+import { type Result } from "@trigger.dev/core/v3";
 import { InsertError, QueryError } from "./errors.js";
 import {
-  ClickhouseQueryBuilderFastFunction,
-  ClickhouseQueryBuilderFunction,
-  ClickhouseReader,
-  ClickhouseWriter,
-  QueryResultWithStats,
+  type ClickhouseQueryBuilderFastFunction,
+  type ClickhouseQueryBuilderFunction,
+  type ClickhouseReader,
+  type ClickhouseWriter,
+  type QueryResultWithStats,
 } from "./types.js";
-import { z } from "zod";
-import { ClickHouseSettings, InsertResult } from "@clickhouse/client";
+import { type z } from "zod";
+import { type ClickHouseSettings, type InsertResult } from "@clickhouse/client";
 import { ClickhouseQueryBuilder, ClickhouseQueryFastBuilder } from "./queryBuilder.js";
 
 export class NoopClient implements ClickhouseReader, ClickhouseWriter {

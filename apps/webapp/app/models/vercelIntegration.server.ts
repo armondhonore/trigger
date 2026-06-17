@@ -6,7 +6,7 @@ import type {
 } from "@vercel/sdk/models/filterprojectenvsop";
 import type { GetV9ProjectsIdOrNameCustomEnvironmentsEnvironments } from "@vercel/sdk/models/getv9projectsidornamecustomenvironmentsop";
 import type { ResponseBodyProjects } from "@vercel/sdk/models/getprojectsop";
-import { Organization, OrganizationIntegration, SecretReference } from "@trigger.dev/database";
+import { type Organization, type OrganizationIntegration, type SecretReference } from "@trigger.dev/database";
 import { z } from "zod";
 import { ResultAsync, errAsync, okAsync } from "neverthrow";
 import { $transaction, prisma } from "~/db.server";
@@ -15,9 +15,9 @@ import { logger } from "~/services/logger.server";
 import { getSecretStore } from "~/services/secrets/secretStore.server";
 import { generateFriendlyId } from "~/v3/friendlyIdentifiers";
 import {
-  SyncEnvVarsMapping,
+  type SyncEnvVarsMapping,
   shouldSyncEnvVar,
-  TriggerEnvironmentType,
+  type TriggerEnvironmentType,
   envTypeToVercelTarget,
 } from "~/v3/vercel/vercelProjectIntegrationSchema";
 import { EnvironmentVariablesRepository } from "~/v3/environmentVariables/environmentVariablesRepository.server";

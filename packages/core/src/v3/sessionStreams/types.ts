@@ -1,7 +1,7 @@
-import { InputStreamOnceOptions } from "../realtimeStreams/types.js";
+import { type InputStreamOnceOptions } from "../realtimeStreams/types.js";
 import {
   InputStreamOncePromise,
-  InputStreamOnceResult,
+  type InputStreamOnceResult,
   InputStreamTimeoutError,
 } from "../inputStreams/types.js";
 

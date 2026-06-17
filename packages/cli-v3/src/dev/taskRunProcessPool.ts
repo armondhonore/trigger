@@ -1,7 +1,7 @@
 import {
-  MachinePresetResources,
-  ServerBackgroundWorker,
-  WorkerManifest,
+  type MachinePresetResources,
+  type ServerBackgroundWorker,
+  type WorkerManifest,
   generateFriendlyId,
 } from "@trigger.dev/core/v3";
 import { TaskRunProcess } from "../executions/taskRunProcess.js";

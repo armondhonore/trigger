@@ -1,10 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   RunSubscription,
-  SSEStreamPart,
+  type SSEStreamPart,
   SSEStreamSubscription,
-  StreamSubscription,
-  StreamSubscriptionFactory,
+  type StreamSubscription,
+  type StreamSubscriptionFactory,
 } from "../src/v3/apiClient/runStream.js";
 import type { SubscribeRunRawShape } from "../src/v3/schemas/api.js";
 

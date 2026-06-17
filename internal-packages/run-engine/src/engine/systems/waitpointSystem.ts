@@ -2,19 +2,19 @@ import { timeoutError, tryCatch } from "@trigger.dev/core/v3";
 import { WaitpointId } from "@trigger.dev/core/v3/isomorphic";
 import {
   Prisma,
-  PrismaClientOrTransaction,
+  type PrismaClientOrTransaction,
   TaskQueue,
-  TaskRun,
-  TaskRunExecutionSnapshot,
-  TaskRunExecutionStatus,
-  Waitpoint,
+  type TaskRun,
+  type TaskRunExecutionSnapshot,
+  type TaskRunExecutionStatus,
+  type Waitpoint,
 } from "@trigger.dev/database";
 import { assertNever } from "assert-never";
 import { nanoid } from "nanoid";
 import { sendNotificationToWorker } from "../eventBus.js";
-import { EnqueueSystem } from "./enqueueSystem.js";
-import { ExecutionSnapshotSystem, getLatestExecutionSnapshot } from "./executionSnapshotSystem.js";
-import { SystemResources } from "./systems.js";
+import { type EnqueueSystem } from "./enqueueSystem.js";
+import { type ExecutionSnapshotSystem, getLatestExecutionSnapshot } from "./executionSnapshotSystem.js";
+import { type SystemResources } from "./systems.js";
 import { isFinalRunStatus } from "../statuses.js";
 
 export type WaitpointSystemOptions = {
@@ -450,7 +450,7 @@ export class WaitpointSystem {
       // isolation, each statement gets its own snapshot. The CTE's snapshot is taken when
       // it starts, so if a concurrent completeWaitpoint commits during the CTE, the CTE
       // won't see it. This fresh query gets a new snapshot that reflects the latest commits.
-      const pendingCheck = await prisma.$queryRaw<{ pending_count: BigInt }[]>`
+      const pendingCheck = await prisma.$queryRaw<{ pending_count: bigint }[]>`
         SELECT COUNT(*) as pending_count
         FROM "Waitpoint"
         WHERE id IN (${Prisma.join($waitpoints)})

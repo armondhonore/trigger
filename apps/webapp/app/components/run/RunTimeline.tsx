@@ -5,13 +5,13 @@ import {
   millisecondsToNanoseconds,
   nanosecondsToMilliseconds,
 } from "@trigger.dev/core/v3/utils/durations";
-import { Fragment, ReactNode, useState } from "react";
+import { Fragment, type ReactNode, useState } from "react";
 import { cn } from "~/utils/cn";
 import { DateTime, DateTimeAccurate } from "../primitives/DateTime";
 import { LiveTimer } from "../runs/v3/LiveTimer";
 import tileBgPath from "~/assets/images/error-banner-tile@2x.png";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../primitives/Tooltip";
-import { getHelpTextForEvent, TimelineSpanEvent } from "~/utils/timelineSpanEvents";
+import { getHelpTextForEvent, type TimelineSpanEvent } from "~/utils/timelineSpanEvents";
 
 // Types for the RunTimeline component
 export type TimelineEventState = "complete" | "error" | "inprogress" | "delayed";

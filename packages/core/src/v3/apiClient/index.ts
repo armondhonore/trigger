@@ -3,67 +3,67 @@ import { z } from "zod";
 import { VERSION } from "../../version.js";
 import { generateJWT } from "../jwt.js";
 import {
-  AddTagsRequestBody,
-  ApiDeploymentListOptions,
+  type AddTagsRequestBody,
+  type ApiDeploymentListOptions,
   ApiDeploymentListResponseItem,
   ApiDeploymentListSearchParams,
   RetrieveCurrentDeploymentResponseBody,
   AppendToStreamResponseBody,
-  BatchItemNDJSON,
+  type BatchItemNDJSON,
   BatchTaskRunExecutionResult,
-  BatchTriggerTaskV3RequestBody,
+  type BatchTriggerTaskV3RequestBody,
   BatchTriggerTaskV3Response,
   CanceledRunResponse,
-  CloseSessionRequestBody,
-  CompleteWaitpointTokenRequestBody,
+  type CloseSessionRequestBody,
+  type CompleteWaitpointTokenRequestBody,
   CompleteWaitpointTokenResponseBody,
   CreatedSessionResponseBody,
-  CreateSessionRequestBody,
-  EndAndContinueSessionRequestBody,
+  type CreateSessionRequestBody,
+  type EndAndContinueSessionRequestBody,
   EndAndContinueSessionResponseBody,
-  ListSessionsOptions,
+  type ListSessionsOptions,
   ListSessionsResponseBody,
   ListedSessionItem,
   RetrieveSessionResponseBody,
-  UpdateSessionRequestBody,
-  CreateBatchRequestBody,
+  type UpdateSessionRequestBody,
+  type CreateBatchRequestBody,
   CreateBatchResponse,
-  CreateEnvironmentVariableRequestBody,
-  CreateInputStreamWaitpointRequestBody,
+  type CreateEnvironmentVariableRequestBody,
+  type CreateInputStreamWaitpointRequestBody,
   CreateInputStreamWaitpointResponseBody,
-  CreateSessionStreamWaitpointRequestBody,
+  type CreateSessionStreamWaitpointRequestBody,
   CreateSessionStreamWaitpointResponseBody,
-  CreateScheduleOptions,
+  type CreateScheduleOptions,
   CreateStreamResponseBody,
   CreateUploadPayloadUrlResponseBody,
-  CreateWaitpointTokenRequestBody,
+  type CreateWaitpointTokenRequestBody,
   CreateWaitpointTokenResponseBody,
   DeletedScheduleObject,
   EnvironmentVariableResponseBody,
   EnvironmentVariableWithSecret,
-  ListQueueOptions,
+  type ListQueueOptions,
   ListRunResponseItem,
-  ListScheduleOptions,
+  type ListScheduleOptions,
   QueueItem,
-  QueueTypeName,
+  type QueueTypeName,
   QueryExecuteRequestBody,
   QueryExecuteResponseBody,
   QueryExecuteCSVResponseBody,
   QuerySchemaResponseBody,
   ListDashboardsResponseBody,
   ReplayRunResponse,
-  RescheduleRunRequestBody,
+  type RescheduleRunRequestBody,
   ResetIdempotencyKeyResponse,
   RetrieveBatchV2Response,
-  RetrieveQueueParam,
-  ResolvePromptRequestBody,
+  type RetrieveQueueParam,
+  type ResolvePromptRequestBody,
   ResolvePromptResponseBody,
   ListPromptsResponseBody,
   ListPromptVersionsResponseBody,
-  PromotePromptVersionRequestBody,
-  CreatePromptOverrideRequestBody,
-  UpdatePromptOverrideRequestBody,
-  ReactivatePromptOverrideRequestBody,
+  type PromotePromptVersionRequestBody,
+  type CreatePromptOverrideRequestBody,
+  type UpdatePromptOverrideRequestBody,
+  type ReactivatePromptOverrideRequestBody,
   PromptOkResponseBody,
   PromptOverrideCreatedResponseBody,
   RetrieveRunResponse,
@@ -74,28 +74,28 @@ import {
   StreamBatchItemsResponse,
   TaskRunExecutionResult,
   ReadSessionStreamRecordsResponseBody,
-  TriggerTaskRequestBody,
+  type TriggerTaskRequestBody,
   TriggerTaskResponse,
-  UpdateEnvironmentVariableRequestBody,
-  UpdateMetadataRequestBody,
+  type UpdateEnvironmentVariableRequestBody,
+  type UpdateMetadataRequestBody,
   UpdateMetadataResponseBody,
-  UpdateScheduleOptions,
-  WaitForDurationRequestBody,
+  type UpdateScheduleOptions,
+  type WaitForDurationRequestBody,
   WaitForDurationResponseBody,
   WaitForWaitpointTokenResponseBody,
   WaitpointRetrieveTokenResponse,
   WaitpointTokenItem,
 } from "../schemas/index.js";
-import { AsyncIterableStream } from "../streams/asyncIterableStream.js";
+import { type AsyncIterableStream } from "../streams/asyncIterableStream.js";
 import { taskContext } from "../task-context-api.js";
-import { AnyRunTypes, TriggerJwtOptions } from "../types/tasks.js";
-import { Prettify } from "../types/utils.js";
+import { type AnyRunTypes, type TriggerJwtOptions } from "../types/tasks.js";
+import { type Prettify } from "../types/utils.js";
 import {
-  AnyZodFetchOptions,
-  ApiPromise,
-  ApiRequestOptions,
-  CursorPagePromise,
-  ZodFetchOptions,
+  type AnyZodFetchOptions,
+  type ApiPromise,
+  type ApiRequestOptions,
+  type CursorPagePromise,
+  type ZodFetchOptions,
   isRequestOptions,
   zodfetch,
   zodfetchCursorPage,
@@ -103,33 +103,33 @@ import {
 } from "./core.js";
 import { ApiConnectionError, ApiError, BatchNotSealedError } from "./errors.js";
 import { calculateNextRetryDelay } from "../utils/retries.js";
-import { RetryOptions } from "../schemas/index.js";
+import { type RetryOptions } from "../schemas/index.js";
 import {
-  AnyRealtimeRun,
-  AnyRunShape,
-  RealtimeRun,
-  RunShape,
-  RunStreamCallback,
-  RunSubscription,
+  type AnyRealtimeRun,
+  type AnyRunShape,
+  type RealtimeRun,
+  type RunShape,
+  type RunStreamCallback,
+  type RunSubscription,
   SSEStreamSubscriptionFactory,
   SSEStreamSubscription,
-  TaskRunShape,
+  type TaskRunShape,
   runShapeStream,
-  RealtimeRunSkipColumns,
+  type RealtimeRunSkipColumns,
   type SSEStreamPart,
 } from "./runStream.js";
 import { controlSubtype, type ControlEvent } from "../sessionStreams/wireProtocol.js";
 import {
-  CreateEnvironmentVariableParams,
-  ImportEnvironmentVariablesParams,
-  ListProjectRunsQueryParams,
-  ListRunsQueryParams,
-  ListWaitpointTokensQueryParams,
-  SubscribeToRunsQueryParams,
-  UpdateEnvironmentVariableParams,
+  type CreateEnvironmentVariableParams,
+  type ImportEnvironmentVariablesParams,
+  type ListProjectRunsQueryParams,
+  type ListRunsQueryParams,
+  type ListWaitpointTokensQueryParams,
+  type SubscribeToRunsQueryParams,
+  type UpdateEnvironmentVariableParams,
 } from "./types.js";
 import { API_VERSION, API_VERSION_HEADER_NAME } from "./version.js";
-import { ApiClientConfiguration } from "../apiClientManager-api.js";
+import { type ApiClientConfiguration } from "../apiClientManager-api.js";
 import { getEnvVar } from "../utils/getEnv.js";
 
 export type CreateWaitpointTokenResponse = Prettify<
@@ -492,9 +492,9 @@ export class ApiClient {
         await safeStreamCancel(forRetry);
 
         const errText = await response.text().catch((e) => (e as Error).message);
-        let errJSON: Object | undefined;
+        let errJSON: object | undefined;
         try {
-          errJSON = JSON.parse(errText) as Object;
+          errJSON = JSON.parse(errText) as object;
         } catch {
           // ignore
         }

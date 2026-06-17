@@ -1,15 +1,15 @@
 import {
-  PromptManifest,
-  QueueManifest,
-  SkillManifest,
-  SkillMetadata,
-  TaskManifest,
-  WorkerManifest,
+  type PromptManifest,
+  type QueueManifest,
+  type SkillManifest,
+  type SkillMetadata,
+  type TaskManifest,
+  type WorkerManifest,
 } from "../schemas/index.js";
 import {
-  PromptMetadataWithFunctions,
-  TaskMetadataWithFunctions,
-  TaskSchema,
+  type PromptMetadataWithFunctions,
+  type TaskMetadataWithFunctions,
+  type TaskSchema,
 } from "../types/index.js";
 
 export interface ResourceCatalog {

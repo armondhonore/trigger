@@ -1,10 +1,10 @@
 import {
-  ApiPromise,
-  ApiRequestOptions,
-  DeletedScheduleObject,
-  InitOutput,
-  OffsetLimitPagePromise,
-  ScheduleObject,
+  type ApiPromise,
+  type ApiRequestOptions,
+  type DeletedScheduleObject,
+  type InitOutput,
+  type OffsetLimitPagePromise,
+  type ScheduleObject,
   TimezonesResult,
   accessoryAttributes,
   apiClientManager,
@@ -12,8 +12,8 @@ import {
   resourceCatalog,
 } from "@trigger.dev/core/v3";
 import { zodfetch } from "@trigger.dev/core/v3/zodfetch";
-import { Task, TaskOptions, createTask } from "../shared.js";
-import * as SchedulesAPI from "./api.js";
+import { type Task, type TaskOptions, createTask } from "../shared.js";
+import type * as SchedulesAPI from "./api.js";
 import { tracer } from "../tracer.js";
 
 export type ScheduleOptions<

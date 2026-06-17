@@ -11,11 +11,11 @@ import { VercelIntegrationRepository } from "~/models/vercelIntegration.server";
 import { findCurrentWorkerDeployment } from "~/v3/models/workerDeployment.server";
 import {
   VercelProjectIntegrationDataSchema,
-  VercelProjectIntegrationData,
-  VercelIntegrationConfig,
-  SyncEnvVarsMapping,
-  TriggerEnvironmentType,
-  EnvSlug,
+  type VercelProjectIntegrationData,
+  type VercelIntegrationConfig,
+  type SyncEnvVarsMapping,
+  type TriggerEnvironmentType,
+  type EnvSlug,
   envTypeToSlug,
   createDefaultVercelIntegrationData,
 } from "~/v3/vercel/vercelProjectIntegrationSchema";

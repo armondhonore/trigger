@@ -1,5 +1,5 @@
-import { InputStreamManager, InputStreamOncePromise } from "./types.js";
-import { InputStreamOnceOptions } from "../realtimeStreams/types.js";
+import { type InputStreamManager, InputStreamOncePromise } from "./types.js";
+import { type InputStreamOnceOptions } from "../realtimeStreams/types.js";
 
 export class NoopInputStreamManager implements InputStreamManager {
   setRunId(_runId: string, _streamsVersion?: string): void {}

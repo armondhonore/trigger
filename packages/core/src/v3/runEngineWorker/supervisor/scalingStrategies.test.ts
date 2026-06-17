@@ -3,7 +3,7 @@ import {
   NoneScalingStrategy,
   SmoothScalingStrategy,
   AggressiveScalingStrategy,
-  ScalingStrategyOptions,
+  type ScalingStrategyOptions,
 } from "./scalingStrategies.js";
 import { QueueMetricsProcessor } from "./queueMetricsProcessor.js";
 

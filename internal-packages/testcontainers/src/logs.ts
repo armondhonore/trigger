@@ -1,7 +1,7 @@
 import { env, isCI } from "std-env";
-import { TestContext } from "vitest";
-import { DockerDiagnostics, getDockerDiagnostics } from "./docker";
-import { StartedTestContainer } from "testcontainers";
+import { type TestContext } from "vitest";
+import { type DockerDiagnostics, getDockerDiagnostics } from "./docker";
+import { type StartedTestContainer } from "testcontainers";
 
 let setupOrder = 0;
 

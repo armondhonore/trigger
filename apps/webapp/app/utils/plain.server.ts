@@ -1,4 +1,4 @@
-import { PlainClient, uiComponent } from "@team-plain/typescript-sdk";
+import { PlainClient, type uiComponent } from "@team-plain/typescript-sdk";
 import { env } from "~/env.server";
 
 type Input = {

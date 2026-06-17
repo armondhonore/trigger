@@ -1,10 +1,10 @@
 const API_NAME = "runtime";
 
 import {
-  BatchTaskRunExecutionResult,
-  TaskRunContext,
-  TaskRunExecutionResult,
-  WaitpointTokenResult,
+  type BatchTaskRunExecutionResult,
+  type TaskRunContext,
+  type TaskRunExecutionResult,
+  type WaitpointTokenResult,
 } from "../schemas/index.js";
 import { getGlobal, registerGlobal, unregisterGlobal } from "../utils/globals.js";
 import { type RuntimeManager } from "./manager.js";

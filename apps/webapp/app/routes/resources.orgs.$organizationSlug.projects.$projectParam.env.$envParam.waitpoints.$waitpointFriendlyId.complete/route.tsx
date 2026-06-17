@@ -2,7 +2,7 @@ import { env } from "~/env.server";
 import { parse } from "@conform-to/zod";
 import { Form, useLocation, useNavigation, useSubmit } from "@remix-run/react";
 import { type ActionFunctionArgs, json } from "@remix-run/server-runtime";
-import { stringifyIO, timeoutError, WaitpointTokenStatus } from "@trigger.dev/core/v3";
+import { stringifyIO, timeoutError, type WaitpointTokenStatus } from "@trigger.dev/core/v3";
 import { WaitpointId } from "@trigger.dev/core/v3/isomorphic";
 import type { Waitpoint } from "@trigger.dev/database";
 import { useCallback, useRef } from "react";

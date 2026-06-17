@@ -20,11 +20,11 @@ import {
 } from "graphile-worker";
 import omit from "lodash.omit";
 import { z } from "zod";
-import { Logger } from "@trigger.dev/core/logger";
+import { type Logger } from "@trigger.dev/core/logger";
 import {
-  PrismaClient,
-  PrismaClientOrTransaction,
-  PrismaReplicaClient,
+  type PrismaClient,
+  type PrismaClientOrTransaction,
+  type PrismaReplicaClient,
 } from "@trigger.dev/database";
 import { PgListenService } from "./pgListen.server";
 

@@ -1,11 +1,11 @@
 import {
-  AsyncIterableStream,
+  type AsyncIterableStream,
   createAsyncIterableStreamFromAsyncIterable,
 } from "../streams/asyncIterableStream.js";
 import {
-  RealtimeStreamOperationOptions,
-  RealtimeStreamInstance,
-  RealtimeStreamsManager,
+  type RealtimeStreamOperationOptions,
+  type RealtimeStreamInstance,
+  type RealtimeStreamsManager,
 } from "./types.js";
 
 export class NoopRealtimeStreamsManager implements RealtimeStreamsManager {

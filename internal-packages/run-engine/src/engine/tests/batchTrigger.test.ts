@@ -6,7 +6,7 @@ import { expect } from "vitest";
 import { RunEngine } from "../index.js";
 import { setTimeout } from "node:timers/promises";
 import { setupAuthenticatedEnvironment, setupBackgroundWorker } from "./setup.js";
-import { DequeuedMessage } from "@trigger.dev/core/v3";
+import { type DequeuedMessage } from "@trigger.dev/core/v3";
 
 vi.setConfig({ testTimeout: 60_000 });
 

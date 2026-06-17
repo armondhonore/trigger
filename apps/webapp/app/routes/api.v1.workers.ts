@@ -1,8 +1,8 @@
-import { json, TypedResponse } from "@remix-run/server-runtime";
+import { json, type TypedResponse } from "@remix-run/server-runtime";
 import {
   WorkersCreateRequestBody,
-  WorkersCreateResponseBody,
-  WorkersListResponseBody,
+  type WorkersCreateResponseBody,
+  type WorkersListResponseBody,
 } from "@trigger.dev/core/v3";
 import {
   createActionApiRoute,

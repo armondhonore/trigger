@@ -1,6 +1,6 @@
-import { NoopTaskLogger, TaskLogger, TraceOptions } from "./taskLogger.js";
+import { NoopTaskLogger, type TaskLogger, type TraceOptions } from "./taskLogger.js";
 import { getGlobal, registerGlobal, unregisterGlobal } from "../utils/globals.js";
-import { Span } from "@opentelemetry/api";
+import { type Span } from "@opentelemetry/api";
 
 const API_NAME = "logger";
 

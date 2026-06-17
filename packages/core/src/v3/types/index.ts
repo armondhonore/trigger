@@ -1,6 +1,6 @@
-import { RetrieveRunResponse } from "../schemas/api.js";
-import { AnyRunTypes, InferRunTypes } from "./tasks.js";
-import { Prettify } from "./utils.js";
+import { type RetrieveRunResponse } from "../schemas/api.js";
+import { AnyRunTypes, type InferRunTypes } from "./tasks.js";
+import { type Prettify } from "./utils.js";
 
 export * from "./utils.js";
 export * from "./tasks.js";

@@ -1,5 +1,5 @@
 import {
-  Meter,
+  type Meter,
   type Span,
   type SpanOptions,
   SpanStatusCode,

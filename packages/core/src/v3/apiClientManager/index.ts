@@ -2,7 +2,7 @@ import { ApiClient } from "../apiClient/index.js";
 import { getGlobal, registerGlobal, unregisterGlobal } from "../utils/globals.js";
 import { getEnvVar } from "../utils/getEnv.js";
 import { sdkScope } from "../sdkScope/index.js";
-import { ApiClientConfiguration } from "./types.js";
+import { type ApiClientConfiguration } from "./types.js";
 
 const API_NAME = "api-client";
 

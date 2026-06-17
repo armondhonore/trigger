@@ -1,35 +1,35 @@
-import { Attributes, AttributeValue, trace, Tracer } from "@opentelemetry/api";
+import { type Attributes, type AttributeValue, trace, type Tracer } from "@opentelemetry/api";
 import { RandomIdGenerator } from "@opentelemetry/sdk-trace-base";
 import { SemanticResourceAttributes } from "@opentelemetry/semantic-conventions";
 import {
-  AttemptFailedSpanEvent,
+  type AttemptFailedSpanEvent,
   correctErrorStackTrace,
-  ExceptionEventProperties,
-  ExceptionSpanEvent,
+  type ExceptionEventProperties,
+  type ExceptionSpanEvent,
   flattenAttributes,
   isExceptionSpanEvent,
   nanosecondsToMilliseconds,
   PRIMARY_VARIANT,
   SemanticInternalAttributes,
-  SpanEvent,
-  SpanEvents,
-  TaskEventStyle,
-  TaskRunError,
+  type SpanEvent,
+  type SpanEvents,
+  type TaskEventStyle,
+  type TaskRunError,
   unflattenAttributes,
 } from "@trigger.dev/core/v3";
 import { serializeTraceparent } from "@trigger.dev/core/v3/isomorphic";
 import type { MetricsV1Input } from "@internal/clickhouse";
-import { Prisma, TaskEvent, TaskEventKind } from "@trigger.dev/database";
+import { Prisma, type TaskEvent, TaskEventKind } from "@trigger.dev/database";
 import { nanoid } from "nanoid";
 import { Gauge } from "prom-client";
-import { $replica, prisma, PrismaClient, PrismaReplicaClient } from "~/db.server";
+import { $replica, prisma, type PrismaClient, type PrismaReplicaClient } from "~/db.server";
 import { env } from "~/env.server";
 import { metricsRegister } from "~/metrics.server";
 import { logger } from "~/services/logger.server";
 import { singleton } from "~/utils/singleton";
 import { DynamicFlushScheduler } from "../dynamicFlushScheduler.server";
 import { tracePubSub } from "../services/tracePubSub.server";
-import { DetailedTraceEvent, TaskEventStore, TaskEventStoreTable } from "../taskEventStore.server";
+import { type DetailedTraceEvent, TaskEventStore, type TaskEventStoreTable } from "../taskEventStore.server";
 import { startActiveSpan } from "../tracer.server";
 import { startSpan } from "../tracing.server";
 import {

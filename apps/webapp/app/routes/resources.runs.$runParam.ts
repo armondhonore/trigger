@@ -1,6 +1,6 @@
-import { LoaderFunctionArgs } from "@remix-run/server-runtime";
+import { type LoaderFunctionArgs } from "@remix-run/server-runtime";
 import { MachinePresetName, prettyPrintPacket, TaskRunError } from "@trigger.dev/core/v3";
-import { typedjson, UseDataFunctionReturn } from "remix-typedjson";
+import { typedjson, type UseDataFunctionReturn } from "remix-typedjson";
 import { RUNNING_STATUSES } from "~/components/runs/v3/TaskRunStatus";
 import { $replica } from "~/db.server";
 import { requireUserId } from "~/services/session.server";

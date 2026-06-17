@@ -1,18 +1,18 @@
 import * as k8s from "@kubernetes/client-node";
 import {
-  EnvironmentType,
-  MachinePreset,
-  PostStartCauses,
-  PreStopCauses,
+  type EnvironmentType,
+  type MachinePreset,
+  type PostStartCauses,
+  type PreStopCauses,
 } from "@trigger.dev/core/v3";
 import {
   ProviderShell,
   SimpleLogger,
-  TaskOperations,
-  TaskOperationsCreateOptions,
-  TaskOperationsIndexOptions,
-  TaskOperationsPrePullDeploymentOptions,
-  TaskOperationsRestoreOptions,
+  type TaskOperations,
+  type TaskOperationsCreateOptions,
+  type TaskOperationsIndexOptions,
+  type TaskOperationsPrePullDeploymentOptions,
+  type TaskOperationsRestoreOptions,
 } from "@trigger.dev/core/v3/apps";
 import { PodCleaner } from "./podCleaner";
 import { TaskMonitor } from "./taskMonitor";

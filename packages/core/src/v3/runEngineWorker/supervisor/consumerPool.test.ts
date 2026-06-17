@@ -1,10 +1,10 @@
-import { describe, it, expect, beforeEach, afterEach, vi, Mock } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi, type Mock } from "vitest";
 import {
   RunQueueConsumerPool,
   type ConsumerPoolOptions,
   type QueueConsumerFactory,
 } from "./consumerPool.js";
-import { SupervisorHttpClient } from "./http.js";
+import { type SupervisorHttpClient } from "./http.js";
 import type { WorkerApiDequeueResponseBody } from "./schemas.js";
 import type { QueueConsumer } from "./queueConsumer.js";
 import { ConsumerPoolMetrics } from "./consumerPoolMetrics.js";

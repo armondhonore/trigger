@@ -2,7 +2,7 @@ import { createHook } from "node:async_hooks";
 import { singleton } from "./utils/singleton";
 import { tracer } from "./v3/tracer.server";
 import { env } from "./env.server";
-import { context, Context } from "@opentelemetry/api";
+import { context, type Context } from "@opentelemetry/api";
 import { performance } from "node:perf_hooks";
 import { logger } from "./services/logger.server";
 import { signalsEmitter } from "./services/signals.server";

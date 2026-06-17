@@ -1,6 +1,6 @@
-import { json, TypedResponse } from "@remix-run/server-runtime";
+import { json, type TypedResponse } from "@remix-run/server-runtime";
 import {
-  WorkerApiHeartbeatResponseBody,
+  type WorkerApiHeartbeatResponseBody,
   WorkerApiHeartbeatRequestBody,
 } from "@trigger.dev/core/v3/workers";
 import { createActionWorkerApiRoute } from "~/services/routeBuilders/apiBuilder.server";

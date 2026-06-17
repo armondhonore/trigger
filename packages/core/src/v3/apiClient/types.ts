@@ -1,10 +1,10 @@
 import {
-  MachinePresetName,
-  QueueTypeName,
-  RunStatus,
-  WaitpointTokenStatus,
+  type MachinePresetName,
+  type QueueTypeName,
+  type RunStatus,
+  type WaitpointTokenStatus,
 } from "../schemas/index.js";
-import { CursorPageParams } from "./pagination.js";
+import { type CursorPageParams } from "./pagination.js";
 
 export interface ImportEnvironmentVariablesParams {
   /**

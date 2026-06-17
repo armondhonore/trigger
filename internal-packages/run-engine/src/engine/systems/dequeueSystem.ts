@@ -1,26 +1,26 @@
 import type { BillingCache } from "../billingCache.js";
 import { startSpan } from "@internal/tracing";
 import { assertExhaustive, tryCatch } from "@trigger.dev/core";
-import { DequeuedMessage, RetryOptions, RunAnnotations } from "@trigger.dev/core/v3";
+import { type DequeuedMessage, RetryOptions, RunAnnotations } from "@trigger.dev/core/v3";
 import { placementTag } from "@trigger.dev/core/v3/serverOnly";
 import { generateInternalId, getMaxDuration, SnapshotId } from "@trigger.dev/core/v3/isomorphic";
 import {
-  BackgroundWorker,
-  BackgroundWorkerTask,
-  Prisma,
-  PrismaClientOrTransaction,
-  TaskQueue,
-  WorkerDeployment,
+  type BackgroundWorker,
+  type BackgroundWorkerTask,
+  type Prisma,
+  type PrismaClientOrTransaction,
+  type TaskQueue,
+  type WorkerDeployment,
 } from "@trigger.dev/database";
 import { CURRENT_DEPLOYMENT_LABEL } from "@trigger.dev/core/v3/isomorphic";
 
 import { sendNotificationToWorker } from "../eventBus.js";
 import { getMachinePreset } from "../machinePresets.js";
 import { isDequeueableExecutionStatus, isExecuting } from "../statuses.js";
-import { RunEngineOptions } from "../types.js";
-import { ExecutionSnapshotSystem, getLatestExecutionSnapshot } from "./executionSnapshotSystem.js";
-import { RunAttemptSystem } from "./runAttemptSystem.js";
-import { SystemResources } from "./systems.js";
+import { type RunEngineOptions } from "../types.js";
+import { type ExecutionSnapshotSystem, getLatestExecutionSnapshot } from "./executionSnapshotSystem.js";
+import { type RunAttemptSystem } from "./runAttemptSystem.js";
+import { type SystemResources } from "./systems.js";
 
 export type DequeueSystemOptions = {
   resources: SystemResources;

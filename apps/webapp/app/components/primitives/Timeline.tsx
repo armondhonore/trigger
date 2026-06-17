@@ -1,8 +1,8 @@
 import {
   Component,
-  ComponentPropsWithoutRef,
+  type ComponentPropsWithoutRef,
   Fragment,
-  ReactNode,
+  type ReactNode,
   createContext,
   useCallback,
   useContext,
@@ -38,7 +38,7 @@ export function MousePositionProvider({ children }: { children: ReactNode }) {
 
       setPosition({ x, y });
     },
-    [ref.current]
+    []
   );
 
   return (

@@ -1,7 +1,7 @@
 // app/realtime/S2RealtimeStreams.ts
 import type { UnkeyCache } from "@internal/cache";
-import { StreamIngestor, StreamRecord, StreamResponder, StreamResponseOptions } from "./types";
-import { Logger, LogLevel } from "@trigger.dev/core/logger";
+import { type StreamIngestor, type StreamRecord, type StreamResponder, type StreamResponseOptions } from "./types";
+import { Logger, type LogLevel } from "@trigger.dev/core/logger";
 import { headerValue } from "@trigger.dev/core/v3";
 import { randomUUID } from "node:crypto";
 import { ServiceValidationError } from "~/v3/services/common.server";

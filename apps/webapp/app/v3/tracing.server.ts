@@ -1,7 +1,7 @@
-import { Span, SpanKind, SpanOptions, SpanStatusCode, Tracer } from "@opentelemetry/api";
-import { Logger, SeverityNumber } from "@opentelemetry/api-logs";
+import { type Span, SpanKind, type SpanOptions, SpanStatusCode, type Tracer } from "@opentelemetry/api";
+import { type Logger, SeverityNumber } from "@opentelemetry/api-logs";
 import { flattenAttributes } from "@trigger.dev/core/v3/utils/flattenAttributes";
-import { AuthenticatedEnvironment } from "~/services/apiAuth.server";
+import { type AuthenticatedEnvironment } from "~/services/apiAuth.server";
 import { attributesFromAuthenticatedEnv } from "./tracer.server";
 
 export async function startSpan<T>(

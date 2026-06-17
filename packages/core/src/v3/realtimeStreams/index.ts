@@ -1,9 +1,9 @@
 import { getGlobal, registerGlobal } from "../utils/globals.js";
 import { NoopRealtimeStreamsManager } from "./noopManager.js";
 import {
-  RealtimeStreamOperationOptions,
-  RealtimeStreamInstance,
-  RealtimeStreamsManager,
+  type RealtimeStreamOperationOptions,
+  type RealtimeStreamInstance,
+  type RealtimeStreamsManager,
 } from "./types.js";
 
 // Re-export the session-scoped stream instance so the SDK's

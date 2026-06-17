@@ -1,11 +1,11 @@
 import { json } from "@remix-run/server-runtime";
 import {
   BatchTriggerTaskV2RequestBody,
-  BatchTriggerTaskV2Response,
+  type BatchTriggerTaskV2Response,
   generateJWT,
 } from "@trigger.dev/core/v3";
 import { env } from "~/env.server";
-import { AuthenticatedEnvironment, getOneTimeUseToken } from "~/services/apiAuth.server";
+import { type AuthenticatedEnvironment, getOneTimeUseToken } from "~/services/apiAuth.server";
 import { logger } from "~/services/logger.server";
 import { createActionApiRoute, everyResource } from "~/services/routeBuilders/apiBuilder.server";
 import { resolveIdempotencyKeyTTL } from "~/utils/idempotencyKeys.server";

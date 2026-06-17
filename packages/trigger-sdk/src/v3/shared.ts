@@ -1,11 +1,11 @@
 import { SpanKind } from "@opentelemetry/api";
-import { SerializableJson } from "@trigger.dev/core";
+import { type SerializableJson } from "@trigger.dev/core";
 import {
   accessoryAttributes,
-  ApiClient,
+  type ApiClient,
   ApiError,
   apiClientManager,
-  ApiRequestOptions,
+  type ApiRequestOptions,
   conditionallyExportPacket,
   conditionallyImportPacket,
   convertToolParametersToSchema,
@@ -15,12 +15,12 @@ import {
   getEnvVar,
   getIdempotencyKeyOptions,
   getSchemaParseFn,
-  InitOutput,
+  type InitOutput,
   lifecycleHooks,
   makeIdempotencyKey,
   parsePacket,
-  Queue,
-  QueueOptions,
+  type Queue,
+  type QueueOptions,
   RateLimitError,
   resourceCatalog,
   runtime,
@@ -30,9 +30,9 @@ import {
   type IOPacket,
   SubtaskUnwrapError,
   taskContext,
-  TaskFromIdentifier,
-  TaskRunContext,
-  TaskRunExecutionResult,
+  type TaskFromIdentifier,
+  type TaskRunContext,
+  type TaskRunExecutionResult,
   TaskRunPromise,
 } from "@trigger.dev/core/v3";
 import { tracer } from "./tracer.js";

@@ -14,7 +14,7 @@ import { logger } from "./services/logger.server";
 import { isValidDatabaseUrl } from "./utils/db";
 import { singleton } from "./utils/singleton";
 import { DATASOURCE_CONTEXT_KEY, startActiveSpan } from "./v3/tracer.server";
-import { context, Span, trace } from "@opentelemetry/api";
+import { context, type Span, trace } from "@opentelemetry/api";
 import { queryPerformanceMonitor } from "./utils/queryPerformanceMonitor.server";
 
 export type {

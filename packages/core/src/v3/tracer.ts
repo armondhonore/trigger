@@ -1,16 +1,16 @@
 import {
-  Attributes,
-  Context,
-  SpanOptions,
+  type Attributes,
+  type Context,
+  type SpanOptions,
   SpanStatusCode,
-  TimeInput,
+  type TimeInput,
   context,
   propagation,
   trace,
   type Span,
   type Tracer,
 } from "@opentelemetry/api";
-import { Logger, logs } from "@opentelemetry/api-logs";
+import { type Logger, logs } from "@opentelemetry/api-logs";
 import { clock } from "./clock-api.js";
 import { isCompleteTaskWithOutput } from "./errors.js";
 import { recordSpanException } from "./otel/utils.js";

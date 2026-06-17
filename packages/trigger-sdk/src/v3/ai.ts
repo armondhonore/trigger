@@ -1,6 +1,6 @@
 import {
   accessoryAttributes,
-  AnyTask,
+  type AnyTask,
   apiClientManager,
   controlSubtype,
   getSchemaParseFn,
@@ -21,7 +21,7 @@ import {
   type ReadStreamOptions,
   SemanticInternalAttributes,
   type SendInputStreamOptions,
-  Task,
+  type Task,
   taskContext,
   type AppendStreamOptions,
   type InputStreamOnceResult,

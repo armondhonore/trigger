@@ -1,10 +1,10 @@
 import {
   calculateNextRetryDelay,
   RetryOptions,
-  TaskRunExecution,
-  TaskRunExecutionRetry,
-  TaskRunFailedExecutionResult,
-  V3TaskRunExecution,
+  type TaskRunExecution,
+  type TaskRunExecutionRetry,
+  type TaskRunFailedExecutionResult,
+  type V3TaskRunExecution,
 } from "@trigger.dev/core/v3";
 import type { Prisma, TaskRun } from "@trigger.dev/database";
 import * as semver from "semver";

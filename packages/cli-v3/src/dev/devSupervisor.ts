@@ -11,27 +11,27 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { setTimeout as awaitTimeout } from "node:timers/promises";
 import {
-  BuildManifest,
-  CreateBackgroundWorkerRequestBody,
-  DevConfigResponseBody,
+  type BuildManifest,
+  type CreateBackgroundWorkerRequestBody,
+  type DevConfigResponseBody,
   SemanticInternalAttributes,
-  WorkerManifest,
+  type WorkerManifest,
 } from "@trigger.dev/core/v3";
-import { ResolvedConfig } from "@trigger.dev/core/v3/build";
-import { CliApiClient } from "../apiClient.js";
-import { DevCommandOptions } from "../commands/dev.js";
+import { type ResolvedConfig } from "@trigger.dev/core/v3/build";
+import { type CliApiClient } from "../apiClient.js";
+import { type DevCommandOptions } from "../commands/dev.js";
 import { eventBus } from "../utilities/eventBus.js";
 import { logger } from "../utilities/logger.js";
 import { resolveSourceFiles } from "../utilities/sourceFiles.js";
 import { BackgroundWorker } from "./backgroundWorker.js";
 import { copySkillFolders } from "../build/bundleSkills.js";
-import { WorkerRuntime } from "./workerRuntime.js";
+import { type WorkerRuntime } from "./workerRuntime.js";
 import { cliLink, prettyError } from "../utilities/cliOutput.js";
 import { DevRunController } from "../entryPoints/dev-run-controller.js";
-import { io, Socket } from "socket.io-client";
+import { io, type Socket } from "socket.io-client";
 import {
-  WorkerClientToServerEvents,
-  WorkerServerToClientEvents,
+  type WorkerClientToServerEvents,
+  type WorkerServerToClientEvents,
 } from "@trigger.dev/core/v3/workers";
 import pLimit from "p-limit";
 import { resolveLocalEnvVars } from "../utilities/localEnvVars.js";

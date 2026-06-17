@@ -1,10 +1,10 @@
-import { ResolvedConfig } from "@trigger.dev/core/v3/build";
-import { Command, Option as CommandOption } from "commander";
+import { type ResolvedConfig } from "@trigger.dev/core/v3/build";
+import { type Command, Option as CommandOption } from "commander";
 import { z } from "zod";
 import { CliApiClient } from "../apiClient.js";
 import { CommonCommandOptions, commonOptions, wrapCommandAction } from "../cli/common.js";
 import { watchConfig } from "../config.js";
-import { DevSessionInstance, startDevSession } from "../dev/devSession.js";
+import { type DevSessionInstance, startDevSession } from "../dev/devSession.js";
 import { createLockFile } from "../dev/lock.js";
 import { chalkError } from "../utilities/cliOutput.js";
 import { resolveLocalEnvVars } from "../utilities/localEnvVars.js";
@@ -15,7 +15,7 @@ import {
   fetchPlatformNotification,
 } from "../utilities/platformNotifications.js";
 import { runtimeChecks } from "../utilities/runtimeCheck.js";
-import { getProjectClient, LoginResultOk } from "../utilities/session.js";
+import { getProjectClient, type LoginResultOk } from "../utilities/session.js";
 import { login } from "./login.js";
 import { updateTriggerPackages } from "./update.js";
 import {

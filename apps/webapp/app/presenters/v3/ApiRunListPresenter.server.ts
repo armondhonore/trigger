@@ -8,7 +8,7 @@ import {
 import { type Project, type RuntimeEnvironment, type TaskRunStatus } from "@trigger.dev/database";
 import assertNever from "assert-never";
 import { z } from "zod";
-import { API_VERSIONS, RunStatusUnspecifiedApiVersion } from "~/api/versions";
+import { type API_VERSIONS, RunStatusUnspecifiedApiVersion } from "~/api/versions";
 import { clickhouseFactory } from "~/services/clickhouse/clickhouseFactoryInstance.server";
 import { logger } from "~/services/logger.server";
 import { CoercedDate } from "~/utils/zod";

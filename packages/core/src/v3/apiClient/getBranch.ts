@@ -1,4 +1,4 @@
-import { GitMeta } from "../schemas/index.js";
+import { type GitMeta } from "../schemas/index.js";
 import { getEnvVar } from "../utils/getEnv.js";
 
 export function getBranch({

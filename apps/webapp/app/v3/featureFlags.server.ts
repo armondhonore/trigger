@@ -3,7 +3,7 @@ import { prisma, type PrismaClientOrTransaction } from "~/db.server";
 import {
   type FeatureFlagKey,
   FeatureFlagCatalog,
-  FeatureFlagCatalogSchema,
+  type FeatureFlagCatalogSchema,
 } from "~/v3/featureFlags";
 
 export type FlagsOptions<T extends FeatureFlagKey> = {

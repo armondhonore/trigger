@@ -1,4 +1,4 @@
-import { EventBusEventArgs } from "@internal/run-engine";
+import { type EventBusEventArgs } from "@internal/run-engine";
 import { createAdapter } from "@socket.io/redis-adapter";
 import {
   ClientToSharedQueueMessages,
@@ -17,7 +17,7 @@ import type {
 import { ZodNamespace } from "@trigger.dev/core/v3/zodNamespace";
 import { defaultReconnectOnError } from "@internal/redis";
 import { Redis } from "ioredis";
-import { Namespace, Server, Socket } from "socket.io";
+import { type Namespace, Server, type Socket } from "socket.io";
 import { env } from "~/env.server";
 import { findEnvironmentById } from "~/models/runtimeEnvironment.server";
 import { authenticateApiRequestWithFailure } from "~/services/apiAuth.server";

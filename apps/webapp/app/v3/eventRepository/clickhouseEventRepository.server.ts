@@ -8,26 +8,26 @@ import type {
   TaskEventV1Input,
   TaskEventV2Input,
 } from "@internal/clickhouse";
-import { Attributes, startSpan, trace, Tracer } from "@internal/tracing";
+import { type Attributes, startSpan, trace, type Tracer } from "@internal/tracing";
 
 import { createJsonErrorObject } from "@trigger.dev/core/v3/errors";
 import { serializeTraceparent } from "@trigger.dev/core/v3/isomorphic";
 import {
-  AttemptFailedSpanEvent,
-  CancellationSpanEvent,
-  ExceptionSpanEvent,
+  type AttemptFailedSpanEvent,
+  type CancellationSpanEvent,
+  type ExceptionSpanEvent,
   isAttemptFailedSpanEvent,
   isCancellationSpanEvent,
   isExceptionSpanEvent,
-  OtherSpanEvent,
+  type OtherSpanEvent,
   PRIMARY_VARIANT,
-  SpanEvents,
-  TaskEventStyle,
-  TaskRunError,
+  type SpanEvents,
+  type TaskEventStyle,
+  type TaskRunError,
 } from "@trigger.dev/core/v3/schemas";
 import { SemanticInternalAttributes } from "@trigger.dev/core/v3/semanticInternalAttributes";
 import { unflattenAttributes } from "@trigger.dev/core/v3/utils/flattenAttributes";
-import { TaskEventLevel } from "@trigger.dev/database";
+import { type TaskEventLevel } from "@trigger.dev/database";
 import { logger } from "~/services/logger.server";
 import { DynamicFlushScheduler } from "../dynamicFlushScheduler.server";
 import { tracePubSub } from "../services/tracePubSub.server";

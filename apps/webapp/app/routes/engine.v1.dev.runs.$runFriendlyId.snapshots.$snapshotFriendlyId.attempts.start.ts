@@ -1,9 +1,9 @@
-import { json, TypedResponse } from "@remix-run/server-runtime";
-import { MachinePreset, SemanticInternalAttributes } from "@trigger.dev/core/v3";
+import { json, type TypedResponse } from "@remix-run/server-runtime";
+import { type MachinePreset, SemanticInternalAttributes } from "@trigger.dev/core/v3";
 import { RunId, SnapshotId } from "@trigger.dev/core/v3/isomorphic";
 import {
   WorkerApiRunAttemptStartRequestBody,
-  WorkerApiRunAttemptStartResponseBody,
+  type WorkerApiRunAttemptStartResponseBody,
 } from "@trigger.dev/core/v3/workers";
 import type { AuthenticatedEnvironment } from "@trigger.dev/core/v3/auth/environment";
 import { defaultMachine } from "~/services/platform.v3.server";

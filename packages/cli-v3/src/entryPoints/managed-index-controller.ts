@@ -1,6 +1,6 @@
 import {
   BuildManifest,
-  CreateBackgroundWorkerRequestBody,
+  type CreateBackgroundWorkerRequestBody,
   serializeIndexingError,
 } from "@trigger.dev/core/v3";
 import { readFile, writeFile } from "node:fs/promises";

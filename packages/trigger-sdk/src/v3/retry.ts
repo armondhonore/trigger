@@ -1,4 +1,4 @@
-import { Attributes, Span, SpanStatusCode, context, trace } from "@opentelemetry/api";
+import { type Attributes, type Span, SpanStatusCode, context, trace } from "@opentelemetry/api";
 import {
   SEMATTRS_HTTP_HOST,
   SEMATTRS_HTTP_METHOD,
@@ -8,10 +8,10 @@ import {
   SEMATTRS_HTTP_URL,
 } from "@opentelemetry/semantic-conventions";
 import {
-  FetchRetryByStatusOptions,
-  FetchRetryOptions,
-  FetchRetryStrategy,
-  RetryOptions,
+  type FetchRetryByStatusOptions,
+  type FetchRetryOptions,
+  type FetchRetryStrategy,
+  type RetryOptions,
   SemanticInternalAttributes,
   accessoryAttributes,
   calculateNextRetryDelay,
