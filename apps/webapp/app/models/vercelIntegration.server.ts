@@ -6,7 +6,11 @@ import type {
 } from "@vercel/sdk/models/filterprojectenvsop";
 import type { GetV9ProjectsIdOrNameCustomEnvironmentsEnvironments } from "@vercel/sdk/models/getv9projectsidornamecustomenvironmentsop";
 import type { ResponseBodyProjects } from "@vercel/sdk/models/getprojectsop";
-import { type Organization, type OrganizationIntegration, type SecretReference } from "@trigger.dev/database";
+import {
+  type Organization,
+  type OrganizationIntegration,
+  type SecretReference,
+} from "@trigger.dev/database";
 import { z } from "zod";
 import { ResultAsync, errAsync, okAsync } from "neverthrow";
 import { $transaction, prisma } from "~/db.server";

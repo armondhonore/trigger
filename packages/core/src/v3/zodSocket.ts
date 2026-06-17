@@ -2,7 +2,11 @@ import type { ManagerOptions, Socket, SocketOptions } from "socket.io-client";
 import { io } from "socket.io-client";
 import { ZodError, z } from "zod";
 import { type EventEmitterLike, type ZodMessageValueSchema } from "./zodMessageHandler.js";
-import { LogLevel, SimpleStructuredLogger, type StructuredLogger } from "./utils/structuredLogger.js";
+import {
+  LogLevel,
+  SimpleStructuredLogger,
+  type StructuredLogger,
+} from "./utils/structuredLogger.js";
 import { fromZodError } from "zod-validation-error";
 
 export interface ZodSocketMessageCatalogSchema {

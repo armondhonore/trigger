@@ -1,6 +1,10 @@
 import { getGlobal, registerGlobal } from "../utils/globals.js";
 import { NoopSessionStreamManager } from "./noopManager.js";
-import { type InputStreamOncePromise, type SessionChannelIO, type SessionStreamManager } from "./types.js";
+import {
+  type InputStreamOncePromise,
+  type SessionChannelIO,
+  type SessionStreamManager,
+} from "./types.js";
 import { type InputStreamOnceOptions } from "../realtimeStreams/types.js";
 
 const API_NAME = "session-streams";

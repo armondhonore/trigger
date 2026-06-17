@@ -1,4 +1,11 @@
-import { type Context, ROOT_CONTEXT, type Span, SpanKind, context, trace } from "@opentelemetry/api";
+import {
+  type Context,
+  ROOT_CONTEXT,
+  type Span,
+  SpanKind,
+  context,
+  trace,
+} from "@opentelemetry/api";
 import {
   type V3TaskRunExecution,
   type TaskRunExecutionLazyAttemptPayload,

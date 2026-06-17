@@ -13,7 +13,12 @@ import { fixturesConfig, type TestCase } from "./fixtures.js";
 import { type E2EOptions, E2EOptionsSchema } from "./schemas.js";
 import { executeTestCaseRun, runTsc } from "./utils.js";
 import { normalizeImportPath } from "../src/utilities/normalizeImportPath.js";
-import { installFixtureDeps, LOCKFILES, type PackageManager, parsePackageManager } from "./utils.js";
+import {
+  installFixtureDeps,
+  LOCKFILES,
+  type PackageManager,
+  parsePackageManager,
+} from "./utils.js";
 import { alwaysExternal } from "@trigger.dev/core/v3/build";
 
 const TIMEOUT = 120_000;

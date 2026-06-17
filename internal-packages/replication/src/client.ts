@@ -6,7 +6,11 @@ import Redlock, { type Lock } from "redlock";
 import { createRedisClient } from "@internal/redis";
 import { Logger } from "@trigger.dev/core/logger";
 import { LogicalReplicationClientError } from "./errors.js";
-import { type PgoutputMessage, PgoutputParser, getPgoutputStartReplicationSQL } from "./pgoutput.js";
+import {
+  type PgoutputMessage,
+  PgoutputParser,
+  getPgoutputStartReplicationSQL,
+} from "./pgoutput.js";
 import { startSpan, trace, type Tracer } from "@internal/tracing";
 
 export interface LogicalReplicationClientOptions {

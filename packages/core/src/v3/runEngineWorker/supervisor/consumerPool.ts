@@ -1,5 +1,9 @@
 import { SimpleStructuredLogger } from "../../utils/structuredLogger.js";
-import { type QueueConsumer, RunQueueConsumer, type RunQueueConsumerOptions } from "./queueConsumer.js";
+import {
+  type QueueConsumer,
+  RunQueueConsumer,
+  type RunQueueConsumerOptions,
+} from "./queueConsumer.js";
 import { QueueMetricsProcessor } from "./queueMetricsProcessor.js";
 import {
   ScalingStrategy,

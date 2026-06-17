@@ -1,5 +1,9 @@
 import { z } from "zod";
-import { type ClickhouseQueryFunction, type ClickhouseReader, type ColumnExpression } from "./types.js";
+import {
+  type ClickhouseQueryFunction,
+  type ClickhouseReader,
+  type ColumnExpression,
+} from "./types.js";
 import { type ClickHouseSettings } from "@clickhouse/client";
 export type QueryParamValue = string | number | boolean | Array<string | number | boolean> | null;
 export type QueryParams = Record<string, QueryParamValue>;

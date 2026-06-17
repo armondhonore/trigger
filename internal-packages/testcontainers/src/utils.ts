@@ -5,7 +5,12 @@ import { tryCatch } from "@trigger.dev/core";
 import Redis from "ioredis";
 import path from "path";
 import { isDebug } from "std-env";
-import { GenericContainer, type StartedNetwork, type StartedTestContainer, Wait } from "testcontainers";
+import {
+  GenericContainer,
+  type StartedNetwork,
+  type StartedTestContainer,
+  Wait,
+} from "testcontainers";
 import { x } from "tinyexec";
 import type { TestContext } from "vitest";
 import { ClickHouseContainer, runClickhouseMigrations } from "./clickhouse";

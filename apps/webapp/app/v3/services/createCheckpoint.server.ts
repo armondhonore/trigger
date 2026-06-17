@@ -1,4 +1,7 @@
-import { type CoordinatorToPlatformMessages, type ManualCheckpointMetadata } from "@trigger.dev/core/v3";
+import {
+  type CoordinatorToPlatformMessages,
+  type ManualCheckpointMetadata,
+} from "@trigger.dev/core/v3";
 import type { InferSocketMessageSchema } from "@trigger.dev/core/v3/zodSocket";
 import type { Checkpoint, CheckpointRestoreEvent } from "@trigger.dev/database";
 import { logger } from "~/services/logger.server";

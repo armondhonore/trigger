@@ -7,7 +7,12 @@ import {
   type RetryOptions,
   type TriggerTraceContext,
 } from "@trigger.dev/core/v3";
-import { type PrismaClient, type PrismaReplicaClient, type TaskRun, type Waitpoint } from "@trigger.dev/database";
+import {
+  type PrismaClient,
+  type PrismaReplicaClient,
+  type TaskRun,
+  type Waitpoint,
+} from "@trigger.dev/database";
 import {
   type Worker,
   type WorkerConcurrencyOptions,

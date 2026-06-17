@@ -1,6 +1,11 @@
 import Redis, { type RedisOptions } from "ioredis";
 import { defaultReconnectOnError } from "@internal/redis";
-import { Prisma, type PrismaClientOrTransaction, type PrismaTransactionOptions, prisma } from "~/db.server";
+import {
+  Prisma,
+  type PrismaClientOrTransaction,
+  type PrismaTransactionOptions,
+  prisma,
+} from "~/db.server";
 import { env } from "~/env.server";
 import { singleton } from "~/utils/singleton";
 

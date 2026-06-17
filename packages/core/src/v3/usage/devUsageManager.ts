@@ -1,4 +1,9 @@
-import { type InitialUsageState, type UsageManager, type UsageMeasurement, type UsageSample } from "./types.js";
+import {
+  type InitialUsageState,
+  type UsageManager,
+  type UsageMeasurement,
+  type UsageSample,
+} from "./types.js";
 import { clock } from "../clock-api.js";
 import { type ClockTime, calculateDurationInMs } from "../clock/clock.js";
 

@@ -1,4 +1,9 @@
-import { createCache, DefaultStatefulContext, Namespace, type Cache as UnkeyCache } from "@unkey/cache";
+import {
+  createCache,
+  DefaultStatefulContext,
+  Namespace,
+  type Cache as UnkeyCache,
+} from "@unkey/cache";
 import { createLRUMemoryStore } from "@internal/cache";
 import { randomUUID } from "crypto";
 import { type Redis } from "ioredis";

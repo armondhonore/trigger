@@ -1,4 +1,4 @@
-import {type Cluster} from "ioredis";
+import { type Cluster } from "ioredis";
 import type Redis from "ioredis";
 
 /**

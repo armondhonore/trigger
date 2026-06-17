@@ -1,4 +1,8 @@
-import { type BuildManifest, type ServerBackgroundWorker, type WorkerManifest } from "@trigger.dev/core/v3";
+import {
+  type BuildManifest,
+  type ServerBackgroundWorker,
+  type WorkerManifest,
+} from "@trigger.dev/core/v3";
 import { execOptionsForRuntime } from "@trigger.dev/core/v3/build";
 import { join } from "node:path";
 import { indexWorkerManifest } from "../indexing/indexWorkerManifest.js";

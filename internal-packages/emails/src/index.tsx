@@ -14,7 +14,11 @@ import AlertDeploymentSuccessEmail, {
 import InviteEmail, { InviteEmailSchema } from "../emails/invite";
 import MagicLinkEmail from "../emails/magic-link";
 
-import { constructMailTransport, type MailTransport, type MailTransportOptions } from "./transports";
+import {
+  constructMailTransport,
+  type MailTransport,
+  type MailTransportOptions,
+} from "./transports";
 import MfaEnabledEmail, { MfaEnabledEmailSchema } from "../emails/mfa-enabled";
 import MfaDisabledEmail, { MfaDisabledEmailSchema } from "../emails/mfa-disabled";
 import BulkActionCompletedEmail, {

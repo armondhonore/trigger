@@ -9,7 +9,10 @@ import {
   type Row,
   type ShapeStreamInterface,
 } from "@electric-sql/client";
-import { type AsyncIterableStream, createAsyncIterableStream } from "../streams/asyncIterableStream.js";
+import {
+  type AsyncIterableStream,
+  createAsyncIterableStream,
+} from "../streams/asyncIterableStream.js";
 import { API_VERSION_HEADER_NAME, API_VERSION } from "./version.js";
 
 export type ZodShapeStreamOptions = {

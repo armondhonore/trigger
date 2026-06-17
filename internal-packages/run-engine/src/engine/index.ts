@@ -1,5 +1,12 @@
 import { createRedisClient, type Redis } from "@internal/redis";
-import { type Counter, getMeter, type Meter, startSpan, trace, type Tracer } from "@internal/tracing";
+import {
+  type Counter,
+  getMeter,
+  type Meter,
+  startSpan,
+  trace,
+  type Tracer,
+} from "@internal/tracing";
 import { Logger } from "@trigger.dev/core/logger";
 import {
   type CheckpointInput,
@@ -45,7 +52,10 @@ import type {
 import { FairQueueSelectionStrategy } from "../run-queue/fairQueueSelectionStrategy.js";
 import { RunQueue } from "../run-queue/index.js";
 import { RunQueueFullKeyProducer } from "../run-queue/keyProducer.js";
-import { type AuthenticatedEnvironment, type MinimalAuthenticatedEnvironment } from "../shared/index.js";
+import {
+  type AuthenticatedEnvironment,
+  type MinimalAuthenticatedEnvironment,
+} from "../shared/index.js";
 import { BillingCache } from "./billingCache.js";
 import {
   ExecutionSnapshotNotFoundError,

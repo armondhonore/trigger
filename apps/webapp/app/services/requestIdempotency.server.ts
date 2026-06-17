@@ -1,5 +1,10 @@
 import { Logger, type LogLevel } from "@trigger.dev/core/logger";
-import { createCache, DefaultStatefulContext, Namespace, type Cache as UnkeyCache } from "@unkey/cache";
+import {
+  createCache,
+  DefaultStatefulContext,
+  Namespace,
+  type Cache as UnkeyCache,
+} from "@unkey/cache";
 import { createLRUMemoryStore } from "@internal/cache";
 import { RedisCacheStore } from "./unkey/redisCacheStore.server";
 import { type RedisWithClusterOptions } from "~/redis.server";

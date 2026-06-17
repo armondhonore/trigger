@@ -43,7 +43,10 @@ import {
 import { SemanticInternalAttributes } from "../semanticInternalAttributes.js";
 import { type TriggerTracer } from "../tracer.js";
 import { tryCatch } from "../tryCatch.js";
-import { type HandleErrorModificationOptions, type TaskMetadataWithFunctions } from "../types/index.js";
+import {
+  type HandleErrorModificationOptions,
+  type TaskMetadataWithFunctions,
+} from "../types/index.js";
 import {
   conditionallyExportPacket,
   conditionallyImportPacket,

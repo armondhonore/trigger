@@ -29,7 +29,11 @@ import { logger } from "~/services/logger.server";
 import { singleton } from "~/utils/singleton";
 import { DynamicFlushScheduler } from "../dynamicFlushScheduler.server";
 import { tracePubSub } from "../services/tracePubSub.server";
-import { type DetailedTraceEvent, TaskEventStore, type TaskEventStoreTable } from "../taskEventStore.server";
+import {
+  type DetailedTraceEvent,
+  TaskEventStore,
+  type TaskEventStoreTable,
+} from "../taskEventStore.server";
 import { startActiveSpan } from "../tracer.server";
 import { startSpan } from "../tracing.server";
 import {
