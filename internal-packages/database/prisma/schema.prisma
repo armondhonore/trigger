@@ -342,6 +342,7 @@ model RuntimeEnvironment {
   maximumConcurrencyLimit     Int     @default(5)
   concurrencyLimitBurstFactor Decimal @default("2.00") @db.Decimal(4, 2)
   paused                      Boolean @default(false)
+  pauseSource                 EnvironmentPauseSource?
 
   autoEnableInternalSources Boolean @default(true)
 
@@ -419,6 +420,10 @@ enum RuntimeEnvironmentType {
   STAGING
   DEVELOPMENT
   PREVIEW
+}
+
+enum EnvironmentPauseSource {
+  BILLING_LIMIT
 }
 
 model Project {
