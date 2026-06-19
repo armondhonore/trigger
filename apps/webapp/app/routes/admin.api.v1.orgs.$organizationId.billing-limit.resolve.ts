@@ -2,12 +2,11 @@ import { type ActionFunctionArgs, json } from "@remix-run/server-runtime";
 import { z } from "zod";
 import { prisma } from "~/db.server";
 import { requireAdminApiRequest } from "~/services/personalAccessToken.server";
-import { completeBillingLimitResolve } from "~/services/platform.v3.server";
+import { bustBillingLimitCaches } from "~/services/platform.v3.server";
 import { logger } from "~/services/logger.server";
-import {
-  convergeBillingLimitResolve,
-  type PendingBillingLimitResolve,
-} from "~/v3/services/billingLimit/billingLimitConvergeResolve.server";
+import { enqueueBillingLimitResolve } from "~/v3/billingLimitWorker.server";
+import { processBillingLimitResolve } from "~/v3/services/billingLimit/billingLimitResolve.server";
+import type { PendingBillingLimitResolve } from "~/v3/services/billingLimit/billingLimitPendingResolve.types";
 
 const ParamsSchema = z.object({
   organizationId: z.string(),
@@ -53,8 +52,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
   }
 
   try {
-    await convergeBillingLimitResolve(pending);
-    await completeBillingLimitResolve(organizationId);
+    await processBillingLimitResolve(pending, {
+      bustCaches: bustBillingLimitCaches,
+      enqueueResolve: enqueueBillingLimitResolve,
+    });
   } catch (error) {
     logger.error("Billing limit resolve webhook failed", {
       error,

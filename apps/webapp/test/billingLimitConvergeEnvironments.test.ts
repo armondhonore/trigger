@@ -55,6 +55,31 @@ describe("convergeBillingLimitEnvironmentsForOrg", () => {
     expect(envAfter.pauseSource).toBeNull();
   });
 
+  postgresTest("rolls back pause when concurrency update fails", async ({ prisma }) => {
+    const { organization, project } = await createTestOrgProjectWithMember(prisma);
+    const environment = await createRuntimeEnvironment(prisma, {
+      projectId: project.id,
+      organizationId: organization.id,
+      type: "PRODUCTION",
+      slug: uniqueId("prod"),
+    });
+
+    await expect(
+      convergeBillingLimitEnvironmentsForOrg(organization.id, "grace", {
+        prismaClient: prisma,
+        updateConcurrency: async () => {
+          throw new Error("run queue unavailable");
+        },
+      })
+    ).rejects.toThrow("run queue unavailable");
+
+    const envAfter = await prisma.runtimeEnvironment.findUniqueOrThrow({
+      where: { id: environment.id },
+    });
+    expect(envAfter.paused).toBe(false);
+    expect(envAfter.pauseSource).toBeNull();
+  });
+
   postgresTest("does not unpause environments paused for other reasons", async ({ prisma }) => {
     const { organization, project } = await createTestOrgProjectWithMember(prisma);
     const environment = await createRuntimeEnvironment(prisma, {

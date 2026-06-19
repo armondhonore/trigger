@@ -53,8 +53,7 @@ export const billingAlertsSchema = z.object({
     const values = typeof i === "string" ? [i] : Array.isArray(i) ? i : [];
     return values
       .filter((v) => v !== "")
-      .map((v) => Number(v))
-      .filter((n) => Number.isFinite(n));
+      .map((v) => Number(v));
   }, z.number().array().refine(thresholdValuesAreUnique, "Each alert must be unique")),
 });
 

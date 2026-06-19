@@ -3,8 +3,6 @@ import type { MetaFunction } from "@remix-run/react";
 import {
   json,
   redirect,
-  type ActionFunction,
-  type LoaderFunctionArgs,
 } from "@remix-run/server-runtime";
 import { tryCatch } from "@trigger.dev/core";
 import { typedjson, useTypedLoaderData } from "remix-typedjson";
@@ -43,6 +41,7 @@ import { NavBar, PageAccessories, PageTitle } from "~/components/primitives/Page
 import { prisma } from "~/db.server";
 import { featuresForRequest } from "~/features.server";
 import { useScrollContainerToTop } from "~/hooks/useScrollContainerToTop";
+import { resolveOrgIdFromSlug } from "~/models/organization.server";
 import {
   commitSession,
   getSession,
@@ -59,6 +58,7 @@ import {
   setBillingAlert,
   setBillingLimit,
 } from "~/services/platform.v3.server";
+import { dashboardAction, dashboardLoader } from "~/services/routeBuilders/dashboardBuilder";
 import type { BillingLimitResult } from "~/services/billingLimit.schemas";
 import {
   getAlertsResetRequested,
@@ -77,15 +77,31 @@ import {
   v3BillingLimitsPath,
   v3BillingPath,
 } from "~/utils/pathBuilder";
-import { requireUserId } from "~/services/session.server";
+
+const billingLimitsAuthorization = {
+  action: "manage" as const,
+  resource: { type: "billing" as const },
+};
 
 export const meta: MetaFunction = () => {
   return [{ title: `Billing limits | Trigger.dev` }];
 };
 
-export async function loader({ params, request }: LoaderFunctionArgs) {
-  const userId = await requireUserId(request);
-  const { organizationSlug } = OrganizationParamsSchema.parse(params);
+export const loader = dashboardLoader(
+  {
+    params: OrganizationParamsSchema,
+    context: async (params) => {
+      const organizationId = await resolveOrgIdFromSlug(params.organizationSlug);
+      return organizationId ? { organizationId } : {};
+    },
+    authorization: {
+      ...billingLimitsAuthorization,
+      message: "With your current role, you can't manage billing limits.",
+    },
+  },
+  async ({ params, request, user }) => {
+  const userId = user.id;
+  const { organizationSlug } = params;
 
   const { isManagedCloud } = featuresForRequest(request);
   if (!isManagedCloud) {
@@ -131,9 +147,9 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   firstDayOfMonth.setUTCHours(0, 0, 0, 0);
 
   const firstDayOfNextMonth = new Date();
-  firstDayOfNextMonth.setUTCMonth(firstDayOfNextMonth.getUTCMonth() + 1);
   firstDayOfNextMonth.setUTCDate(1);
   firstDayOfNextMonth.setUTCHours(0, 0, 0, 0);
+  firstDayOfNextMonth.setUTCMonth(firstDayOfNextMonth.getUTCMonth() + 1);
 
   const [usage, queuedRunCount, billingLimitPauseEnvCount] = await Promise.all([
     getCachedUsage(organization.id, { from: firstDayOfMonth, to: firstDayOfNextMonth }),
@@ -166,7 +182,8 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     submittedResumeMode,
     suggestedNewLimitDollars,
   });
-}
+  }
+);
 
 type LoaderData = {
   billingLimit: BillingLimitResult;
@@ -182,9 +199,18 @@ type LoaderData = {
   suggestedNewLimitDollars: number;
 };
 
-export const action: ActionFunction = async ({ request, params }) => {
-  const userId = await requireUserId(request);
-  const { organizationSlug } = OrganizationParamsSchema.parse(params);
+export const action = dashboardAction(
+  {
+    params: OrganizationParamsSchema,
+    context: async (params) => {
+      const organizationId = await resolveOrgIdFromSlug(params.organizationSlug);
+      return organizationId ? { organizationId } : {};
+    },
+    authorization: billingLimitsAuthorization,
+  },
+  async ({ request, params, user }) => {
+  const userId = user.id;
+  const { organizationSlug } = params;
 
   const organization = await prisma.organization.findFirst({
     where: { slug: organizationSlug, members: { some: { userId } } },
@@ -476,7 +502,8 @@ export const action: ActionFunction = async ({ request, params }) => {
   }
 
   return json({ error: "Unknown form intent" }, { status: 400 });
-};
+  }
+);
 
 export default function Page() {
   const {

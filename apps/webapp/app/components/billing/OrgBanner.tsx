@@ -9,6 +9,7 @@ import {
   useOptionalOrganization,
   useOrganization,
   useBillingLimit,
+  useCanManageBilling,
 } from "~/hooks/useOrganizations";
 import { useOptionalProject, useProject } from "~/hooks/useProject";
 import { useShowSelfServe } from "~/hooks/useShowSelfServe";
@@ -17,7 +18,7 @@ import { v3BillingLimitsPath, v3BillingPath, v3QueuesPath } from "~/utils/pathBu
 
 function getUpgradeResetDate(): Date {
   const nextMonth = new Date();
-  nextMonth.setUTCMonth(nextMonth.getMonth() + 1);
+  nextMonth.setUTCMonth(nextMonth.getUTCMonth() + 1);
   nextMonth.setUTCDate(1);
   nextMonth.setUTCHours(0, 0, 0, 0);
   return nextMonth;
@@ -129,18 +130,23 @@ function LimitGraceBanner() {
 
 function NoLimitConfiguredBanner() {
   const organization = useOrganization();
+  const canManageBilling = useCanManageBilling();
 
   return (
     <AnimatedOrgBannerBar
       show
       variant="warning"
       action={
-        <LinkButton variant="tertiary/small" to={v3BillingLimitsPath(organization)}>
-          Configure billing limit
-        </LinkButton>
+        canManageBilling ? (
+          <LinkButton variant="tertiary/small" to={v3BillingLimitsPath(organization)}>
+            Configure billing limit
+          </LinkButton>
+        ) : undefined
       }
     >
-      Protect your organization from unexpected usage spikes.
+      {canManageBilling
+        ? "Protect your organization from unexpected usage spikes."
+        : "Billing limits are not configured for this organization. Contact an organization administrator to configure them."}
     </AnimatedOrgBannerBar>
   );
 }

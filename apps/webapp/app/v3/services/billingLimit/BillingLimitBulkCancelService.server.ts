@@ -130,10 +130,11 @@ export class BillingLimitBulkCancelService {
               },
             ],
           },
-          select: { friendlyId: true },
+          select: { id: true, friendlyId: true },
         });
 
         if (existing) {
+          await enqueueProcessBulkAction(existing.id);
           bulkActionIds.push(existing.friendlyId);
           continue;
         }

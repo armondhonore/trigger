@@ -161,7 +161,15 @@ async function pauseEnvironmentForBillingLimit(
     },
   });
 
-  await updateConcurrency(updated, 0);
+  try {
+    await updateConcurrency(updated, 0);
+  } catch (error) {
+    await db.runtimeEnvironment.update({
+      where: { id: environment.id },
+      data: { paused: false, pauseSource: null },
+    });
+    throw error;
+  }
 }
 
 async function resumeEnvironmentFromBillingLimit(
@@ -181,5 +189,16 @@ async function resumeEnvironmentFromBillingLimit(
     },
   });
 
-  await updateConcurrency(updated);
+  try {
+    await updateConcurrency(updated);
+  } catch (error) {
+    await db.runtimeEnvironment.update({
+      where: { id: environment.id },
+      data: {
+        paused: true,
+        pauseSource: EnvironmentPauseSource.BILLING_LIMIT,
+      },
+    });
+    throw error;
+  }
 }

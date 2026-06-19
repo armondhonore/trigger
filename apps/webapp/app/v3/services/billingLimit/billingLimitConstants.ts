@@ -23,6 +23,13 @@ export function buildBillingLimitResolveDedupeKey(
   return `billing-limit-resolve:${organizationId}:${resolvedAt}`;
 }
 
+export function buildBillingLimitResolveJobId(
+  organizationId: string,
+  resolvedAt: string
+): string {
+  return `billingLimit.resolve:${organizationId}:${resolvedAt}`;
+}
+
 export function buildBillingLimitInProgressCancelJobId(
   organizationId: string,
   hitAt: string

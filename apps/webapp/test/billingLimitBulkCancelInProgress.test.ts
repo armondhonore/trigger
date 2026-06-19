@@ -48,13 +48,21 @@ describe("BillingLimitBulkCancelService.cancelInProgressRuns", () => {
       },
     });
 
+    const enqueuedBulkActionIds: string[] = [];
+
     const result = await BillingLimitBulkCancelService.cancelInProgressRuns(
       organization.id,
       { hitAt },
-      { prismaClient: prisma, enqueueProcessBulkAction: async () => undefined }
+      {
+        prismaClient: prisma,
+        enqueueProcessBulkAction: async (bulkActionId) => {
+          enqueuedBulkActionIds.push(bulkActionId);
+        },
+      }
     );
 
     expect(result.bulkActionIds).toEqual(["bulk_existing"]);
+    expect(enqueuedBulkActionIds).toEqual(["bulk_existing"]);
 
     const groups = await prisma.bulkActionGroup.findMany({
       where: { environmentId: productionEnv.id, type: BulkActionType.CANCEL },

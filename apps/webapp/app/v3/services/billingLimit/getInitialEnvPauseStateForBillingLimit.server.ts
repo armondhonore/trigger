@@ -1,6 +1,7 @@
 import { EnvironmentPauseSource, type RuntimeEnvironmentType } from "@trigger.dev/database";
 import type { Organization, Project, RuntimeEnvironment } from "@trigger.dev/database";
 import type { BillingLimitResult } from "~/services/billingLimit.schemas";
+import { logger } from "~/services/logger.server";
 import { updateEnvConcurrencyLimits } from "~/v3/runQueue.server";
 import { isBillableEnvironmentType } from "./billingLimitConstants";
 import { resolveConvergeTargetFromBillingLimit } from "./billingLimitReconciliation.server";
@@ -23,9 +24,19 @@ export async function getInitialEnvPauseStateForBillingLimit(
     return { paused: false, pauseSource: null };
   }
 
-  const billingLimit = deps.getBillingLimit
-    ? await deps.getBillingLimit(organizationId)
-    : await (await import("~/services/platform.v3.server")).getBillingLimit(organizationId);
+  let billingLimit: BillingLimitResult | undefined;
+  try {
+    billingLimit = deps.getBillingLimit
+      ? await deps.getBillingLimit(organizationId)
+      : await (await import("~/services/platform.v3.server")).getBillingLimit(organizationId);
+  } catch (error) {
+    logger.error("Failed to fetch billing limit for initial env pause state", {
+      organizationId,
+      error,
+    });
+    return { paused: false, pauseSource: null };
+  }
+
   const targetState = resolveConvergeTargetFromBillingLimit(billingLimit);
 
   if (targetState === "grace" || targetState === "rejected") {
@@ -45,5 +56,13 @@ export async function applyBillingLimitPauseAfterEnvCreate(
     return;
   }
 
-  await updateEnvConcurrencyLimits(environment, 0);
+  try {
+    await updateEnvConcurrencyLimits(environment, 0);
+  } catch (error) {
+    logger.error("Failed to apply billing-limit pause after env create", {
+      environmentId: environment.id,
+      organizationId: environment.organizationId,
+      error,
+    });
+  }
 }

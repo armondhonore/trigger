@@ -37,7 +37,7 @@ export async function runPendingBillingLimitResolves(
 
     try {
       const completion = await complete(pending.organizationId);
-      if (!completion) {
+      if (!completion || completion.completed !== true) {
         throw new Error("Billing platform client unavailable");
       }
     } catch (error) {

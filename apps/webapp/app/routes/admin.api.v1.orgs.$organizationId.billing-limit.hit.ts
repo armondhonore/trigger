@@ -1,7 +1,8 @@
 import { type ActionFunctionArgs, json } from "@remix-run/server-runtime";
 import { z } from "zod";
 import { prisma } from "~/db.server";
-import { BillingLimitHitWebhookBodySchema } from "~/services/billingLimit.schemas";
+import { BillingLimitHitWebhookBodySchema, type BillingLimitHitWebhookBody } from "~/services/billingLimit.schemas";
+import { logger } from "~/services/logger.server";
 import { requireAdminApiRequest } from "~/services/personalAccessToken.server";
 import { bustBillingLimitCaches } from "~/services/platform.v3.server";
 import {
@@ -24,7 +25,17 @@ export async function action({ request, params }: ActionFunctionArgs) {
   }
 
   const { organizationId } = ParamsSchema.parse(params);
-  const body = BillingLimitHitWebhookBodySchema.parse(await request.json());
+
+  let body: BillingLimitHitWebhookBody;
+  try {
+    body = BillingLimitHitWebhookBodySchema.parse(await request.json());
+  } catch (error) {
+    logger.error("Invalid billing limit hit webhook payload", {
+      error,
+      organizationId,
+    });
+    return json({ error: "Invalid request body" }, { status: 400 });
+  }
 
   const organization = await prisma.organization.findFirst({
     where: { id: organizationId },

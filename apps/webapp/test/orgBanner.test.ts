@@ -19,11 +19,21 @@ describe("selectOrgBanner", () => {
     ).toBe(OrgBannerKind.LimitRejected);
   });
 
-  it("shows no-limit when unconfigured and self-serve", () => {
+  it("prioritizes upgrade over no-limit when free tier is exceeded", () => {
     expect(
       selectOrgBanner({
         billingLimit: { isConfigured: false, gracePeriodMs: 86_400_000 },
         hasExceededFreeTier: true,
+        showSelfServe: true,
+      })
+    ).toBe(OrgBannerKind.Upgrade);
+  });
+
+  it("shows no-limit when unconfigured and self-serve", () => {
+    expect(
+      selectOrgBanner({
+        billingLimit: { isConfigured: false, gracePeriodMs: 86_400_000 },
+        hasExceededFreeTier: false,
         showSelfServe: true,
       })
     ).toBe(OrgBannerKind.NoLimitConfigured);

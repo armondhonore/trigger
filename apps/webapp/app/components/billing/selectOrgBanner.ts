@@ -31,12 +31,14 @@ export function selectOrgBanner(input: {
     if (status === "grace") {
       return OrgBannerKind.LimitGrace;
     }
-  } else if (billingLimit && !billingLimit.isConfigured && showSelfServe) {
-    return OrgBannerKind.NoLimitConfigured;
   }
 
   if (hasExceededFreeTier) {
     return OrgBannerKind.Upgrade;
+  }
+
+  if (billingLimit && !billingLimit.isConfigured && showSelfServe) {
+    return OrgBannerKind.NoLimitConfigured;
   }
 
   if (showEnvironmentWarning) {

@@ -6,8 +6,10 @@ import { logger } from "~/services/logger.server";
 import { singleton } from "~/utils/singleton";
 import { BillingLimitConvergeEnvironmentsService } from "./services/billingLimit/billingLimitConvergeEnvironmentsService.server";
 import type { BillingLimitConvergeTargetState } from "./services/billingLimit/billingLimitConstants";
-import { buildBillingLimitInProgressCancelJobId } from "./services/billingLimit/billingLimitConstants";
+import { buildBillingLimitInProgressCancelJobId, buildBillingLimitResolveJobId } from "./services/billingLimit/billingLimitConstants";
 import { runBillingLimitCancelInProgressRuns } from "./services/billingLimit/billingLimitCancelInProgressRuns.server";
+import { runPendingBillingLimitResolves } from "./services/billingLimit/billingLimitPendingResolveCoordinator.server";
+import type { PendingBillingLimitResolve } from "./services/billingLimit/billingLimitPendingResolve.types";
 
 function initializeWorker() {
   const redisOptions = {
@@ -53,6 +55,17 @@ function initializeWorker() {
           maxAttempts: 5,
         },
       },
+      "billingLimit.resolve": {
+        schema: z.object({
+          organizationId: z.string(),
+          resumeMode: z.enum(["queue", "new_only"]),
+          resolvedAt: z.string(),
+        }),
+        visibilityTimeoutMs: 60_000 * 10,
+        retry: {
+          maxAttempts: 5,
+        },
+      },
     },
     concurrency: {
       workers: env.BILLING_LIMIT_WORKER_CONCURRENCY_WORKERS,
@@ -74,18 +87,50 @@ function initializeWorker() {
       "billingLimit.cancelInProgressRuns": async ({ payload }) => {
         await runBillingLimitCancelInProgressRuns(payload.organizationId, payload.hitAt);
       },
+      "billingLimit.resolve": async ({ payload }) => {
+        await runPendingBillingLimitResolves([payload]);
+      },
     },
   });
 
-  if (env.BILLING_LIMIT_WORKER_ENABLED === "true") {
-    logger.debug(
-      `👨‍🏭 Starting billing limit worker at host ${env.BILLING_LIMIT_WORKER_REDIS_HOST}, reconcileIntervalMs = ${env.BILLING_LIMIT_RECONCILE_INTERVAL_MS}`
-    );
-    worker.start();
-    void scheduleBillingLimitReconcileTick(worker);
+  return worker;
+}
+
+declare global {
+  // eslint-disable-next-line no-var
+  var __billingLimitWorkerStarted__: boolean | undefined;
+}
+
+/**
+ * Bootstraps the billing-limit redis worker on webapp startup.
+ *
+ * Constructed via the module singleton (for enqueue from webhooks); started
+ * here so `sideEffects: false` builds keep an explicit entry-point side
+ * effect — do not rely on a bare `import "~/v3/billingLimitWorker.server"`.
+ */
+export function initBillingLimitWorker(
+  opts: {
+    isEnabled?: () => boolean;
+  } = {}
+): void {
+  const isEnabled = opts.isEnabled ?? (() => env.BILLING_LIMIT_WORKER_ENABLED === "true");
+
+  if (!isEnabled()) {
+    return;
   }
 
-  return worker;
+  if (global.__billingLimitWorkerStarted__) {
+    return;
+  }
+  global.__billingLimitWorkerStarted__ = true;
+
+  const worker = billingLimitWorker;
+
+  logger.debug(
+    `👨‍🏭 Starting billing limit worker at host ${env.BILLING_LIMIT_WORKER_REDIS_HOST}, reconcileIntervalMs = ${env.BILLING_LIMIT_RECONCILE_INTERVAL_MS}`
+  );
+  worker.start();
+  void scheduleBillingLimitReconcileTick(worker);
 }
 
 async function scheduleBillingLimitReconcileTick(worker: ReturnType<typeof initializeWorker>) {
@@ -118,5 +163,13 @@ export async function enqueueBillingLimitCancelInProgressRuns(
     id: buildBillingLimitInProgressCancelJobId(organizationId, hitAt),
     job: "billingLimit.cancelInProgressRuns",
     payload: { organizationId, hitAt },
+  });
+}
+
+export async function enqueueBillingLimitResolve(pending: PendingBillingLimitResolve) {
+  return billingLimitWorker.enqueue({
+    id: buildBillingLimitResolveJobId(pending.organizationId, pending.resolvedAt),
+    job: "billingLimit.resolve",
+    payload: pending,
   });
 }

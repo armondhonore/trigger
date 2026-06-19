@@ -63,6 +63,15 @@ describe("runPendingBillingLimitResolves", () => {
     expect(completeCalls).toBe(1);
   });
 
+  it("keeps org pending when ack returns completed: false", async () => {
+    const stillPending = await runPendingBillingLimitResolves([pending], {
+      converge: async () => undefined,
+      complete: async () => ({ completed: false }),
+    });
+
+    expect(stillPending).toEqual(new Set(["org_123"]));
+  });
+
   it("clears org from pending set when converge and ack both succeed", async () => {
     const stillPending = await runPendingBillingLimitResolves([pending], {
       converge: async () => undefined,

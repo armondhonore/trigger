@@ -183,24 +183,22 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   }
 
   switch (action) {
-    case "environment-pause":
+    case "environment-pause": {
       const pauseService = new PauseEnvironmentService();
-      {
-        const result = await pauseService.call(environment, "paused");
-        if (!result.success) {
-          return redirectWithErrorMessage(redirectPath, request, result.error);
-        }
+      const result = await pauseService.call(environment, "paused");
+      if (!result.success) {
+        return redirectWithErrorMessage(redirectPath, request, result.error);
       }
       return redirectWithSuccessMessage(redirectPath, request, "Environment paused");
-    case "environment-resume":
+    }
+    case "environment-resume": {
       const resumeService = new PauseEnvironmentService();
-      {
-        const result = await resumeService.call(environment, "resumed");
-        if (!result.success) {
-          return redirectWithErrorMessage(redirectPath, request, result.error);
-        }
+      const result = await resumeService.call(environment, "resumed");
+      if (!result.success) {
+        return redirectWithErrorMessage(redirectPath, request, result.error);
       }
       return redirectWithSuccessMessage(redirectPath, request, "Environment resumed");
+    }
     case "queue-pause":
     case "queue-resume": {
       const friendlyId = formData.get("friendlyId");

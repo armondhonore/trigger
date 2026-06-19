@@ -154,10 +154,7 @@ export class UpsertBranchService {
       });
 
       const alreadyExisted = branch.createdAt < now;
-
-      if (!alreadyExisted) {
-        await applyBillingLimitPauseAfterEnvCreate(branch);
-      }
+      await applyBillingLimitPauseAfterEnvCreate(branch);
 
       return {
         success: true as const,

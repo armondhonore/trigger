@@ -110,6 +110,29 @@ describe("billingAlertsFormat", () => {
     });
   });
 
+  it("normalizes cents-based alerts for billing limits under $10", () => {
+    const normalized = normalizeBillingAlertsFromApi({
+      amount: 500,
+      emails: [],
+      alertLevels: [0.75, 0.9],
+    });
+
+    expect(normalized).toEqual({
+      amount: 5,
+      emails: [],
+      alertLevels: [0.75, 0.9],
+    });
+
+    expect(
+      storedAlertsToThresholds(normalized, "plan", 500, 500)
+    ).toEqual([75, 90]);
+
+    expect(getAlertPreviewLimitCents(normalized, 500, 500)).toBe(500);
+    expect(previewDollarAmountForPercent(75, getAlertPreviewLimitCents(normalized, 500, 500))).toBe(
+      3.75
+    );
+  });
+
   it("returns no default thresholds when alerts are empty", () => {
     expect(
       storedAlertsToThresholds({ amount: 50, emails: [], alertLevels: [] }, "plan", 5000, 5000)
@@ -165,8 +188,8 @@ describe("billingAlertsFormat", () => {
     expect(previewDollarAmountForPercent(10, 10_000)).toBe(10);
   });
 
-  it("defaults unconfigured billing limit to plan mode", () => {
-    expect(getBillingLimitMode({ isConfigured: false, gracePeriodMs: 86_400_000 })).toBe("plan");
+  it("defaults unconfigured billing limit to none mode", () => {
+    expect(getBillingLimitMode({ isConfigured: false, gracePeriodMs: 86_400_000 })).toBe("none");
   });
 
   it("detects configured alerts for the current billing limit mode", () => {

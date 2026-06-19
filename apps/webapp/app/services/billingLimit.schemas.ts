@@ -15,13 +15,13 @@ export const BillingLimitStateSchema = z.discriminatedUnion("status", [
   }),
   z.object({
     status: z.literal("grace"),
-    hitAt: z.string(),
-    graceEndsAt: z.string(),
+    hitAt: z.string().datetime({ offset: true }),
+    graceEndsAt: z.string().datetime({ offset: true }),
   }),
   z.object({
     status: z.literal("rejected"),
-    hitAt: z.string(),
-    graceEndsAt: z.string(),
+    hitAt: z.string().datetime({ offset: true }),
+    graceEndsAt: z.string().datetime({ offset: true }),
   }),
 ]);
 
@@ -132,7 +132,7 @@ export type BillingLimitsActiveResult = z.infer<typeof BillingLimitsActiveResult
 export const BillingLimitPendingResolveOrgSchema = z.object({
   organizationId: z.string(),
   resumeMode: z.enum(["queue", "new_only"]),
-  resolvedAt: z.string(),
+  resolvedAt: z.string().datetime({ offset: true }),
 });
 
 export const BillingLimitsPendingResolvesResultSchema = z.object({
@@ -144,7 +144,7 @@ export type BillingLimitsPendingResolvesResult = z.infer<
 >;
 
 export const BillingLimitHitWebhookBodySchema = z.object({
-  hitAt: z.string(),
+  hitAt: z.string().datetime({ offset: true }),
   cancelInProgressRuns: z.boolean(),
   limitState: z.literal("grace"),
 });

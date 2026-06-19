@@ -1,4 +1,4 @@
-import { type PrismaClientOrTransaction } from "@trigger.dev/database";
+import { EnvironmentPauseSource, type PrismaClientOrTransaction } from "@trigger.dev/database";
 import { prisma } from "~/db.server";
 import { logger } from "~/services/logger.server";
 import { getManualPauseEnvironmentResult } from "~/v3/services/billingLimit/manualPauseEnvironmentGuard.server";
@@ -68,15 +68,29 @@ export class PauseEnvironmentService extends WithRunEngine {
         );
       }
 
-      await this._prisma.runtimeEnvironment.update({
-        where: {
-          id: environment.id,
-        },
-        data: {
-          paused: action === "paused",
-          pauseSource: action === "resumed" ? null : undefined,
-        },
-      });
+      if (action === "resumed") {
+        const resumed = await this._prisma.runtimeEnvironment.updateMany({
+          where: {
+            id: environment.id,
+            NOT: { pauseSource: EnvironmentPauseSource.BILLING_LIMIT },
+          },
+          data: {
+            paused: false,
+            pauseSource: null,
+          },
+        });
+
+        if (resumed.count === 0) {
+          throw new Error(
+            "This environment is paused because your organization reached its billing limit. Resolve the limit on the billing limits settings page to resume."
+          );
+        }
+      } else {
+        await this._prisma.runtimeEnvironment.update({
+          where: { id: environment.id },
+          data: { paused: true },
+        });
+      }
 
       if (action === "paused") {
         logger.debug("PauseEnvironmentService: pausing environment", {

@@ -95,3 +95,11 @@ export function useBillingLimit(matches?: UIMatch[]) {
   });
   return data?.billingLimit;
 }
+
+export function useCanManageBilling(matches?: UIMatch[]) {
+  const data = useTypedMatchesData<typeof orgLoader>({
+    id: "routes/_app.orgs.$organizationSlug",
+    matches,
+  });
+  return data?.canManageBilling === true;
+}

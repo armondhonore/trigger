@@ -10,7 +10,7 @@ import { PassThrough } from "stream";
 import * as Worker from "~/services/worker.server";
 import { initMollifierDrainerWorker } from "~/v3/mollifierDrainerWorker.server";
 import { initMollifierStaleSweepWorker } from "~/v3/mollifierStaleSweepWorker.server";
-import "~/v3/billingLimitWorker.server";
+import { initBillingLimitWorker } from "~/v3/billingLimitWorker.server";
 import { bootstrap } from "./bootstrap";
 import { LocaleContextProvider } from "./components/primitives/LocaleProvider";
 import {
@@ -236,6 +236,7 @@ Worker.init().catch((error) => {
 
 initMollifierDrainerWorker();
 initMollifierStaleSweepWorker();
+initBillingLimitWorker();
 
 bootstrap().catch((error) => {
   logError(error);

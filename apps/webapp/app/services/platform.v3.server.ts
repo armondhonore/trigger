@@ -568,16 +568,21 @@ export async function getCachedUsage(
 ) {
   if (!client) return undefined;
 
-  const result = await platformCache.usage.swr(
-    `${organizationId}:${from.toISOString()}:${to.toISOString()}`,
-    async () => {
-      const usageResponse = await getUsage(organizationId, { from, to });
+  try {
+    const result = await platformCache.usage.swr(
+      `${organizationId}:${from.toISOString()}:${to.toISOString()}`,
+      async () => {
+        const usageResponse = await getUsage(organizationId, { from, to });
 
-      return usageResponse;
-    }
-  );
+        return usageResponse;
+      }
+    );
 
-  return result.val;
+    return result.val;
+  } catch (e) {
+    recordPlatformFailure("getCachedUsage", "caught");
+    return undefined;
+  }
 }
 
 export async function getUsageSeries(organizationId: string, params: UsageSeriesParams) {
@@ -673,28 +678,35 @@ export async function getBillingLimit(
 ): Promise<BillingLimitResult | undefined> {
   if (!client) return undefined;
 
-  const result = await platformCache.billingLimit.swr(organizationId, async () => {
-    try {
-      const response = await client.fetch(
-        `/api/v1/orgs/${organizationId}/billing-limit`,
-        asPlatformSchema(BillingLimitResultSchema)
-      );
-      if (!response.success) {
-        recordPlatformFailure("getBillingLimit", "no_success");
+  // Loader callback errors are caught below; also guard the SWR read itself so
+  // Redis/cache infra failures cannot reject org-layout Promise.all callers.
+  try {
+    const result = await platformCache.billingLimit.swr(organizationId, async () => {
+      try {
+        const response = await client.fetch(
+          `/api/v1/orgs/${organizationId}/billing-limit`,
+          asPlatformSchema(BillingLimitResultSchema)
+        );
+        if (!response.success) {
+          recordPlatformFailure("getBillingLimit", "no_success");
+          return undefined;
+        }
+        return response;
+      } catch (e) {
+        recordPlatformFailure("getBillingLimit", "caught");
         return undefined;
       }
-      return response;
-    } catch (e) {
-      recordPlatformFailure("getBillingLimit", "caught");
+    });
+
+    if (result.err || result.val === undefined) {
       return undefined;
     }
-  });
 
-  if (result.err || result.val === undefined) {
+    return result.val;
+  } catch (e) {
+    recordPlatformFailure("getBillingLimit", "caught");
     return undefined;
   }
-
-  return result.val;
 }
 
 export async function setBillingLimit(

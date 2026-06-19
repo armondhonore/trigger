@@ -193,6 +193,17 @@ describe("billing-limits form validation", () => {
     expect(submission.error?.alertLevels).toBeTruthy();
   });
 
+  it("rejects non-numeric alert thresholds", () => {
+    const formData = new FormData();
+    formData.set("intent", "billing-alerts");
+    formData.append("emails", "a@example.com");
+    formData.append("alertLevels", "75");
+    formData.append("alertLevels", "not-a-number");
+
+    const submission = parse(formData, { schema: billingAlertsSchema });
+    expect(submission.error?.["alertLevels[1]"]).toBeTruthy();
+  });
+
   it("accepts a valid billing limit custom submission", () => {
     const formData = new FormData();
     formData.set("intent", "billing-limit");
@@ -261,7 +272,7 @@ describe("isBillingLimitFormDirty", () => {
     expect(
       isBillingLimitFormDirty({
         billingLimit: unconfiguredLimit,
-        mode: "plan",
+        mode: "none",
         customAmount: "",
         cancelInProgressRuns: false,
       })

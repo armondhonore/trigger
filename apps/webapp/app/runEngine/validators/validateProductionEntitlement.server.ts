@@ -1,10 +1,10 @@
-import type { ReportUsageResult } from "@trigger.dev/platform/v3";
+import type { EntitlementResult } from "~/services/billingLimit.schemas";
 import { OutOfEntitlementError } from "~/v3/outOfEntitlementError.server";
 import type { EntitlementValidationParams, EntitlementValidationResult } from "../types";
 
 export type GetEntitlementFn = (
   organizationId: string
-) => Promise<ReportUsageResult | undefined>;
+) => Promise<EntitlementResult | undefined>;
 
 export async function validateProductionEntitlement(
   params: EntitlementValidationParams,

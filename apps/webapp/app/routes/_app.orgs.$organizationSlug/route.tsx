@@ -10,6 +10,8 @@ import { OrganizationsPresenter } from "~/presenters/OrganizationsPresenter.serv
 import { RegionsPresenter, type Region } from "~/presenters/v3/RegionsPresenter.server";
 import { getImpersonationId } from "~/services/impersonation.server";
 import { getCachedUsage, getBillingLimit, getCurrentPlan } from "~/services/platform.v3.server";
+import { rbac } from "~/services/rbac.server";
+import { canManageBilling } from "~/services/routeBuilders/permissions.server";
 import { requireUser } from "~/services/session.server";
 import { telemetry } from "~/services/telemetry.server";
 import { organizationPath } from "~/utils/pathBuilder";
@@ -97,6 +99,12 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const shouldLoadRegions =
     !!projectParam && !!environment && environment.type !== "DEVELOPMENT";
 
+  const sessionAuth = await rbac.authenticateSession(request, {
+    userId: user.id,
+    organizationId: organization.id,
+  });
+  const userCanManageBilling = sessionAuth.ok ? canManageBilling(sessionAuth.ability) : false;
+
   const [plan, usage, billingLimit, customDashboards, regions] = await Promise.all([
     getCurrentPlan(organization.id),
     getCachedUsage(organization.id, { from: firstDayOfMonth, to: firstDayOfNextMonth }),
@@ -173,6 +181,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
       limit: dashboardLimit,
     },
     widgetLimitPerDashboard,
+    canManageBilling: userCanManageBilling,
   });
 };
 

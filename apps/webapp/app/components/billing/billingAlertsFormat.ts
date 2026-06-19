@@ -18,7 +18,7 @@ export type BillingLimitMode = "plan" | "custom" | "none";
 
 export function getBillingLimitMode(billingLimit: BillingLimitResult): BillingLimitMode {
   if (!billingLimit.isConfigured) {
-    return "plan";
+    return "none";
   }
   return billingLimit.mode;
 }
@@ -240,14 +240,16 @@ export function normalizeBillingAlertsFromApi(apiAlerts: {
   // Platform API stores amount in cents.
   let amountDollars = rawAmount / 100;
 
-  // Legacy percentage alerts sometimes stored plan dollars directly (e.g. 100 for $100).
-  // Never apply to absolute dollar alerts — those use a fixed $1 base (100 cents).
+  // Legacy percentage alerts sometimes stored plan dollars directly (e.g. 100 for $100)
+  // with whole-number percents (10, 50, 80). New saves store cents and fractional levels
+  // (0.75, 0.9) via thresholdsToAlertPayload — never treat those as legacy dollars.
   if (
     rawAmount !== ABSOLUTE_ALERT_BASE_CENTS &&
     Number.isFinite(rawAmount) &&
     rawAmount >= 10 &&
     rawAmount / 100 < 10 &&
-    alertLevels.length > 0
+    alertLevels.length > 0 &&
+    !usesFractionAlertLevelFormat(alertLevels)
   ) {
     amountDollars = rawAmount;
   }
@@ -311,11 +313,8 @@ export function storedAlertsToThresholds(
     return [];
   }
 
-  // Legacy percentage alerts keep their saved base amount even if billing limit changed.
-  if (
-    percentageAlertAmountMatches(amountCents, effectiveLimitCents, planLimitCents) ||
-    amountCents > 0
-  ) {
+  // Saved percentage alerts keep their thresholds whenever a positive base amount is stored.
+  if (amountCents > 0) {
     return uiThresholds.slice(0, MAX_PERCENTAGE_ALERTS);
   }
 
