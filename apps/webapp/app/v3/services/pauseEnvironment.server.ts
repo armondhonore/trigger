@@ -1,6 +1,7 @@
 import { type PrismaClientOrTransaction } from "@trigger.dev/database";
 import { prisma } from "~/db.server";
 import { logger } from "~/services/logger.server";
+import { getManualPauseEnvironmentResult } from "~/v3/services/billingLimit/manualPauseEnvironmentGuard.server";
 import { updateEnvConcurrencyLimits } from "../runQueue.server";
 import { WithRunEngine } from "./baseService.server";
 import { AuthenticatedEnvironment } from "~/services/apiAuth.server";
@@ -40,6 +41,27 @@ export class PauseEnvironmentService extends WithRunEngine {
         throw new Error("Organization not found");
       }
 
+      const runtimeEnvironment = await this._prisma.runtimeEnvironment.findFirst({
+        where: { id: environment.id },
+        select: {
+          pauseSource: true,
+        },
+      });
+
+      const manualPauseGuard = getManualPauseEnvironmentResult(
+        action,
+        runtimeEnvironment?.pauseSource
+      );
+      if (!manualPauseGuard.proceed) {
+        if (manualPauseGuard.success) {
+          return {
+            success: true,
+            state: manualPauseGuard.state,
+          };
+        }
+        throw new Error(manualPauseGuard.error);
+      }
+
       if (!org.runsEnabled && action === "resumed") {
         throw new Error(
           "Runs are disabled for this organization. Your free plan has probably been exceeded. If not please contact support."
@@ -52,6 +74,7 @@ export class PauseEnvironmentService extends WithRunEngine {
         },
         data: {
           paused: action === "paused",
+          pauseSource: action === "resumed" ? null : undefined,
         },
       });
 

@@ -79,6 +79,7 @@ export class OrganizationsPresenter {
             type: true,
             slug: true,
             paused: true,
+            pauseSource: true,
             isBranchableEnvironment: true,
             branchName: true,
             parentEnvironmentId: true,
@@ -207,6 +208,7 @@ export class OrganizationsPresenter {
       | "type"
       | "branchName"
       | "paused"
+      | "pauseSource"
       | "parentEnvironmentId"
       | "isBranchableEnvironment"
       | "archivedAt"

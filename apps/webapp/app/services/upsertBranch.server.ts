@@ -6,6 +6,10 @@ import { type CreateBranchOptions } from "~/routes/_app.orgs.$organizationSlug.p
 import { isValidGitBranchName, sanitizeBranchName } from "@trigger.dev/core/v3/utils/gitBranch";
 import { logger } from "./logger.server";
 import { getCurrentPlan, getLimit } from "./platform.v3.server";
+import {
+  applyBillingLimitPauseAfterEnvCreate,
+  getInitialEnvPauseStateForBillingLimit,
+} from "~/v3/services/billingLimit/getInitialEnvPauseStateForBillingLimit.server";
 
 export class UpsertBranchService {
   #prismaClient: PrismaClient;
@@ -103,6 +107,10 @@ export class UpsertBranchService {
       const apiKey = createApiKeyForEnv(parentEnvironment.type);
       const pkApiKey = createPkApiKeyForEnv(parentEnvironment.type);
       const shortcode = branchSlug;
+      const billingPause = await getInitialEnvPauseStateForBillingLimit(
+        parentEnvironment.organization.id,
+        parentEnvironment.type
+      );
 
       const now = new Date();
 
@@ -119,6 +127,8 @@ export class UpsertBranchService {
           pkApiKey,
           shortcode,
           maximumConcurrencyLimit: parentEnvironment.maximumConcurrencyLimit,
+          paused: billingPause.paused,
+          pauseSource: billingPause.pauseSource,
           organization: {
             connect: {
               id: parentEnvironment.organization.id,
@@ -137,9 +147,17 @@ export class UpsertBranchService {
         update: {
           git: git ?? undefined,
         },
+        include: {
+          organization: true,
+          project: true,
+        },
       });
 
       const alreadyExisted = branch.createdAt < now;
+
+      if (!alreadyExisted) {
+        await applyBillingLimitPauseAfterEnvCreate(branch);
+      }
 
       return {
         success: true as const,

@@ -10,6 +10,7 @@ import {
 import { DialogClose } from "@radix-ui/react-dialog";
 import { Form, useNavigation, useSearchParams, type MetaFunction } from "@remix-run/react";
 import { type ActionFunctionArgs, type LoaderFunctionArgs } from "@remix-run/server-runtime";
+import { EnvironmentPauseSource } from "@trigger.dev/database";
 import type { RuntimeEnvironmentType } from "@trigger.dev/database";
 import type { QueueItem } from "@trigger.dev/core/v3/schemas";
 import { useEffect, useState } from "react";
@@ -184,11 +185,21 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   switch (action) {
     case "environment-pause":
       const pauseService = new PauseEnvironmentService();
-      await pauseService.call(environment, "paused");
+      {
+        const result = await pauseService.call(environment, "paused");
+        if (!result.success) {
+          return redirectWithErrorMessage(redirectPath, request, result.error);
+        }
+      }
       return redirectWithSuccessMessage(redirectPath, request, "Environment paused");
     case "environment-resume":
       const resumeService = new PauseEnvironmentService();
-      await resumeService.call(environment, "resumed");
+      {
+        const result = await resumeService.call(environment, "resumed");
+        if (!result.success) {
+          return redirectWithErrorMessage(redirectPath, request, result.error);
+        }
+      }
       return redirectWithSuccessMessage(redirectPath, request, "Environment resumed");
     case "queue-pause":
     case "queue-resume": {
@@ -346,7 +357,9 @@ export default function Page() {
               animate
               accessory={
                 <div className="flex items-start gap-1">
-                  {environment.runsEnabled ? <EnvironmentPauseResumeButton env={env} /> : null}
+                  {environment.runsEnabled && env.pauseSource !== EnvironmentPauseSource.BILLING_LIMIT ? (
+                    <EnvironmentPauseResumeButton env={env} />
+                  ) : null}
                   <LinkButton
                     variant="secondary/small"
                     LeadingIcon={RunsIcon}
