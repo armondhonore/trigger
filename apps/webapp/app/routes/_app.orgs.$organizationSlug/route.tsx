@@ -9,11 +9,12 @@ import { useTypedMatchesData } from "~/hooks/useTypedMatchData";
 import { OrganizationsPresenter } from "~/presenters/OrganizationsPresenter.server";
 import { RegionsPresenter, type Region } from "~/presenters/v3/RegionsPresenter.server";
 import { getImpersonationId } from "~/services/impersonation.server";
-import { getCachedUsage, getCurrentPlan } from "~/services/platform.v3.server";
+import { getCachedUsage, getBillingLimit, getCurrentPlan } from "~/services/platform.v3.server";
 import { requireUser } from "~/services/session.server";
 import { telemetry } from "~/services/telemetry.server";
 import { organizationPath } from "~/utils/pathBuilder";
 import { isEnvironmentPauseResumeFormSubmission } from "../_app.orgs.$organizationSlug.projects.$projectParam.env.$envParam.queues/route";
+import { isBillingLimitSettingsFormSubmission } from "../_app.orgs.$organizationSlug.settings.billing-limits/billingLimitsRevalidation";
 
 const ParamsSchema = z.object({
   organizationSlug: z.string(),
@@ -50,6 +51,10 @@ export const shouldRevalidate: ShouldRevalidateFunction = (params) => {
 
   // Invalidate if the environment has been paused or resumed
   if (isEnvironmentPauseResumeFormSubmission(params.formMethod, params.formData)) {
+    return true;
+  }
+
+  if (isBillingLimitSettingsFormSubmission(params.formMethod, params.formData)) {
     return true;
   }
 
@@ -92,9 +97,10 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const shouldLoadRegions =
     !!projectParam && !!environment && environment.type !== "DEVELOPMENT";
 
-  const [plan, usage, customDashboards, regions] = await Promise.all([
+  const [plan, usage, billingLimit, customDashboards, regions] = await Promise.all([
     getCurrentPlan(organization.id),
     getCachedUsage(organization.id, { from: firstDayOfMonth, to: firstDayOfNextMonth }),
+    getBillingLimit(organization.id),
     prisma.metricsDashboard.findMany({
       where: { organizationId: organization.id },
       select: {
@@ -160,6 +166,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     regions,
     isImpersonating: !!impersonationId,
     currentPlan: { ...plan, v3Usage: { ...usage, hasExceededFreeTier, usagePercentage } },
+    billingLimit,
     customDashboards: customDashboardsWithWidgetCount,
     dashboardLimits: {
       used: customDashboards.length,
