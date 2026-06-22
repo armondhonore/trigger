@@ -1,5 +1,21 @@
 # trigger.dev
 
+## 4.5.0-rc.8
+
+### Patch Changes
+
+- Adds `trigger.dev mint-token`, which mints a short-lived delegated token from your stored personal access token. The token authenticates against the API as you, can be narrowed with `--cap` and given a lifetime with `--ttl`, and prints to stdout so it can be captured. ([#3997](https://github.com/triggerdotdev/trigger.dev/pull/3997))
+
+  ```bash
+  UAT=$(trigger.dev mint-token --ttl 3600 --cap read:runs)
+  ```
+
+- Runner debug logs are now disabled by default. Set `SEND_RUN_DEBUG_LOGS=true` on the supervisor to re-enable them. ([#3992](https://github.com/triggerdotdev/trigger.dev/pull/3992))
+- Updated dependencies:
+  - `@trigger.dev/core@4.5.0-rc.8`
+  - `@trigger.dev/build@4.5.0-rc.8`
+  - `@trigger.dev/schema-to-json@4.5.0-rc.8`
+
 ## 4.5.0-rc.7
 
 ### Patch Changes

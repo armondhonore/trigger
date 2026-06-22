@@ -1,5 +1,12 @@
 # internal-platform
 
+## 4.5.0-rc.8
+
+### Patch Changes
+
+- Add request and response schemas for the new Errors API (error groups). These back the env-scoped HTTP endpoints for listing error groups, retrieving a single group, and changing its state (resolve, ignore, unresolve), plus a `filter[error]` option on the runs list to fetch the runs behind a group. Exported from `@trigger.dev/core/v3` so the SDK can reuse them. ([#4005](https://github.com/triggerdotdev/trigger.dev/pull/4005))
+- Add an optional `skipBodyParsing` flag to the internal HTTP server route definition, letting a route respond without reading or parsing the request body. ([#4009](https://github.com/triggerdotdev/trigger.dev/pull/4009))
+
 ## 4.5.0-rc.7
 
 ### Patch Changes
