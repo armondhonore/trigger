@@ -5,19 +5,24 @@ application:
     image: ghcr.io/triggerdotdev/trigger.dev:latest
     path: /
     servicePorts:
-    - 3030
+    - 3000
     vars:
       NODE_ENV: production
-      DATABASE_URL: "postgresql://trigger:trigger@postgres.pod:5432/trigger"
-      DIRECT_URL: "postgresql://trigger:trigger@postgres.pod:5432/trigger"
+      REMIX_APP_PORT: "3000"
+      PORT: "3000"
+      DATABASE_URL: "postgresql://trigger:trigger@trigger-postgres.pod:5432/trigger?schema=public&sslmode=disable"
+      DIRECT_URL: "postgresql://trigger:trigger@trigger-postgres.pod:5432/trigger?schema=public&sslmode=disable"
       REDIS_TLS_DISABLED: "true"
-      REDIS_HOST: "redis.pod"
+      REDIS_HOST: "trigger-redis.pod"
       REDIS_PORT: "6379"
       SESSION_SECRET: "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4"
       ENCRYPTION_KEY: "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
       MAGIC_LINK_SECRET: "a1b2c3d4e5f6a1b2c3d4"
       APP_ORIGIN: "https://relaxed-weasel-trigger.cloud.nexlayer.ai"
-  - name: postgres
+      LOGIN_ORIGIN: "https://relaxed-weasel-trigger.cloud.nexlayer.ai"
+      API_ORIGIN: "https://relaxed-weasel-trigger.cloud.nexlayer.ai"
+      NODE_MAX_OLD_SPACE_SIZE: "2048"
+  - name: trigger-postgres
     image: mirror.gcr.io/library/postgres:16-alpine
     servicePorts:
     - 5432
@@ -25,11 +30,12 @@ application:
       POSTGRES_DB: trigger
       POSTGRES_USER: trigger
       POSTGRES_PASSWORD: trigger
+      PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
     - name: trigger-db
-      mountPath: /var/lib/postgresql/data
+      mountPath: /var/lib/postgresql
       size: 10Gi
-  - name: redis
+  - name: trigger-redis
     image: mirror.gcr.io/library/redis:7-alpine
     servicePorts:
     - 6379
