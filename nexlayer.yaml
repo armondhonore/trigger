@@ -5,11 +5,11 @@ application:
     image: ghcr.io/triggerdotdev/trigger.dev:latest
     path: /
     servicePorts:
-    - 3000
+    - 3030
     vars:
       NODE_ENV: production
-      REMIX_APP_PORT: "3000"
-      PORT: "3000"
+      REMIX_APP_PORT: "3030"
+      PORT: "3030"
       DATABASE_URL: "postgresql://trigger:trigger@trigger-postgres.pod:5432/trigger?schema=public&sslmode=disable"
       DIRECT_URL: "postgresql://trigger:trigger@trigger-postgres.pod:5432/trigger?schema=public&sslmode=disable"
       REDIS_TLS_DISABLED: "true"
